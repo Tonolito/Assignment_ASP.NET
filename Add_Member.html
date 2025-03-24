@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/member_popup.css" />
+  </head>
+
+  <body>
+    <div class="member-container">
+      <div class="add-member-card">
+        <header class="top-card">
+          <h3>Add Member</h3>
+          <button class="exit-btn">
+            <img src="/css/images/X.svg" alt="" />
+          </button>
+        </header>
+        <div class="upload-picture-container">
+          <input class="img-upload" type="file" hidden id="upload-img" />
+          <label for="img-upload"
+            ><img src="/css/images/upload.svg" alt=""
+          /></label>
+        </div>
+        <form>
+          <div class="fullname-flex">
+            <div class="labelgroup-member">
+              <label for="">First Name</label>
+              <input type="text" placeholder="First Name" />
+            </div>
+            <div class="labelgroup-member">
+              <label for="">Last Name</label>
+              <input type="text" placeholder="Last Name" />
+            </div>
+          </div>
+
+          <div class="labelgroup-member">
+            <label for="">Email</label>
+            <input type="text" placeholder="Email" />
+          </div>
+
+          <div class="labelgroup-member">
+            <label for="">Phonenumber</label>
+            <input type="text" placeholder="Phonenumber" />
+          </div>
+
+          <div class="labelgroup-member">
+            <label for="">Job Title</label>
+            <input type="text" placeholder="Job Title" />
+          </div>
+          <div class="labelgroup-member">
+            <label for="">Address</label>
+            <input type="text" placeholder="Address" />
+          </div>
+          <div class="labelgroup-member">
+            <label for="">Date of birh</label>
+            <div class="dob-flex">
+              <select name="" id="">
+                <option value="" disabled selected>Day</option>
+              </select>
+              <select name="" id="">
+                <option value="" disabled selected>Month</option>
+              </select>
+              <select name="" id="">
+                <option value="" disabled selected>Year</option>
+              </select>
+            </div>
+          </div>
+          <button type="submit" class="btn blue-btn">Add Member</button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

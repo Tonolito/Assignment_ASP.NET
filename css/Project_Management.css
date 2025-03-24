@@ -1,0 +1,369 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Protest+Guerrilla&display=swap");
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+body {
+  background-color: #f1f3f7;
+}
+p,
+h2,
+h6,
+button {
+  font-family: "Nunito";
+}
+p {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.container {
+  max-width: 1320px;
+  padding-left: 1rem;
+  padding-right: 2rem;
+}
+.layout-nav {
+  display: grid;
+  grid-template-areas: "sidebar header" "sidebar main";
+  grid-template-columns: 1fr 5fr;
+}
+
+header {
+  grid-area: header;
+  border-bottom: 1px solid #e3e5e8;
+
+  .container {
+    display: grid;
+    align-items: center;
+    grid-template-columns: 1fr auto auto auto auto;
+    gap: 1.5rem;
+    padding-top: 1.5rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    padding-bottom: 1rem;
+    max-width: 1320px;
+    position: relative;
+
+    .searchbar-container {
+      display: flex;
+      gap: 0.75rem;
+      .searchbar {
+        border: none;
+        outline: none;
+        font-size: 16px;
+        background-color: transparent;
+      }
+    }
+
+    .vertical-line {
+      border-right: 1px #e3e5e8 solid;
+      height: 2rem;
+    }
+  }
+  .profile-img-container {
+    width: 40px;
+    height: 40px;
+  }
+}
+.profile-dropdown {
+  position: absolute;
+  top: 4.4rem;
+  right: 6.6rem;
+  background-color: #ffffff;
+  border-radius: 14px;
+  padding: 0.5rem;
+}
+.profile-bar {
+  display: flex;
+  align-items: center;
+  justify-content: ;
+  gap: 1rem;
+  padding: 12px;
+  border-radius: 14px;
+  background-color: brown;
+  margin-bottom: 12px;
+}
+.darkmode-bar {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 1rem;
+  padding: 14px;
+  border-radius: 14px;
+  margin-bottom: 5px;
+  background-color: brown;
+
+  p {
+    padding-right: 6.6rem;
+  }
+}
+.horizontal-line {
+  border-bottom: 1px solid #ebeef2;
+}
+.logout-bar {
+  display: flex;
+  align-items: center;
+  padding: 14px;
+  gap: 1rem;
+  width: 100%;
+  border-radius: 14px;
+  margin-top: 8px;
+  background-color: transparent;
+  border: none;
+  background-color: brown;
+}
+.notification {
+  position: absolute;
+  background-color: #ffffff;
+  top: 72px;
+  right: 135px;
+
+  /*  */
+  /*  */
+  /* display: none; */
+  border-radius: 14px;
+
+  .notification-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e3e5e8;
+    padding-left: 1.5rem;
+    padding-right: 2rem;
+    padding-top: 1.5rem;
+    p {
+      font-size: 20px;
+    }
+  }
+  .notification-title {
+    font-size: 15px;
+  }
+  .notification-time {
+    font-size: 14px;
+    color: #637085;
+  }
+  .notification-main {
+    padding: 1rem;
+  }
+  .notification-main-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 10px;
+    background-color: #f5f7fa;
+    border-radius: 14px;
+  }
+  .notification-main-text {
+    padding-right: 55px;
+  }
+}
+aside {
+  grid-area: sidebar;
+  border-right: 1px solid #e3e5e8;
+}
+.sidebar {
+  grid-area: sidebar;
+  min-width: 17rem;
+
+  .container {
+    max-width: 1320px;
+    margin-left: auto;
+    /* margin-right: auto; */
+    padding: 1.3rem 1rem;
+
+    display: flex;
+    flex-direction: column;
+  }
+
+  .logo-container {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 1.5rem;
+  }
+  .sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    padding-left: 1rem;
+
+    margin-bottom: 0.5rem;
+    font-family: "Nunito";
+    /* semi */
+    font-weight: 600;
+    /* Heading */
+    color: #1a1926;
+
+    background-color: transparent;
+    border-radius: 1rem;
+    border: none;
+  }
+  .sidebar-link:hover {
+    /* Accent */
+    color: #2d99ff;
+    background-color: #2e9aff1a;
+  }
+
+  .sidebar-link.active {
+    /* Accent */
+    color: #2d99ff;
+    background-color: #2e9aff1a;
+  }
+}
+.overview {
+  grid-area: overview;
+
+  .container {
+    max-width: 1320px;
+    /* margin-left: auto; */
+    /* margin-right: auto; */
+    padding: 2rem 2rem;
+  }
+
+  .upper-overview {
+    display: flex;
+    justify-content: space-between;
+
+    .blue-btn {
+      background-color: #2d99ff;
+      color: white;
+      &:hover {
+        background-color: #2682d9;
+      }
+    }
+    .add-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      border: none;
+      padding: 1rem 1.5rem;
+      border-radius: 1rem;
+    }
+
+    h2 {
+      font-size: 32px;
+      font-weight: 600;
+    }
+  }
+
+  .filter-overview {
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px solid #e3e5e8;
+    margin-top: 2rem;
+    padding-bottom: 1rem;
+    gap: 2rem;
+  }
+
+  .filter-option {
+    border: none;
+    background-color: transparent;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    &:focus {
+      border-bottom: 3px solid #2d99ff;
+      color: #2d99ff;
+    }
+  }
+}
+.project-grid-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  gap: 2rem;
+}
+.project-card {
+  display: grid;
+  background-color: white;
+  grid-template-rows: auto 1fr auto;
+  padding: 1.5rem;
+  min-width: 22rem;
+  min-height: 17rem;
+  border-radius: 1rem;
+
+  .upper-card {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    position: relative;
+  }
+  h6 {
+    font-size: 18px;
+    font-weight: 600;
+    font-family: "Nunito";
+  }
+  .dots-container {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 1rem;
+    background-color: transparent;
+
+    &:hover {
+      background-color: #f5f7fa;
+    }
+  }
+  .lower-card {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .deadline-card {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+
+    background-color: #e3e5e8;
+    border-radius: 1rem;
+    padding: 0.5rem 1rem;
+  }
+  .members-card {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .dropdown-project {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    padding: 0.5rem;
+    border-radius: 1rem;
+    right: 0rem;
+    top: 1.9rem;
+    min-width: 14rem;
+  }
+  .dropdown-option {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: 1rem;
+    padding: 14px 1rem;
+    width: 100%;
+    border-radius: 14px;
+
+    border: none;
+    background: transparent;
+    &:hover {
+      background-color: #0066ff;
+    }
+  }
+  .dropdown-option-add {
+    border-bottom: 1px solid #ebeef2;
+  }
+
+  .dropdown-option-delete {
+    color: red;
+  }
+}

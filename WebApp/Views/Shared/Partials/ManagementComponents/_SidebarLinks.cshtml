@@ -1,0 +1,8 @@
+﻿<a class="sidebar-link @(Context.Request.Path == "/projects" ? "active": "")" asp-action="Projects" asp-controller="Projects">
+    <i class="fa-duotone fa-solid fa-briefcase"></i>
+    <span>Projects</span>
+</a>
+<a class="sidebar-link @(Context.Request.Path == "/admin/members" ? "active": "")" asp-action="Members" asp-controller="Admin">
+    <i class="fa-duotone fa-solid fa-user-group"></i>
+    <span>Team members</span>
+</a>

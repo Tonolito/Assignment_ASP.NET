@@ -1,0 +1,15 @@
+﻿@{
+    ViewData["Title"] = "Login";
+
+    Layout = "_AuthLayout";
+
+}
+<div class="container">
+    <div class="form-container">
+        <h1>@ViewData["Title"]</h1>
+        @await Html.PartialAsync("Partials/AuthComponents/_Google-SignIn-Btn")
+        @await Html.PartialAsync("Partials/AuthComponents/_FormDivider")
+        @await Html.PartialAsync("Partials/_SignInForm")
+        @await Html.PartialAsync("Partials/AuthComponents/_NoAccount")
+    </div>
+</div>

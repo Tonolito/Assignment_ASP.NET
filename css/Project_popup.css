@@ -1,0 +1,121 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Protest+Guerrilla&display=swap");
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  font-family: "Nunito";
+}
+body {
+  background-color: #eaecf0;
+}
+.project-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin: 1.25rem;
+}
+.add-project-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2rem;
+  min-width: 35rem;
+
+  background-color: #fff;
+  border-radius: 1rem;
+}
+.top-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+.upload-picture-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+  position: relative;
+
+  img {
+    border-radius: 2rem;
+    border: dashed #c6c8cc 1px;
+    padding: 3.5rem;
+  }
+}
+.labelgroup-project {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  width: 100%;
+  position: relative;
+
+  input {
+    border-radius: 1rem;
+    border: 1px solid #ebeef2;
+    font-size: 15px;
+    padding: 1rem;
+  }
+  .description-input {
+    height: 200px; /*TEMPO */
+  }
+  .budget-input {
+    padding-left: 2.4rem;
+  }
+}
+.dates-flex {
+  display: flex;
+  flex-direction: row;
+  gap: 1.5rem;
+}
+.search-icon-container {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: 2.8rem;
+  left: 29rem;
+}
+.search-icon {
+}
+
+.value-icon-container {
+  position: absolute;
+  top: 2.8rem;
+  left: 1rem;
+}
+.value-icon {
+}
+.btn {
+  border: 1px none grey;
+  padding: 1rem 4rem;
+  border-radius: 16px;
+  width: 100%;
+}
+
+.blue-btn {
+  background-color: #2d99ff;
+  color: white;
+}
+.btn-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.exit-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 0.5rem;
+  background-color: transparent;
+  width: 24px;
+  height: 24px;
+
+  &:focus {
+    background-color: #eaecf0;
+  }
+}

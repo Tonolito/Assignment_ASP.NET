@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/Project_popup.css" />
+  </head>
+  <body>
+    <div class="project-container">
+      <div class="add-project-card">
+        <header class="top-card">
+          <h3>Edit Project</h3>
+          <button class="exit-btn">
+            <img src="/css/images/X.svg" alt="" />
+          </button>
+        </header>
+        <div class="upload-picture-container">
+          <input class="img-upload" type="file" hidden id="upload-img" />
+          <label for="img-upload"
+            ><img src="/css/images/upload.svg" alt=""
+          /></label>
+        </div>
+        <form>
+          <div class="labelgroup-project">
+            <label for="">Project Name</label>
+            <input type="text" placeholder="Project Name" />
+          </div>
+          <div class="labelgroup-project">
+            <label for="">Client Name</label>
+            <input type="text" placeholder="Client Name" />
+          </div>
+
+          <div class="labelgroup-project">
+            <label for="">Description</label>
+            <input
+              class="description-input"
+              type="text"
+              placeholder="Description"
+            />
+          </div>
+
+          <div class="dates-flex">
+            <div class="labelgroup-project">
+              <label for="">Start Date</label>
+              <input type="date" />
+            </div>
+            <div class="labelgroup-project">
+              <label for="">End Date</label>
+              <input type="date" />
+            </div>
+          </div>
+
+          <div class="labelgroup-project">
+            <label for="">Members</label>
+            <div class="search-icon-container">
+              <img class="search-icon" src="/css/images/Search.svg" alt="" />
+            </div>
+            <input type="text" placeholder="Members" />
+          </div>
+
+          <div class="labelgroup-project">
+            <label for="">Budget</label>
+            <div class="value-icon-container">
+              <img class="value-icon" src="/css/images/Dollar.svg" alt="" />
+            </div>
+            <input class="budget-input" type="number" />
+          </div>
+          <div class="btn-container">
+            <button class="blue-btn btn" type="submit">Create</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
