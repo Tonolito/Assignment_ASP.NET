@@ -5,20 +5,10 @@
             <h6 class="card-title">ASP.NET Web App</h6>
             <p class="card-company">GitLab Inc.</p>
         </div>
-        <button class="dots-container">
+        <button class="dots-container" data-modal="true" data-target="#projectModal">
             <img src="/images/Dot_2.svg" alt="">
         </button>
-        <div class="dropdown-project">
-            <button class="dropdown-option"> <img src="/images/Edit.svg" alt="">Edit</button>
-            <button class="dropdown-option dropdown-option-add">
-                <img src="/images/Add User.svg" alt="">Add
-                member
-            </button>
-            <button class="dropdown-option dropdown-option-delete">
-                <img src="/images/Delete.svg" alt="">Delete
-                Project
-            </button>
-        </div>
+        @await Html.PartialAsync("Partials/ManagementComponents/_ProjectDropdown")
     </div>
     <p class="card-description">It is necessary to develop a website redesign in a corporate style.</p>
     <div class="lower-card">
@@ -26,9 +16,6 @@
             <i class="fa-regular fa-clock"></i>
             <p>1 Week left</p>
         </div>
-        <div class="members-card">
-            <img src="/images/avatar2.svg" alt="">
-            <img src="/images/avatar2.svg" alt="">
-        </div>
+        @await Html.PartialAsync("Partials/ManagementComponents/_ProjectMembers")
     </div>
 </div>

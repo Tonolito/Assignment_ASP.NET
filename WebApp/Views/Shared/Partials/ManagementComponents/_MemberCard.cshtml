@@ -1,0 +1,21 @@
+﻿<div class="member-card">
+        <div class="card-header">
+        <button class="dots-container" data-modal="true" data-target="#memberModal">
+                <img src="/images/Dot_2.svg" alt="" />
+            </button>
+            @await Html.PartialAsync("Partials/ManagementComponents/_MemberDropdown")
+        </div>
+        <div class="member-img-container">
+            <img src="/images/avatar1.svg" alt="" />
+        </div>
+        <div class="member-details">
+            <h4>Hans Mattin-Lassei</h4>
+            <div class="member-title-card">Chief Executive Officer</div>
+        </div>
+        <div class="member-contact-info">
+            <p>hans@domain.com</p>
+            <p>+46 070-123 45 78</p>
+        </div>
+        <button class="btn">Message</button>
+    </div>
+@await Html.PartialAsync("Partials/ManagementComponents/_MemberEditModal")

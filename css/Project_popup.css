@@ -9,14 +9,14 @@
 body {
   background-color: #eaecf0;
 }
-.project-container {
+.modal-container {
   display: flex;
   align-items: center;
   justify-content: center;
 
   margin: 1.25rem;
 }
-.add-project-card {
+.modal-card {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -26,6 +26,7 @@ body {
   background-color: #fff;
   border-radius: 1rem;
 }
+
 .top-card {
   display: flex;
   flex-direction: row;
@@ -46,7 +47,7 @@ body {
     padding: 3.5rem;
   }
 }
-.labelgroup-project {
+.labelgroup-modal {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -79,16 +80,51 @@ body {
   top: 2.8rem;
   left: 29rem;
 }
-.search-icon {
-}
 
 .value-icon-container {
   position: absolute;
   top: 2.8rem;
   left: 1rem;
 }
-.value-icon {
+
+.exit-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background-color: transparent;
+  width: 24px;
+  height: 24px;
+  padding: 1rem;
+  border-radius: 14px;
+  cursor: pointer;
+  &:focus {
+    background-color: #eaecf0;
+  }
 }
+
+/* Member */
+.dob-flex {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  align-items: center;
+  gap: 1.5em;
+
+  select {
+    border-radius: 1rem;
+    border: 1px solid #ebeef2;
+    font-size: 15px;
+    padding: 1rem;
+    padding-right: 3.5em;
+  }
+}
+
+/* _____________________ */
+/* .btn-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+} */
 .btn {
   border: 1px none grey;
   padding: 1rem 4rem;
@@ -99,23 +135,4 @@ body {
 .blue-btn {
   background-color: #2d99ff;
   color: white;
-}
-.btn-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.exit-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  border-radius: 0.5rem;
-  background-color: transparent;
-  width: 24px;
-  height: 24px;
-
-  &:focus {
-    background-color: #eaecf0;
-  }
 }

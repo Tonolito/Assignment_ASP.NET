@@ -37,6 +37,9 @@
     --accent-op-10: #2e9aff1a;
     --orange: #FF9640;
     --red: #FF6640;
+    --red-op-10: #FF6640;
+    --green: #31D482;
+    --green-op-10: #55d46a1a;
     --yellow: #FFD422;
     --dark-red: #E94D3F;
     --dark-accent: #2682D9;
@@ -77,7 +80,10 @@ h5 {
 h6 {
     font-size: var(--font-h6);
 }
-label
+button{
+    font-family:var(--font-family);
+    font-size: var(--font-body-16);
+}
 
 html, body {
     font-size: var(--font-body-16);
@@ -165,6 +171,7 @@ aside {
 /* Main */
 .overview {
     grid-area: overview;
+    position: relative
 }
 
     .overview .container {
@@ -199,6 +206,37 @@ aside {
                 border-bottom: 3px solid var(--accent);
                 color: var(--accent);
             }
+
+
+main .container {
+    max-width: 1320px;
+    padding-left: 1rem;
+    padding-right: 2rem;
+}
+
+/* Projects */
+.project-grid-layout {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 2rem;
+}
+/* Members */
+.member-grid-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    gap: 2rem;
+    margin-left: 4.6rem;
+    margin-right: 8.4rem;
+}
+
+/* Client */
+.client-flex-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
 
 
 /*---- Components ----*/
@@ -248,7 +286,9 @@ aside {
     padding: 1rem 1.5rem;
     border-radius: 1rem;
 }
-
+button{
+    cursor:pointer;
+}
 /*Links*/
 
 
@@ -310,6 +350,11 @@ aside {
 
 /*---- HeaderComponents ----*/
 
+
+.fa-gear,.fa-bell{
+    cursor:pointer;
+  
+}
 /*Profile Dropdown*/
 .profile-dropdown {
     display: none;
@@ -337,6 +382,7 @@ aside {
     border-radius: 14px;
     margin-bottom: 5px;
 /*    background-color: brown;*/
+    cursor: pointer;
 }
     .darkmode-bar p {
         padding-right: 6.6rem;
@@ -409,9 +455,426 @@ aside {
     padding-right: 55px;
 }
 
+/*---- main Components ----*/
+
+/* Project Card Components */
+.project-card {
+    display: grid;
+    background-color: white;
+    grid-template-rows: auto 1fr auto;
+    padding: 1.5rem;
+    min-width: 22rem;
+    min-height: 17rem;
+    border-radius: 1rem;
+}
+
+.upper-card {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    position: relative;
+}
+
+    .upper-card h6 {
+        font-size: 18px;
+        font-weight: 600;
+        font-family: "Nunito";
+    }
+
+.lower-card {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.deadline-card {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #e3e5e8;
+    border-radius: 1rem;
+    padding: 0.5rem 1rem;
+}
+.members-card {
+    display: flex;
+    gap: 0.5rem;
+}
+/*Members Card Components*/
+.member-card {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 14px;
+    padding: 24px;
+}
+
+/*.dots-container {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 1rem;
+    background-color: transparent;
+}
+
+    .dots-container:hover {
+        background-color: #f5f7fa;
+    }*/
+
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    position: relative;
+}
+
+.dropdown-member {
+    position: absolute;
+    display: none;
+    flex-direction: column;
+    background-color: #ffffff;
+    padding: 0.5rem;
+    border-radius: 1rem;
+    right: -9.5rem;
+    top: 1.9rem;
+    min-width: 14rem;
+}
+
+.horizontal-line {
+    margin: 0.5rem 0;
+    border-bottom: 1px solid #ebeef2;
+}
+
+/*.dropdown-option {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1rem;
+    padding: 14px 1rem;
+    width: 100%;
+    border-radius: 14px;
+    border: none;
+    background: transparent;
+}
+
+    .dropdown-option:hover {
+        background-color: #0066ff;
+    }*/
+
+.member-img-container {
+    align-self: center;
+    height: 150px;
+    width: 150px;
+    margin-bottom: 1rem;
+}
+
+    .member-img-container img {
+        width: 100%;
+        height: 100%;
+    }
+
+.member-details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.member-title-card {
+    background-color: #f0f1f5;
+    border-radius: 14px;
+    padding: 0.5rem 1rem;
+    text-align: center;
+    margin-top: 0.5rem;
+}
+
+.member-contact-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+    /*Card Dropdown*/
+    .dots-container {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 1rem;
+    background-color: transparent;
+}
+
+    .dots-container:hover {
+        background-color: #f5f7fa;
+    }
+
+
+.dropdown-project {
+    position: absolute;
+    display: none;
+    flex-direction: column;
+    background-color: #ffffff;
+    padding: 0.5rem;
+    border-radius: 1rem;
+    right: 0;
+    top: 1.9rem;
+    min-width: 14rem;
+    cursor: pointer;
+}
+
+.dropdown-option {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1rem;
+    padding: 14px 1rem;
+    width: 100%;
+    border-radius: 14px;
+    border: none;
+    background: transparent;
+}
+
+    .dropdown-option:hover {
+        color: var(--accent);
+        background-color: var(--accent-op-10);
+    }
+
+.dropdown-option-add {
+    border-bottom: 1px solid #ebeef2;
+}
+
+.dropdown-option-delete {
+    color: var(--red);
+}
+    .dropdown-option-delete:hover {
+        color: var(--red);
+    }
+/* Client header */
+.info-row {
+    display: flex;
+    flex-direction: row;
+    background-color: white;
+    border-radius: 14px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+    .client-checkbox-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 1.35rem;
+    margin-right: 5rem;
+}
+
+    .client-checkbox-header input {
+        width: 20px;
+        height: 20px;
+    }
+
+.client-list-header.location {
+    margin-left: 11rem;
+}
+
+.client-list-header.phonenumber {
+    margin-left: 7rem;
+}
+
+.client-list-header.date {
+    margin-left: 7rem;
+}
+
+.client-list-header.status {
+    margin-left: 8rem;
+}
+/* Client card */
+.client-card {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 3fr 3fr 3fr 3fr 3fr 1fr;
+    background-color: white;
+    border-radius: 14px;
+    padding: 1.5rem;
+}
+
+    .client-card:hover {
+        background-color: var(--accent-op-10);
+    }
+
+.client-checkbox-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+    .client-checkbox-container input {
+        width: 20px;
+        height: 20px;
+    }
+
+.client-info {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    margin-right: 2rem;
+}
+
+.client-img-container {
+    width: 100px;
+    height: 100px;
+    margin-right: 1.5rem;
+    align-self: center;
+}
+
+    .client-img-container img {
+        width: 100%;
+        height: 100%;
+    }
+
+.client-list-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.active-container {
+    display: flex;
+    justify-content: center;
+    width: 5rem;
+    padding: 0.5rem 0;
+    color: var(--green);
+    background-color: var(--green-op-10);
+    border-radius: 14px;
+}
+.dropdown-client {
+    position: absolute;
+    display: none;
+    flex-direction: column;
+    background-color: #ffffff;
+    padding: 0.5rem;
+    border-radius: 1rem;
+    right: 5rem;
+    top: 5rem;
+    min-width: 14rem;
+    z-index: 1;
+}
+
+/* Modal Component */
+.modal-container {
+    display: none;
+    background-color: #c6c7cb80;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    justify-content: center;
+    z-index: 1;
+}
+
+.modal-card {
+    position: absolute;
+    display:flex;
+    flex-direction: column;
+    padding: 2rem;
+    min-width: 35rem;
+    background-color: #fff;
+    border-radius: 1rem;
+    margin-top: 1.25rem;
+}
+
+
+
+
+.top-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.upload-picture-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.upload-picture-container img {
+  border-radius: 2rem;
+  border: dashed #c6c8cc 1px;
+  padding: 3.5rem;
+}
+
+.labelgroup-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  width: 100%;
+  position: relative;
+}
+
+.labelgroup-modal input {
+  border-radius: 1rem;
+  border: 1px solid #ebeef2;
+  font-size: 15px;
+  padding: 1rem;
+}
+
+.labelgroup-modal .description-input {
+  height: 200px;
+}
+
+.labelgroup-modal .budget-input {
+  padding-left: 2.4rem;
+}
+
+.dates-flex {
+  display: flex;
+  flex-direction: row;
+  gap: 1.5rem;
+}
+
+.search-icon-container,
+.value-icon-container {
+  position: absolute;
+  top: 2.8rem;
+}
+
+.search-icon-container {
+  width: 20px;
+  height: 20px;
+  left: 29rem;
+}
+
+.value-icon-container {
+  left: 1rem;
+}
+
+.exit-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background-color: transparent;
+  width: 24px;
+  height: 24px;
+  padding: 1rem;
+  border-radius: 14px;
+  cursor: pointer;
+}
+
+.exit-btn:focus {
+  background-color: #eaecf0;
+}
 
     /*SignUp & SignIn css*/
-.input-group {
+    .input-group {
     display: grid;
     gap: 0.5rem;
     min-width: 400px;

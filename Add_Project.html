@@ -5,14 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <link rel="stylesheet" href="/css/Project_popup.css" />
+    <link
+      rel="stylesheet"
+      href="https://kit.fontawesome.com/a576612222.css"
+      crossorigin="anonymous"
+    />
   </head>
   <body>
-    <div class="project-container">
-      <div class="add-project-card">
+    <div class="modal-container">
+      <div class="modal-card">
         <header class="top-card">
           <h3>Add Project</h3>
           <button class="exit-btn">
-            <img src="/css/images/X.svg" alt="" />
+            <i class="fa-solid fa-xmark fa-2xl"></i>
           </button>
         </header>
         <div class="upload-picture-container">
@@ -22,16 +27,16 @@
           /></label>
         </div>
         <form>
-          <div class="labelgroup-project">
+          <div class="labelgroup-modal">
             <label for="">Project Name</label>
             <input type="text" placeholder="Project Name" />
           </div>
-          <div class="labelgroup-project">
+          <div class="labelgroup-modal">
             <label for="">Client Name</label>
             <input type="text" placeholder="Client Name" />
           </div>
 
-          <div class="labelgroup-project">
+          <div class="labelgroup-modal">
             <label for="">Description</label>
             <input
               class="description-input"
@@ -41,17 +46,17 @@
           </div>
 
           <div class="dates-flex">
-            <div class="labelgroup-project">
+            <div class="labelgroup-modal">
               <label for="">Start Date</label>
               <input type="date" />
             </div>
-            <div class="labelgroup-project">
+            <div class="labelgroup-modal">
               <label for="">End Date</label>
               <input type="date" />
             </div>
           </div>
 
-          <div class="labelgroup-project">
+          <div class="labelgroup-modal">
             <label for="">Members</label>
             <div class="search-icon-container">
               <img class="search-icon" src="/css/images/Search.svg" alt="" />
@@ -59,16 +64,15 @@
             <input type="text" placeholder="Members" />
           </div>
 
-          <div class="labelgroup-project">
+          <div class="labelgroup-modal">
             <label for="">Budget</label>
             <div class="value-icon-container">
               <img class="value-icon" src="/css/images/Dollar.svg" alt="" />
             </div>
             <input class="budget-input" type="number" />
           </div>
-          <div class="btn-container">
-            <button class="blue-btn btn" type="submit">Create</button>
-          </div>
+
+          <button class="blue-btn btn" type="submit">Create</button>
         </form>
       </div>
     </div>

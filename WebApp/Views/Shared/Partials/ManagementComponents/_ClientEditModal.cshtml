@@ -1,0 +1,39 @@
+﻿<div class="modal-container" id="editClientModal">
+    <div class="modal-card">
+        <div class="top-card">
+            <h3>Edit Client</h3>
+            <button class="exit-btn" data-close="true">
+                <i class="fa-solid fa-xmark fa-2xl"></i>
+            </button>
+        </div>
+        <div class="upload-picture-container">
+            <input class="img-upload" type="file" hidden id="upload-img" />
+            <label for="img-upload">
+                <img src="/images/upload.svg" alt="" />
+            </label>
+        </div>
+        <form>
+            <div class="labelgroup-modal">
+                <label for="">Company Name</label>
+                <input type="text" placeholder="Comapny Name" />
+            </div>
+
+            <div class="labelgroup-modal">
+                <label for="">Location</label>
+                <input type="text" placeholder="Location" />
+            </div>
+
+            <div class="labelgroup-modal">
+                <label for="">Email</label>
+                <input type="text" placeholder="Email" />
+            </div>
+
+            <div class="labelgroup-modal">
+                <label for="">Phonenumber</label>
+                <input type="text" placeholder="Phonenumber" />
+            </div>
+
+            <button type="submit" class="btn blue-btn">Save</button>
+        </form>
+    </div>
+</div>

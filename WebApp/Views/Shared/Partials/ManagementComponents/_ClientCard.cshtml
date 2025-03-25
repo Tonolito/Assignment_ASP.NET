@@ -1,0 +1,33 @@
+﻿<div class="client-card" >
+    <div class="client-checkbox-container">
+        <input type="checkbox" name="" id="">
+    </div>
+    <div class="client-info">
+        <div class="client-img-container">
+            <img src="/images/avatar1.svg" alt="">
+        </div>
+        <div class="client-list-item">
+            <p>Tono Ab</p>
+            <p>Antonio@domain.com</p>
+        </div>
+    </div>
+    <div class="client-list-item">
+        <p>Örebro, Sweden</p>
+    </div>
+    <div class="client-list-item">
+        <p>0725056260</p>
+    </div>
+    <div class="client-list-item">
+        <p>25/3 -25</p>
+    </div>
+    <div class="client-list-item">
+        <div class="active-container">
+            <p class="client-active">Active</p>
+        </div>
+
+    </div>
+    <div class="client-list-item">
+        <button class="dots-container" data-modal="true" data-target="#clientModal"> <i class="fa-solid fa-ellipsis"></i></button>
+    </div>
+    @await Html.PartialAsync("Partials/ManagementComponents/_ClientDropdown")
+</div>

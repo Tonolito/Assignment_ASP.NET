@@ -5,9 +5,13 @@
     <div class="container">
         <div class="upper-overview">
             <h2>@ViewData["Title"]</h2>
-            <button class="blue-btn add-btn"><i class="fa-regular fa-plus"></i> Add project</button>
+            <button type="button" data-modal="true" data-target="#addProjectModal" class="blue-btn add-btn">
+                <i class="fa-regular fa-plus"></i> Add project</button>
         </div>
         @await Html.PartialAsync("Partials/ManagementComponents/_FilterOverview")
+        @await Html.PartialAsync("Partials/ManagementComponents/_ProjectAddModal")
+        @await Html.PartialAsync("Partials/ManagementComponents/_ProjectEditModal")
+
     </div>
 
 </div>

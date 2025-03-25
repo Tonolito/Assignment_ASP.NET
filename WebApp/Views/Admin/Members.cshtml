@@ -1,5 +1,18 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    ViewData["Title"] = "Team Members";
 }
+<div class="overview">
+    <div class="container">
+        <div class="upper-overview">
+            <h2>@ViewData["Title"]</h2>
+            <button type="button" data-modal="true" data-target="#addMemberModal"  class="blue-btn add-btn">
+                <i class="fa-regular fa-plus"></i> Add Member
+            </button>
+        </div>
+    </div>
+    @await Html.PartialAsync("Partials/ManagementComponents/_MemberAddModal")
+
+</div>
+<div class="container">
+   @await Html.PartialAsync("Partials/ManagementComponents/_MembersGridLayout")
+</div>

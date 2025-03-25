@@ -1,0 +1,20 @@
+﻿@{
+    ViewData["Title"] = "Clients";
+}
+
+<div class="overview">
+    <div class="container">
+        <div class="upper-overview">
+            <h2>@ViewData["Title"]</h2>
+            <button type="button" data-modal="true" data-target="#addClientModal" class="blue-btn add-btn">
+                <i class="fa-regular fa-plus"></i> Add Client
+            </button>
+        </div>
+    </div>
+    @await Html.PartialAsync("Partials/ManagementComponents/_ClientAddModal")
+    @await Html.PartialAsync("Partials/ManagementComponents/_ClientEditModal")
+
+</div>
+<div class="container">
+    @await Html.PartialAsync("Partials/ManagementComponents/_ClientFlexLayout")
+</div>
