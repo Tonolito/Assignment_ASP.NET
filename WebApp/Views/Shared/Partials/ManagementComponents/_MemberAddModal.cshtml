@@ -1,4 +1,5 @@
-﻿<div class="modal-container" id="addMemberModal">
+﻿@model AddMemberForm
+<div class="modal-container" id="addMemberModal">
     <div class="modal-card">
         <div class="top-card">
             <h3>Add Member</h3>
@@ -6,44 +7,60 @@
                 <i class="fa-solid fa-xmark fa-2xl"></i>
             </button>
         </div>
-        <div class="upload-picture-container">
-            <input class="img-upload" type="file" hidden id="upload-img" />
-            <label for="img-upload">
-                <img src="/css/images/upload.svg" alt="" />
-            </label>
-        </div>
-        <form>
+        
+        <form novalidate method="post" asp-action="Add" asp-controller="Members">
+            <div class="image-previewer circle">
+                <img src="" class="image-preview" />
+                <input asp-for="MemberImage" accept="image/*" class="hide" />
+            </div>
             <div class="fullname-flex">
                 <div class="labelgroup-modal">
-                    <label for="">First Name</label>
-                    <input type="text" placeholder="First Name" />
+                    <label asp-for="FirstName"></label>
+                    <div class="field-group">
+                        <input asp-for="FirstName" />
+                        <span asp-validation-for="FirstName"></span>
+                    </div>
                 </div>
                 <div class="labelgroup-modal">
-                    <label for="">Last Name</label>
-                    <input type="text" placeholder="Last Name" />
+                    <label asp-for="LastName"></label>
+                    <div class="field-group">
+                        <input asp-for="LastName" />
+                        <span asp-validation-for="LastName"></span>
+                    </div>
                 </div>
             </div>
+            <div class="labelgroup-modal">
+                <label asp-for="Email"></label>
+                <div class="field-group">
+                    <input asp-for="Email" />
+                    <span asp-validation-for="Email"></span>
+                </div>
+            </div>
+            <div class="labelgroup-modal">
+                    <label asp-for="Phone"></label>
+                    <div class="field-group">
+                        <input asp-for="Phone" />
+                        <span asp-validation-for="Phone"></span>
+                    </div>
+                </div>
 
             <div class="labelgroup-modal">
-                <label for="">Email</label>
-                <input type="text" placeholder="Email" />
-            </div>
-
-            <div class="labelgroup-modal">
-                <label for="">Phonenumber</label>
-                <input type="text" placeholder="Phonenumber" />
-            </div>
-
-            <div class="labelgroup-modal">
-                <label for="">Job Title</label>
-                <input type="text" placeholder="Job Title" />
+                <label asp-for="JobTitle"></label>
+                <div class="field-group">
+                    <input asp-for="JobTitle" />
+                    <span asp-validation-for="JobTitle"></span>
+                </div>
             </div>
             <div class="labelgroup-modal">
-                <label for="">Address</label>
-                <input type="text" placeholder="Address" />
+                <label asp-for="Address"></label>
+                <div class="field-group">
+                    <input asp-for="Address" />
+                    <span asp-validation-for="Address"></span>
+                </div>
             </div>
             <div class="labelgroup-modal">
-                <label for="">Date of birh</label>
+                <label asp-for="DateOfBirth"></label>
+                @* ??????????????????????? *@
                 <div class="dob-flex">
                     <select name="" id="">
                         <option value="" disabled selected>Day</option>

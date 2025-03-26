@@ -16,6 +16,7 @@
     --font-h5: 20px;
     --font-h6: 18px;
     --font-body: 36px;
+    --font-fa-pro: "Font Awesome 6 Pro";
     --weight-regular: 400;
     --weight-medium: 500;
     --weight-semi: 600;
@@ -777,9 +778,9 @@ button{
 
 .modal-card {
     position: absolute;
-    display:flex;
+    display: flex;
     flex-direction: column;
-    padding: 2rem;
+    padding: 1.875rem;
     min-width: 35rem;
     background-color: #fff;
     border-radius: 1rem;
@@ -796,27 +797,52 @@ button{
   margin-bottom: 2rem;
 }
 
-.upload-picture-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 2rem;
-  position: relative;
+.hide{
+    display:none;
 }
-
-.upload-picture-container img {
-  border-radius: 2rem;
-  border: dashed #c6c8cc 1px;
-  padding: 3.5rem;
+.image-previewer{
+ border: 2px dashed grey;
+ height: 150px;
+ width: 150px;
+ margin: 2rem auto;
+ display: flex;
+ justify-content: center;
+ align-items:center;
+ cursor: pointer;
+ overflow: hidden;
+ position: relative;
 }
+    .image-previewer::after
+    {
+        content: '\f030';
+        font-family:var(--font-fa-pro);
+        font-weight:var(--weight-bold);
+        background-color:lightgrey;
+        color: var(--white);
+        padding: 1rem;
+        border-radius: 50%;
+        position:relative;
+        bottom:0;
+    }
+    .image-previewer.selected::after {
+        content: '\f044';
+        position: absolute;
+        bottom: 5px;
+    }
+.image-previewer.circle{
+    border-radius:50%;
+}
+.image-previewer.square {
+        border-radius: 16px;
+    }
 
 .labelgroup-modal {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  margin-bottom: 2rem;
-  width: 100%;
-  position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.875rem;
+    width: 100%;
+    position: relative;
 }
 
 .labelgroup-modal input {
@@ -824,6 +850,7 @@ button{
   border: 1px solid #ebeef2;
   font-size: 15px;
   padding: 1rem;
+  width: 100%;
 }
 
 .labelgroup-modal .description-input {
@@ -834,10 +861,33 @@ button{
   padding-left: 2.4rem;
 }
 
+.field-group{
+    position: relative;
+}
+
+.input-validation-error{
+    border-color: var(--red);
+}
+.field-validation-error{
+    position:absolute;
+    z-index:1;
+    right:0.2rem;
+    top:0.4rem;
+    background-color:lightpink ;
+    color:var(--red);
+    padding: 0.5rem 1rem;
+    border-radius: 14px;
+}
 .dates-flex {
   display: flex;
   flex-direction: row;
   gap: 1.5rem;
+}
+.fullname-flex {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5em;
 }
 
 .search-icon-container,

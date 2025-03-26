@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Business.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace WebApp.Controllers;
 
@@ -17,4 +18,6 @@ public class AdminController : Controller
     {
         return View();
     }
+
+    
 }

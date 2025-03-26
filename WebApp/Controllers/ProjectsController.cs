@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Business.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace WebApp.Controllers;
 
@@ -10,30 +11,30 @@ public class ProjectsController : Controller
     {
         return View();
     }
-    //public IActionResult AddProject()
-    //{
-    //    return View();
-    //}
 
-    //public IActionResult OptionsProject()
-    //{
-    //    return View();
-    //}
-    
-    //public IActionResult EditProject()
-    //{
-    //    return View();
-    //}
+    [HttpPost]
+    public IActionResult Add(AddProjectForm form)
+    {
+        if (!ModelState.IsValid)
+        {
+            var errors = ModelState
+                .Where(x => x.Value?.Errors.Count > 0)
+                .ToDictionary(kvp => kvp.Key,
+                kvp => kvp.Value?.Errors.Select(x => x.ErrorMessage).ToArray()
+                );
+            return BadRequest(new { success = false, errors });
+        }
 
-    //public IActionResult NotificationProject()
-    //{
-    //    return View();
-    //}
+        //var result = await _clientService.AddClientAsync(form);
+        //if(result)
+        //{
+        //    return Ok(new { succes = true });
+        //}
+        //else
+        //{
+        //    return Problem("Unable to submit data");
+        //}
+        return Ok(new { succes = true });
 
-
-    //// LOG out??
-    //public IActionResult Logout()
-    //{
-    //    return View();
-    //}
+    }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Business.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace WebApp.Controllers;
 
@@ -9,18 +10,29 @@ public class MembersController : Controller
         return View();
     }
 
-    public IActionResult AddMember()
+    [HttpPost]
+    public IActionResult Add(AddMemberForm form)
     {
-        return View();
-    }
+        if (!ModelState.IsValid)
+        {
+            var errors = ModelState
+                .Where(x => x.Value?.Errors.Count > 0)
+                .ToDictionary(kvp => kvp.Key,
+                kvp => kvp.Value?.Errors.Select(x => x.ErrorMessage).ToArray()
+                );
+            return BadRequest(new { success = false, errors });
+        }
 
-    public IActionResult EditMember()
-    {
-        return View();
-    }
+        //var result = await _clientService.AddClientAsync(form);
+        //if(result)
+        //{
+        //    return Ok(new { succes = true });
+        //}
+        //else
+        //{
+        //    return Problem("Unable to submit data");
+        //}
+        return Ok(new { succes = true });
 
-    public IActionResult NotificationMember()
-    {
-        return View();
     }
 }

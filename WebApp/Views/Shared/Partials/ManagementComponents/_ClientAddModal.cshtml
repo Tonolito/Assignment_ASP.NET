@@ -1,4 +1,5 @@
-﻿<div class="modal-container" id="addClientModal">
+﻿@model AddClientForm
+<div class="modal-container" id="addClientModal">
     <div class="modal-card" >
         <div class="top-card">
             <h3>Add Client</h3>
@@ -6,31 +7,42 @@
                 <i class="fa-solid fa-xmark fa-2xl"></i>
             </button>
         </div>
-        <div class="upload-picture-container">
-            <input class="img-upload" type="file" hidden id="upload-img" />
-            <label for="img-upload">
-                <img src="/images/upload.svg" alt="" />
-            </label>
-        </div>
-        <form novalidate method="post" asp-action="AddClient" asp-controller="Admin">
+        
+        <form novalidate method="post" asp-action="AddClient" asp-controller="Clients">
+            <div class="image-previewer circle">
+                <img src="" class="image-preview" />
+                <input asp-for="ClientImage" accept="image/*" class="hide" />
+            </div>
             <div class="labelgroup-modal">
-                <label for="">Company Name</label>
-                <input type="text" placeholder="Comapny Name" />
+                <label asp-for="CompanyName"></label>
+                <div class="field-group">
+                    <input asp-for="CompanyName" />
+                    <span asp-validation-for="CompanyName"></span>
+                </div>
             </div>
 
             <div class="labelgroup-modal">
-                <label for="">Location</label>
-                <input type="text" placeholder="Location" />
+                <label asp-for="Location">Location</label>
+                <div class="field-group">
+                    <input asp-for="Location" />
+                    <span asp-validation-for="Location"></span>
+                </div>
             </div>
 
             <div class="labelgroup-modal">
-                <label for="">Email</label>
-                <input type="text" placeholder="Email" />
+                <label asp-for="Email">Email</label>
+                <div class="field-group">
+                    <input asp-for="Email" />
+                    <span asp-validation-for="Email"></span>
+                </div>
             </div>
 
             <div class="labelgroup-modal">
-                <label for="">Phonenumber</label>
-                <input type="text" placeholder="Phonenumber" />
+                <label asp-for="Phone"></label>
+                <div class="field-group">
+                    <input asp-for="Phone" />
+                    <span asp-validation-for="Phone"></span>
+                </div>
             </div>
 
             <button type="submit" class="btn blue-btn">Add Client</button>
