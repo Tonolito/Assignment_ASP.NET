@@ -1,14 +1,15 @@
-﻿
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 
-namespace Business.Models;
+namespace Business.Dtos;
 
-public class AddMemberForm
+public class EditMemberDto
 {
+    //public int Id { get; set; }
+
     [DataType(DataType.Upload)]
     [Display(Name = "Member Image", Prompt = "Select a image")]
-    public IFormFile? MemberImage {get; set;}
+    public IFormFile? MemberImage { get; set; }
 
     [Display(Name = "First Name", Prompt = "Enter your First Name")]
     [DataType(DataType.Text)]
@@ -40,6 +41,5 @@ public class AddMemberForm
     public string? Address { get; set; }
 
 
-    public DateOnly? DateOfBirth { get; set; }
-    
+    //public DateOnly? DateOfBirth { get; set; }
 }

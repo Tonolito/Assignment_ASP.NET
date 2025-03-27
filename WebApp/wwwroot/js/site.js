@@ -1,6 +1,47 @@
 ﻿
 document.addEventListener('DOMContentLoaded', () => {
     const previewSize = 150
+
+
+    const form = document.querySelector("form");
+
+    if (!form) return;
+
+    const fields = form.querySelectorAll("input[data-val='true']");
+    console.log("Found fields:", fields.length);
+
+    // Lägg till event listener för varje fält
+    fields.forEach(field => {
+        console.log("Adding event listener to:", field.name);
+
+        field.addEventListener("input", function () {
+            validateField(field); // Validera varje fält när användaren skriver
+        });
+    });
+
+    // Lägg till event listener för form submit
+    form.addEventListener("submit", function (event) {
+        let isValid = true;
+
+        // Validera alla fält vid submit
+        fields.forEach(field => {
+            validateField(field); // Kör validering på varje fält
+
+            // Kontrollera om fältet har felklass och stoppa submit om det finns fel
+            if (field.classList.contains("input-validation-error")) {
+                isValid = false; // Om någon fält har felklass, stoppa submit
+            }
+        });
+
+        // Om inte alla fält är giltiga, stoppa submit
+        if (!isValid) {
+            event.preventDefault(); // Stoppa formuläret från att skickas
+            console.log("Form submission blocked due to validation errors.");
+        }
+    });
+
+  
+
     // Open modals
     const modalButtons = document.querySelectorAll('[data-modal="true"]')
     modalButtons.forEach(button => {
@@ -44,13 +85,84 @@ document.addEventListener('DOMContentLoaded', () => {
         })
     })
 
-    //Open Dropdowns
-    document.querySelectorAll(".dots-container").forEach(button => {
-        button.addEventListener("click", () => {
-            const dropDown = document.querySelectorAll(".dropdown-client")
-            dropDown.style.display = "flex" ? "none" : "flex";
+    document.querySelectorAll(".icon-trigger").forEach(trigger => {
+        trigger.addEventListener("click", (e) => {
+            e.stopPropagation(); // Förhindrar att klick utanför stänger direkt
+
+            let dropdown = null;
+
+            // Kontrollera vilken ikon som klickades
+            if (trigger.classList.contains("fa-bell")) {
+                dropdown = document.querySelector(".notification");
+            } else if (trigger.classList.contains("fa-gear")) {
+                dropdown = document.querySelector(".profile-dropdown");
+            }
+
+            if (dropdown) {
+                // Stäng alla andra dropdowns först
+                document.querySelectorAll(".dropdown").forEach(d => {
+                    if (d !== dropdown) d.style.display = "none";
+                });
+
+                // Växla synlighet på den aktuella dropdownen
+                dropdown.style.display = dropdown.style.display === "flex" ? "none" : "flex";
+            }
         });
-    })
+    });
+
+    // Klick utanför → stäng alla dropdowns
+    document.addEventListener("click", () => {
+        document.querySelectorAll(".dropdown").forEach(dropdown => {
+            dropdown.style.display = "none";
+        });
+    });
+
+
+    // Dropdown för alla cards
+    document.querySelectorAll(".dots-container").forEach(button => {
+        button.addEventListener("click", (event) => {
+            event.stopPropagation(); // Förhindrar att klick utanför stänger direkt
+
+            let dropdown = null;
+
+            // Kontrollera om knappen finns i .upper-card (för project och members)
+            const upperCard = button.closest(".upper-card");
+            if (upperCard) {
+                dropdown = upperCard.querySelector(".dropdown");
+            }
+
+            // Om knappen finns i .client-card istället
+            const clientCard = button.closest(".client-card");
+            if (clientCard) {
+                dropdown = clientCard.querySelector(".dropdown-client");
+            }
+
+            if (dropdown) {
+                // Stäng alla andra dropdowns först
+                document.querySelectorAll(".dropdown, .dropdown-client").forEach(d => {
+                    if (d !== dropdown) d.style.display = "none";
+                });
+
+                // Växla synlighet på denna dropdown
+                dropdown.style.display = dropdown.style.display === "flex" ? "none" : "flex";
+            }
+        });
+    });
+
+    // Klicka utanför dropdown → stäng alla dropdowns
+    document.addEventListener("click", () => {
+        document.querySelectorAll(".dropdown, .dropdown-client").forEach(dropdown => {
+            dropdown.style.display = "none";
+        });
+    });
+
+
+    // Klicka utanför dropdown → stäng alla dropdowns
+    document.addEventListener("click", () => {
+        document.querySelectorAll(".dropdown").forEach(dropdown => {
+            dropdown.style.display = "none";
+        });
+    });
 
 
     // Handel image previewer
@@ -179,3 +291,41 @@ async function processImage(file, imagePreview, previewer, previewSize = 150) {
         console.log('Failed on image processing', error)
     }
 }
+function validateField(field) {
+    console.log("Validating field:", field.name);
+
+    let errorSpan = document.querySelector(`span[data-valmsg-for='${field.name}']`);
+    if (!errorSpan) {
+        console.log("No error span found for", field.name);
+        return;
+    }
+
+    let errorMessage = "";
+    let value = field.value.trim();
+
+    if (field.hasAttribute("data-val-required") && value === "") {
+        errorMessage = field.getAttribute("data-val-required");
+        console.log("Required field validation failed:", errorMessage);
+    }
+
+    if (field.hasAttribute("data-val-regex") && value !== "") {
+        let pattern = new RegExp(field.getAttribute("data-val-regex-pattern"));
+        if (!pattern.test(value)) {
+            errorMessage = field.getAttribute("data-val-regex");
+            console.log("Regex validation failed:", errorMessage);
+        }
+    }
+
+    if (errorMessage) {
+        field.classList.add("input-validation-error");
+        errorSpan.classList.remove("field-validation-valid");
+        errorSpan.classList.add("field-validation-error");
+        errorSpan.textContent = errorMessage;
+    } else {
+        field.classList.remove("input-validation-error");
+        errorSpan.classList.remove("field-validation-error");
+        errorSpan.classList.add("field-validation-valid");
+        errorSpan.textContent = "";
+    }
+}
+

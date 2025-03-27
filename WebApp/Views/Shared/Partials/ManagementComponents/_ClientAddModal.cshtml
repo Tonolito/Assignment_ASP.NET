@@ -1,4 +1,4 @@
-﻿@model AddClientForm
+﻿@model AddClientDto
 <div class="modal-container" id="addClientModal">
     <div class="modal-card" >
         <div class="top-card">
@@ -16,8 +16,8 @@
             <div class="labelgroup-modal">
                 <label asp-for="CompanyName"></label>
                 <div class="field-group">
-                    <input asp-for="CompanyName" />
-                    <span asp-validation-for="CompanyName"></span>
+                    <input asp-for="CompanyName"/>
+                    <span asp-validation="CompanyName"></span>
                 </div>
             </div>
 

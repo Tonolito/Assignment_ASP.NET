@@ -1,13 +1,10 @@
-﻿
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 
-namespace Business.Models;
+namespace Business.Dtos;
 
-public class EditProjectForm
+public class AddProjectDto
 {
-    //public int Id { get; set; }
-
     [DataType(DataType.Upload)]
     [Display(Name = "Project Image", Prompt = "Select a image")]
     public IFormFile? ProjectImage { get; set; }

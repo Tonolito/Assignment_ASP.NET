@@ -406,6 +406,7 @@ button{
 
 /*Notification Drowdown*/
 .notification {
+    flex-direction: column;
     display: none;
     position: absolute;
     background-color: var(--white);
@@ -512,6 +513,13 @@ button{
     border-radius: 14px;
     padding: 24px;
 }
+    .member-card .upper-card {
+        display: flex;
+        gap: 1rem;
+        justify-content: flex-end;
+        margin-bottom: 1rem;
+        position: relative;
+    }
 
 /*.dots-container {
     width: 40px;
@@ -534,7 +542,6 @@ button{
 
 .dropdown-member {
     position: absolute;
-    display: none;
     flex-direction: column;
     background-color: #ffffff;
     padding: 0.5rem;
@@ -548,7 +555,9 @@ button{
     margin: 0.5rem 0;
     border-bottom: 1px solid #ebeef2;
 }
-
+.dropdown{
+    display: none;
+}
 /*.dropdown-option {
     display: flex;
     align-items: center;
@@ -617,7 +626,6 @@ button{
 
 .dropdown-project {
     position: absolute;
-    display: none;
     flex-direction: column;
     background-color: #ffffff;
     padding: 0.5rem;
@@ -752,7 +760,6 @@ button{
 }
 .dropdown-client {
     position: absolute;
-    display: none;
     flex-direction: column;
     background-color: #ffffff;
     padding: 0.5rem;
@@ -852,6 +859,12 @@ button{
   padding: 1rem;
   width: 100%;
 }
+    .labelgroup-modal input:focus-visible {
+        border: none;
+    }
+    .labelgroup-modal input:focus{
+        border: none;
+    }
 
 .labelgroup-modal .description-input {
   height: 200px;
@@ -865,10 +878,10 @@ button{
     position: relative;
 }
 
-.input-validation-error{
+form .input-validation-error{
     border-color: var(--red);
 }
-.field-validation-error{
+form .field-validation-error{
     position:absolute;
     z-index:1;
     right:0.2rem;

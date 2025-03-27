@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 
-namespace Business.Models;
 
-public class EditClientForm
+namespace Business.Dtos;
+
+public class EditClientDto
 {
     //public int Id { get; set; }
 
@@ -29,7 +30,7 @@ public class EditClientForm
     public string? Location { get; set; }
 
 
-    [Display(Name = "Phone", Prompt = "Enter     Phonenumber")]
+    [Display(Name = "Phone", Prompt = "Enter Phone")]
     [DataType(DataType.PhoneNumber)]
     public string? Phone { get; set; }
 }

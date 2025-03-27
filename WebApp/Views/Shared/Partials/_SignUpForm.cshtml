@@ -1,40 +1,39 @@
-﻿<form>
+﻿@model MemberSignUpDto
+<form asp-action ="SignUp" asp-controller="Auth" method="post" novalidate>
+
+    @if (!string.IsNullOrEmpty(ViewBag?.ErrorMessage))
+    {
+        <div class="auth-error-message">
+            @ViewBag?.ErrorMessage
+        </div>
+    }
     <div class="input-group">
-        <label class="label" for="firstName">Firstname</label>
-        <input type="text"
-               name="firstName"
-               id="firstName"
-               placeholder="Your Firstname" />
+        <label asp-for="FirstName" class="label" ></label>
+        <input asp-for="FirstName"/>
+        <span asp-validation-for="FirstName"></span>
     </div>
     <div class="input-group">
-        <label class="label" for="firstName">Lastname</label>
-        <input type="text"
-               name="lastName"
-               id="lastName"
-               placeholder="Your Lastname" />
+        <label class="label" asp-for="LastName"></label>
+        <input asp-for="LastName" />
+        <span asp-validation-for="LastName"></span>
     </div>
     <div class="input-group">
-        <label for="email">Email</label>
-        <input type="email"
-               name="email"
-               id="email"
-               placeholder="Your email address" />
+        <label asp-for="Email"></label>
+        <input asp-for="Email"/>
+        <span asp-validation-for="Email"></span>
     </div>
     <div class="input-group">
-        <label for="password">Password </label>
+        <label asp-for="Password"> </label>
         <i class="fa-regular fa-eye"></i>
-        <input type="password"
-               name="password"
-               id="password"
-               placeholder="Enter your password" />
+        <input asp-for="Password" />
+        <span asp-validation-for="Password"></span>
+
     </div>
     <div class="input-group">
-        <label for="confirmPassword">Confirm Password</label>
+        <label asp-for="ConfirmPassword"></label>
         <i class="fa-regular fa-eye"></i>
-        <input type="password"
-               name="confirmPassword"
-               id="confirmPassword"
-               placeholder="Confirm your password" />
+        <input asp-for="ConfirmPassword" />
+        <span asp-validation-for="ConfirmPassword"></span>
     </div>
     <div class="checkbox-group">
         <div class="checkbox-join">

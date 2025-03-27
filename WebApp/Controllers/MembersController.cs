@@ -1,17 +1,13 @@
-﻿using Business.Models;
+﻿using Business.Dtos;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApp.Controllers;
 
 public class MembersController : Controller
 {
-    public IActionResult Index()
-    {
-        return View();
-    }
 
     [HttpPost]
-    public IActionResult Add(AddMemberForm form)
+    public IActionResult Add(AddMemberDto dto)
     {
         if (!ModelState.IsValid)
         {

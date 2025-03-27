@@ -1,4 +1,4 @@
-﻿using Business.Models;
+﻿using Business.Dtos;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApp.Controllers;
@@ -9,7 +9,7 @@ public class ClientsController : Controller
 
 
     [HttpPost]
-    public IActionResult AddClient(AddClientForm form)
+    public IActionResult AddClient(AddClientDto dt)
     {
         if (!ModelState.IsValid)
         {
@@ -35,7 +35,7 @@ public class ClientsController : Controller
     }
 
     [HttpPost]
-    public IActionResult EditClient(EditClientForm form)
+    public IActionResult EditClient(EditClientDto dto)
     {
         if (!ModelState.IsValid)
         {

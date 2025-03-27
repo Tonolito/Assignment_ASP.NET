@@ -1,8 +1,10 @@
-﻿using Business.Models;
+﻿using Business.Dtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApp.Controllers;
 
+[Authorize]
 [Route("projects")]
 public class ProjectsController : Controller
 {
@@ -13,7 +15,7 @@ public class ProjectsController : Controller
     }
 
     [HttpPost]
-    public IActionResult Add(AddProjectForm form)
+    public IActionResult Add(AddProjectDto dto)
     {
         if (!ModelState.IsValid)
         {
