@@ -1,4 +1,6 @@
-﻿@{
+﻿
+@model MembersViewModel
+@{
     ViewData["Title"] = "Team Members";
 }
 <div class="overview">
@@ -10,9 +12,8 @@
             </button>
         </div>
     </div>
-    @await Html.PartialAsync("Partials/ManagementComponents/_MemberAddModal")
-
+    @await Html.PartialAsync("Partials/ManagementComponents/_MemberAddModal", Model.AddMemberViewModel) 
 </div>
 <div class="container">
-   @await Html.PartialAsync("Partials/ManagementComponents/_MembersGridLayout")
+   @await Html.PartialAsync("Partials/ManagementComponents/_MembersGridLayout", Model)
 </div>

@@ -359,12 +359,14 @@ button{
 /*Profile Dropdown*/
 .profile-dropdown {
     display: none;
+    flex-direction:column;
     position: absolute;
     top: 4.4rem;
     right: 6.6rem;
     background-color: var(--white);
     border-radius: 14px;
     padding: 0.5rem;
+    z-index:2;
 }
 .profile-bar {
     display: flex;
@@ -413,6 +415,7 @@ button{
     top: 72px;
     right: 135px;
     border-radius: 14px;
+    z-index:2;
 }
 
 .notification-header {

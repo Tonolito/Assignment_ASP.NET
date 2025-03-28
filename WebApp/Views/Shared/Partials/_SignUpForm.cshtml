@@ -1,4 +1,5 @@
-﻿@model MemberSignUpDto
+﻿
+@model MemberSignUpViewModel
 <form asp-action ="SignUp" asp-controller="Auth" method="post" novalidate>
 
     @if (!string.IsNullOrEmpty(ViewBag?.ErrorMessage))

@@ -11,7 +11,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<DataContext>(x => x.UseSqlServer(builder.Configuration.GetConnectionString("AlphaDB")));
 
 builder.Services.AddScoped<IAuthService, AuthService>();
-
+builder.Services.AddScoped<IMemberService, MemberService>();
 builder.Services.AddIdentity<MemberEntity, IdentityRole>(opions =>
 {
     opions.SignIn.RequireConfirmedAccount = false;

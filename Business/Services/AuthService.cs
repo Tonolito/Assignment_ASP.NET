@@ -7,6 +7,7 @@ namespace Business.Services;
 public interface IAuthService
 {
     Task<bool> SignInAsync(MemberSignInDto dto);
+    Task<bool> SignOutAsync();
     Task<bool> SignUpAsync(MemberSignUpDto dto);
 
 }
@@ -43,5 +44,19 @@ public class AuthService : IAuthService
         var result = await _userManager.CreateAsync(memberEntity, dto.Password);
 
         return result.Succeeded;
+    }
+
+    public async Task<bool> SignOutAsync()
+    {
+        try
+        {
+            await _signInManager.SignOutAsync();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+            return false;
+        }
     }
 }

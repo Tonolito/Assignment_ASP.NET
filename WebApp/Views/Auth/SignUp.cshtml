@@ -1,4 +1,5 @@
-﻿@{
+﻿@model MemberSignUpViewModel
+@{
     ViewData["Title"] = "Create Account";
 
     Layout = "_AuthLayout";
@@ -9,7 +10,7 @@
         <h1>@ViewData["Title"]</h1>
         @await Html.PartialAsync("Partials/AuthComponents/_Google-SignIn-Btn")
         @await Html.PartialAsync("Partials/AuthComponents/_FormDivider")
-        @await Html.PartialAsync("Partials/_SignUpForm")
+        @await Html.PartialAsync("Partials/_SignUpForm", Model)
         @await Html.PartialAsync("Partials/AuthComponents/_AlreadyAccount")
     </div>
 </div>

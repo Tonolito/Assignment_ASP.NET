@@ -1,5 +1,11 @@
-﻿<div class="member-grid-layout">
-    @await Html.PartialAsync("Partials/ManagementComponents/_MemberCard")
-    @await Html.PartialAsync("Partials/ManagementComponents/_MemberCard")
-    @await Html.PartialAsync("Partials/ManagementComponents/_MemberCard")
+﻿
+@model MembersViewModel
+ 
+<div class="member-grid-layout">
+    @foreach(var memberViewModel in Model.Members)
+    {
+        @await Html.PartialAsync("Partials/ManagementComponents/_MemberCard", memberViewModel)
+    }
+    @* @await Html.PartialAsync("Partials/ManagementComponents/_MemberCard") *@
+    @* @await Html.PartialAsync("Partials/ManagementComponents/_MemberCard") *@
 </div>

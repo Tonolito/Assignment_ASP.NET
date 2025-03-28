@@ -1,4 +1,4 @@
-﻿using Business.Dtos;
+﻿using Domain.Dtos;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApp.Controllers;

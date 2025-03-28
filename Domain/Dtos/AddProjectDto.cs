@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 
-namespace Business.Dtos;
+
+namespace Domain.Dtos;
 
 public class AddProjectDto
 {

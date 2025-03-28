@@ -1,10 +1,14 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿
+using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 
-namespace Business.Dtos;
+namespace Domain.Dtos;
 
-public class AddClientDto
+public class EditClientDto
 {
+    //public int Id { get; set; }
+
+
     [DataType(DataType.Upload)]
     [Display(Name = "Client Image", Prompt = "Select a image")]
     public IFormFile? ClientImage { get; set; }
@@ -16,7 +20,7 @@ public class AddClientDto
     public string CompanyName { get; set; } = null!;
 
     [Display(Name = "Email", Prompt = "Enter email address")]
-    [RegularExpression(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", ErrorMessage = "Invalid Email")]
+    //[RegularExpression("sadas")]
     [Required(ErrorMessage = "Required")]
     [DataType(DataType.EmailAddress)]
     public string Email { get; set; } = null!;
@@ -26,7 +30,7 @@ public class AddClientDto
     public string? Location { get; set; }
 
 
-    [Display(Name = "Phone", Prompt = "Enter Phonenumber")]
+    [Display(Name = "Phone", Prompt = "Enter Phone")]
     [DataType(DataType.PhoneNumber)]
     public string? Phone { get; set; }
 }

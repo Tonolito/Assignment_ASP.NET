@@ -3,6 +3,7 @@ using Data.Entities;
 using Domain.Dtos;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using WebApp.ViewModels;
 
 namespace WebApp.Controllers;
 
@@ -10,7 +11,7 @@ namespace WebApp.Controllers;
 public class AuthController : Controller
 {
     private readonly IAuthService _authService;
-
+    
     public AuthController(IAuthService authService)
     {
         _authService = authService;
@@ -19,7 +20,7 @@ public class AuthController : Controller
     [Route("signin")]
     public IActionResult SignIn(string returnUrl = "~/")
     {
-        ViewBag.ErrorMessage = null;
+        ViewBag.ErrorMessage = "";
         ViewBag.ReturnUrl = returnUrl;
 
         return View();
@@ -53,7 +54,7 @@ public class AuthController : Controller
     }
 
 
-
+    //SIGN UP
 
     [Route("signup")]
     public IActionResult SignUp()
@@ -66,20 +67,34 @@ public class AuthController : Controller
 
     [HttpPost]
     [Route("signup")]
-    public async Task<IActionResult> SignUp(MemberSignUpDto dto)
+    public async Task<IActionResult> SignUp(MemberSignUpViewModel model)
     {
+        MemberSignUpDto dto = model;
+
         if (ModelState.IsValid)
         {
-            var result = await _authService.SignUpAsync(dto);
+            var result = await _authService.SignUpAsync(model);
             if (result)
             {
                 return LocalRedirect("~/");
             }
+
         }
 
         ViewBag.ErrorMessage = "";
-        return View(dto);
+        return View();
     }
 
+
+    public async Task<IActionResult> SignOut(string returnUrl = "~/")
+    {
+       var result = await _authService.SignOutAsync();
+        if (!result)
+        {
+            Console.WriteLine("error Signing out");
+        }
+        
+        return Redirect(returnUrl);
+    }
 
 }

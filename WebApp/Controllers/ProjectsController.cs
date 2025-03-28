@@ -1,4 +1,4 @@
-﻿using Business.Dtos;
+﻿using Domain.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

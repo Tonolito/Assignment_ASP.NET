@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Domain.Dtos;
 using System.ComponentModel.DataAnnotations;
 
-namespace Business.Dtos;
+namespace WebApp.ViewModels;
 
-public class EditMemberDto
+public class EditMemberViewModel
 {
     //public int Id { get; set; }
 
@@ -42,4 +42,22 @@ public class EditMemberDto
 
 
     //public DateOnly? DateOfBirth { get; set; }
+
+    public static implicit operator EditMemberDto(EditMemberViewModel model)
+    {
+        return model == null
+            ? null!
+            : new EditMemberDto
+            {
+                MemberImage = model.MemberImage,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Email = model.Email,
+                Phone = model.Phone,
+                JobTitle = model.JobTitle,
+                Address = model.Address,
+                //DateOfBirth = model.DateOfBirth,
+
+            };
+    }
 }

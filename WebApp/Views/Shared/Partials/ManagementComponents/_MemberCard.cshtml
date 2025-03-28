@@ -1,4 +1,7 @@
-﻿<div class="member-card">
+﻿
+@model MemberViewModel
+
+<div class="member-card">
         <div class="upper-card">
         <button class="dots-container" data-modal="true" data-target="#memberModal">
                 <img src="/images/Dot_2.svg" alt="" />
@@ -9,13 +12,13 @@
             <img src="/images/avatar1.svg" alt="" />
         </div>
         <div class="member-details">
-            <h4>Hans Mattin-Lassei</h4>
-            <div class="member-title-card">Chief Executive Officer</div>
+        <h4>@Model.Member.FirstName @Model.Member.LastName</h4>
+            <div class="member-title-card">@Model.Member.JobTitle</div>
         </div>
         <div class="member-contact-info">
-            <p>hans@domain.com</p>
-            <p>+46 070-123 45 78</p>
+            <p>@Model.Member.Email</p>
+            <p>@Model.Member.Phone</p>
         </div>
         <button class="btn">Message</button>
     </div>
-@await Html.PartialAsync("Partials/ManagementComponents/_MemberEditModal")
+@await Html.PartialAsync("Partials/ManagementComponents/_MemberEditModal", Model.EditMemberViewModel)
