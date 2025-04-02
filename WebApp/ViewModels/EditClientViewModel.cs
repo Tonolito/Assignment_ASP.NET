@@ -5,7 +5,7 @@ namespace WebApp.ViewModels;
 
 public class EditClientViewModel
 {
-    //public int Id { get; set; }
+    public string Id { get; set; } = null!;
 
 
     [DataType(DataType.Upload)]

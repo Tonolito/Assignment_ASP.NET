@@ -5,7 +5,7 @@ namespace WebApp.ViewModels;
 
 public class EditProjectViewModel
 {
-    //public int Id { get; set; }
+    public string Id { get; set; } = null!;
 
     [DataType(DataType.Upload)]
     [Display(Name = "Project Image", Prompt = "Select a image")]

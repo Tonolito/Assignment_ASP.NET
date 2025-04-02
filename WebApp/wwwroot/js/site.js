@@ -19,11 +19,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Lägg till event listener för form submit
     form.addEventListener("submit", function (event) {
         let isValid = true;
 
-        // Validera alla fält vid submit
         fields.forEach(field => {
             validateField(field); // Kör validering på varje fält
 
@@ -43,20 +41,43 @@ document.addEventListener('DOMContentLoaded', () => {
   
 
     // Open modals
-    const modalButtons = document.querySelectorAll('[data-modal="true"]')
-    modalButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const modalTarget = button.getAttribute('data-target')
-            const modal = document.querySelector(modalTarget)
+    const modalButtons = document.querySelectorAll('[data-modal="true"]');
 
+    modalButtons.forEach(button => {
+        button.addEventListener('click', async () => {
+            const modalTarget = button.getAttribute('data-target');
+            const modal = document.querySelector(modalTarget);
+            const entityType = button.getAttribute('data-type'); // Typ: Client, Member, Project
+            const entityId = button.getAttribute('data-id'); // ID för entiteten
 
             if (modal) {
-                modal.style.display = 'flex'
-                console.log('Open')
+                modal.style.display = 'flex';
+                console.log('Open');
+
+                if (entityType && entityId) {
+                    console.log("0")
+
+                    try {
+                        const response = await fetch(`/api/${entityType}/Get/${entityId}`);
+                        const data = await response.json();
+
+                        console.log("1")
+                        if (data.success) {
+                            populateModalFields(modal, data.entity);
+                            console.log("2")
+
+                        } else {
+                            console.error('Data not found');
+                            alert('Data not found.');
+                            console.log("3")
+                        }
+                    } catch (error) {
+                        console.error('Error fetching data:', error);
+                    }
+                }
             }
-                
-        })
-    })
+        });
+    });
 
     // Close Modals
     const closeButtons = document.querySelectorAll('[data-close="true"]')
@@ -327,5 +348,14 @@ function validateField(field) {
         errorSpan.classList.add("field-validation-valid");
         errorSpan.textContent = "";
     }
+
+}
+function populateModalFields(modal, data) {
+    Object.keys(data).forEach(key => {
+        const input = modal.querySelector(`[name="${key}"]`);
+        if (input) {
+            input.value = data[key] || "";
+        }
+    });
 }
 

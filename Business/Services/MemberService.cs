@@ -8,6 +8,7 @@ using Data.Interfaces;
 using Domain.Extentions;
 using Business.Interfaces;
 using System.Diagnostics;
+using Data.Repositories;
 
 namespace Business.Services;
 
@@ -132,6 +133,13 @@ public class MemberService(UserManager<MemberEntity> userManager, IMemberReposit
 
         return result.MapTo<MemberResult>();
 
+
+    }
+    public async Task<MemberResult> GetMemberByIdAsync(string id)
+    {
+        var result = await _memberRepository.GetAsync(x => x.Id == id);
+
+        return result.MapTo<MemberResult>();
 
     }
 

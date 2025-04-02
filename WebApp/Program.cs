@@ -7,6 +7,7 @@ using Data.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
@@ -45,7 +46,15 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
     options.ExpireTimeSpan = TimeSpan.FromHours(1);
+    options.AccessDeniedPath = "/denied";
 });
+
+//builder.Services.AddAuthorization(options =>
+//{
+//    options.AddPolicy("Administrators", policy => policy.RequireRole("Administrator"));
+//    options.AddPolicy("Authenticated", policy => policy.RequireRole("Administrator", "User"));
+//});
+
 
 var app = builder.Build();
 
@@ -59,6 +68,35 @@ app.UseRewriter(new Microsoft.AspNetCore.Rewrite.RewriteOptions().AddRedirect("^
 app.UseHttpsRedirection();
 app.UseRouting();
 app.UseAuthorization();
+using (var scope = app.Services.CreateScope())
+{
+    var roleManger = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    string[] roleNames = { "Administrator", "User" };
+
+    foreach (var roleName in roleNames)
+    {
+        var roleExists = await roleManger.RoleExistsAsync(roleName);
+        if (!roleExists)
+        {
+            await roleManger.CreateAsync(new IdentityRole(roleName));
+        }
+    }
+
+    var userManger = scope.ServiceProvider.GetRequiredService<UserManager<MemberEntity>>();
+    var user = new MemberEntity { UserName = "admin@domain.com", Email = "admin@domain.com" };
+
+    var userExists = await userManger.Users.AnyAsync(x => x.Email == user.Email);
+    if (!userExists)
+    {
+        var result = await userManger.CreateAsync(user, "BytMig123!");
+        if (result.Succeeded)
+        {
+            await userManger.AddToRoleAsync(user, "Administrator");
+        }
+    }
+}
+
+
 app.MapStaticAssets();
 app.MapControllerRoute(
     name: "default",

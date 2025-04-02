@@ -8,7 +8,7 @@ using Business.Models;
 
 namespace WebApp.Controllers;
 
-[Authorize]
+[Authorize(Roles = "Administrator")]
 [Route("admin")]
 public class AdminController : Controller
 {
@@ -22,7 +22,7 @@ public class AdminController : Controller
     }
 
 
-    //[Authorize(Roles = "admin")]
+    [Authorize(Roles = "Administrator")]
     [Route("members")]
     public async Task<IActionResult> Members()
     {
@@ -43,7 +43,7 @@ public class AdminController : Controller
     }
 
 
-    //[Authorize(Roles = "admin")]
+    [Authorize(Roles = "Administrator")]
     [Route("clients")]
     public async Task<IActionResult> Clients()
     {

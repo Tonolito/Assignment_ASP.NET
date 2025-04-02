@@ -6,7 +6,7 @@
             <h6 class="card-title">@Model.ProjectName</h6>
             <p class="card-company">@Model.Client</p>
         </div>
-        <button class="dots-container" data-modal="true" data-target="#projectModal">
+        <button class="dots-container" data-modal="true" data-type="Project" data-target="#projectModal" data-id=@Model.Id>
             <img src="/images/Dot_2.svg" alt="">
         </button>
         @await Html.PartialAsync("Partials/ManagementComponents/_ProjectDropdown")

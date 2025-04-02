@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using WebApp.ViewModels;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Business.Interfaces;
+using Business.Services;
+using Domain.Extentions;
+using Domain.Models;
 
 namespace WebApp.Controllers;
 
@@ -83,4 +86,46 @@ public class MembersController : Controller
         }
 
     }
+    [HttpGet("{id}")]
+    public async Task<IActionResult> Edit(string id)
+    {
+        
+
+        if (!ModelState.IsValid)
+        {
+            var errors = ModelState
+                .Where(x => x.Value?.Errors.Count > 0)
+                .ToDictionary(kvp => kvp.Key,
+                kvp => kvp.Value?.Errors.Select(x => x.ErrorMessage).ToArray()
+                );
+            return BadRequest(new { success = false, errors });
+        }
+
+        var result = await _memberService.GetMemberByIdAsync(id);
+        if (result.Succeeded)
+        {
+            var member = result.Result.FirstOrDefault();
+
+            var memberViewModel = new MemberViewModel
+            {
+                Member = new Member()
+                {
+                    Id = member.Id,
+                    FirstName = member.FirstName,
+                    LastName = member.LastName,
+                    Email = member.Email,
+                    Phone = member.Phone,
+                    JobTitle = member.JobTitle,
+                    Address = member.Address
+                }
+            };
+
+
+            return Ok(new { success = true, member = memberViewModel});
+        }
+
+        return NotFound(new { success = false, error = "Member not found." });
+    }
+    
+
 }

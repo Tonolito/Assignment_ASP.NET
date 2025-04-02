@@ -59,4 +59,27 @@ public class ClientsController : Controller
         return Ok(new { succes = true });
 
     }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> EditClient(string id)
+    {
+        if (!ModelState.IsValid)
+        {
+            var errors = ModelState
+                .Where(x => x.Value?.Errors.Count > 0)
+                .ToDictionary(kvp => kvp.Key,
+                kvp => kvp.Value?.Errors.Select(x => x.ErrorMessage).ToArray()
+                );
+            return BadRequest(new { success = false, errors });
+        }
+
+        var result = await _clientService.GetClientByIdAsync(id);
+        if (result.Succeeded)
+        {
+            return Ok(new { success = true});
+        }
+
+        return NotFound(new { success = false, error = "Client not found." });
+    }
+
 }

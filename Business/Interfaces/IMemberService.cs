@@ -10,5 +10,6 @@ public interface IMemberService
     Task<MemberResult> AddMemberToRole(string userId, string roleName);
     Task<MemberResult> CreateMemberAsync(MemberSignUpDto dto, string roleName = "User");
     Task<MemberResult> EditMemberAsync(EditMemberDto dto);
+    Task<MemberResult> GetMemberByIdAsync(string id);
     Task<MemberResult> GetMembersAsnyc();
 }

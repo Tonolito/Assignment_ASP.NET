@@ -38,6 +38,13 @@ public class ClientService(IClientRepository clientRepository) : IClientService
         return result.MapTo<ClientResult>();
 
     }
+    public async Task<ClientResult> GetClientByIdAsync(string id)
+    {
+        var result = await _clientRepository.GetAsync(x => x.Id == id);
+
+        return result.MapTo<ClientResult>();
+
+    }
 
     //UPDATE
     public async Task<ClientResult> EditClientAsync(EditClientDto dto)

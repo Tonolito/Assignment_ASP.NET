@@ -3,17 +3,21 @@
 @{
     ViewData["Title"] = "Team Members";
 }
-<div class="overview">
-    <div class="container">
-        <div class="upper-overview">
-            <h2>@ViewData["Title"]</h2>
-            <button type="button" data-modal="true" data-target="#addMemberModal"  class="blue-btn add-btn">
-                <i class="fa-regular fa-plus"></i> Add Member
-            </button>
+@if(User.IsInRole("Administrator"))
+{
+    <div class="overview">
+        <div class="container">
+            <div class="upper-overview">
+                <h2>@ViewData["Title"]</h2>
+                <button type="button" data-modal="true" data-target="#addMemberModal"  class="blue-btn add-btn">
+                    <i class="fa-regular fa-plus"></i> Add Member
+                </button>
+            </div>
         </div>
+        @await Html.PartialAsync("Partials/ManagementComponents/_MemberAddModal", Model.AddMemberViewModel)
     </div>
-    @await Html.PartialAsync("Partials/ManagementComponents/_MemberAddModal", Model.AddMemberViewModel) 
-</div>
-<div class="container">
-   @await Html.PartialAsync("Partials/ManagementComponents/_MembersGridLayout", Model)
-</div>
+    <div class="container">
+        @await Html.PartialAsync("Partials/ManagementComponents/_MembersGridLayout", Model)
+    </div>
+}
+
