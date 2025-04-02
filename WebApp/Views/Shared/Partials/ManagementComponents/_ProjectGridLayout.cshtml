@@ -1,6 +1,10 @@
-﻿<div class="project-grid-layout">
+﻿@model IEnumerable<Project>
+<div class="project-grid-layout">
+    @foreach(var project in Model)
+    {
+        @await Html.PartialAsync("Partials/ManagementComponents/_ProjectCard", project)
 
-    @await Html.PartialAsync("Partials/ManagementComponents/_ProjectCard")
-    @await Html.PartialAsync("Partials/ManagementComponents/_ProjectCard")
-    @await Html.PartialAsync("Partials/ManagementComponents/_ProjectCard")
+    }
+
+   
 </div>

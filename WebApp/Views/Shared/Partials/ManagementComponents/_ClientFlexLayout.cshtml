@@ -1,7 +1,11 @@
-﻿@await Html.PartialAsync("Partials/ManagementComponents/_ClientListHeader")
+﻿@model IEnumerable<Client>
+@await Html.PartialAsync("Partials/ManagementComponents/_ClientListHeader")
 <div class="client-flex-layout">
-    @await Html.PartialAsync("Partials/ManagementComponents/_ClientCard")
-    @await Html.PartialAsync("Partials/ManagementComponents/_ClientCard")
-    @await Html.PartialAsync("Partials/ManagementComponents/_ClientCard")
+    @foreach(var client in Model)
+    {
+        @await Html.PartialAsync("Partials/ManagementComponents/_ClientCard", client)
+
+    }
+
     
 </div>

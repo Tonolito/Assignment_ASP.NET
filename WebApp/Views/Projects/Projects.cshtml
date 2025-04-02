@@ -1,4 +1,5 @@
-﻿@{
+﻿@model ProjectsViewModel
+@{
     ViewData["Title"] = "Projects";
 }
 <div class="overview">
@@ -9,12 +10,12 @@
                 <i class="fa-regular fa-plus"></i> Add project</button>
         </div>
         @await Html.PartialAsync("Partials/ManagementComponents/_FilterOverview")
-        @await Html.PartialAsync("Partials/ManagementComponents/_ProjectAddModal")
-        @await Html.PartialAsync("Partials/ManagementComponents/_ProjectEditModal")
+        @await Html.PartialAsync("Partials/ManagementComponents/_ProjectAddModal", Model.AddProject)
+        @await Html.PartialAsync("Partials/ManagementComponents/_ProjectEditModal", Model.Edit)
 
     </div>
 
 </div>
 <div class="container">
-    @await Html.PartialAsync("Partials/ManagementComponents/_ProjectGridLayout")
+    @await Html.PartialAsync("Partials/ManagementComponents/_ProjectGridLayout", Model.Projects)
 </div>

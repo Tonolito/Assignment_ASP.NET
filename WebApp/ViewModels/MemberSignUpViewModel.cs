@@ -15,6 +15,7 @@ public class MemberSignUpViewModel
 
     [Required]
     [Display(Name = "Email", Prompt = "Enter Email")]
+    //[RegularExpression(@"")]
     [DataType(DataType.EmailAddress)]
     public string Email { get; set; } = null!;
 
@@ -27,6 +28,10 @@ public class MemberSignUpViewModel
     [Display(Name = "Confrim Password", Prompt = "Confirm your Password")]
     [DataType(DataType.Password)]
     public string ConfirmPassword { get; set; } = null!;
+
+    // FUNGERAR EJ
+    //[Range(typeof(bool),"true", "true")]
+    //public bool TermsAndConditions { get; set; }
 
 
     public static implicit operator MemberSignUpDto(MemberSignUpViewModel model)

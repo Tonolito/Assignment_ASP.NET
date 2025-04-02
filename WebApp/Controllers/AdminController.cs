@@ -1,8 +1,10 @@
 ﻿using Domain.Dtos;
-using Business.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.ViewModels;
+using Business.Interfaces;
+using Domain.Models;
+using Business.Models;
 
 namespace WebApp.Controllers;
 
@@ -11,10 +13,12 @@ namespace WebApp.Controllers;
 public class AdminController : Controller
 {
     private readonly IMemberService _memberService;
+    private readonly IClientService _clientService;
 
-    public AdminController(IMemberService memberService)
+    public AdminController(IMemberService memberService, IClientService clientService)
     {
         _memberService = memberService;
+        _clientService = clientService;
     }
 
 
@@ -22,25 +26,18 @@ public class AdminController : Controller
     [Route("members")]
     public async Task<IActionResult> Members()
     {
-        var members = await _memberService.GetAllMembersAsync();
+        var members = await _memberService.GetMembersAsnyc();
 
         var viewModel = new MembersViewModel
         {
-            Members = members.Select(member => new MemberViewModel
+            Members = members.Result?.Select(member => new MemberViewModel
             {
-                Member = member,
-                EditMemberViewModel = new EditMemberViewModel
-                {
-                    FirstName = member.FirstName,
-                    LastName = member.LastName,
-                    Email = member.Email,
-                    Phone = member.Phone,
-                    JobTitle = member.JobTitle,
-                    //Address = member.Address
-                }
-            }),
+                Member = member, 
+                EditMemberViewModel = new()
+            }) ?? [],
             AddMemberViewModel = new()
         };
+
 
         return View(viewModel);
     }
@@ -48,10 +45,28 @@ public class AdminController : Controller
 
     //[Authorize(Roles = "admin")]
     [Route("clients")]
-    public IActionResult Clients()
+    public async Task<IActionResult> Clients()
     {
-        return View();
+        var clients = await _clientService.GetAllClientsAsync();
+
+        var viewModel = new ClientsViewModel
+        {
+            Clients = clients.Result?.Select(x => new Client
+            {
+                Id = x.Id,
+                ClientName = x.ClientName,
+                Email = x.Email,
+                Location = x.Location,
+                Phone = x.Phone,
+            }) ?? [],
+            AddClient = new(),
+            EditClient = new()
+
+        };
+
+        return View(viewModel);
     }
 
     
 }
+

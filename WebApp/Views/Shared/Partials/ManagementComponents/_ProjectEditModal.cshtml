@@ -1,4 +1,4 @@
-﻿@model EditProjectDto
+﻿@model EditProjectViewModel
 <div class="modal-container" id="editProjectModal">
     <div class="modal-card">
         <div class="top-card">
@@ -7,8 +7,8 @@
                 <i class="fa-solid fa-xmark fa-2xl"></i>
             </button>
         </div>
-        
-        <form novalidate method="post" asp-action="Edit" asp-controller="Projects">
+
+        <form novalidate method="post" asp-action="EditProject" asp-controller="Projects">
             @* <input asp-for="Id" type="hidden" /> *@
             <div class="image-previewer circle">
                 <img src="" class="image-preview" />
@@ -22,10 +22,10 @@
                 </div>
             </div>
             <div class="labelgroup-modal">
-                <label asp-for="ClientName"></label>
+                <label asp-for="ClientId"></label>
                 <div class="field-group">
-                    <input asp-for="ClientName" />
-                    <span asp-validation-for="ClientName"></span>
+                    <input asp-for="ClientId" />
+                    <span asp-validation-for="ClientId"></span>
                 </div>
             </div>
 
@@ -55,12 +55,12 @@
             </div>
 
             <div class="labelgroup-modal">
-                <label asp-for="Members"></label>
+                <label asp-for="UserId"></label>
                 <div class="search-icon-container">
                     <img class="search-icon" src="/css/images/Search.svg" alt="" />
                 </div>
-                <input asp-for="Members"/>
-                <span asp-validation-for="Members"></span>
+                <input asp-for="UserId"/>
+                <span asp-validation-for="UserId"></span>
             </div>
 
             <div class="labelgroup-modal">

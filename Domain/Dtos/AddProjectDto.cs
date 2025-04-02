@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 
@@ -16,11 +17,6 @@ public class AddProjectDto
     [Required(ErrorMessage = "Required")]
     public string ProjectName { get; set; } = null!;
 
-    [Display(Name = "Client Name", Prompt = "Enter Client name")]
-    [DataType(DataType.Text)]
-    [Required(ErrorMessage = "Required")]
-    public string ClientName { get; set; } = null!;
-
     [Display(Name = "Description", Prompt = "Enter Description")]
     [Required(ErrorMessage = "Required")]
     [DataType(DataType.Text)]
@@ -29,19 +25,23 @@ public class AddProjectDto
     [Display(Name = "Start Date", Prompt = "")]
     [DataType(DataType.Date)]
     [Required(ErrorMessage = "Required")]
-    public DateOnly StartDate { get; set; }
+    public DateTime? StartDate { get; set; }
 
     [Display(Name = "End Date", Prompt = "")]
     [DataType(DataType.Date)]
     [Required(ErrorMessage = "Required")]
-    public DateOnly EndDate { get; set; }
-
-
-    //??????
-    [Display(Name = "Members", Prompt = "Add Member")]
-    public string? Members { get; set; }
+    public DateTime? EndDate { get; set; }
 
     [Display(Name = "Budget", Prompt = "0")]
     [Required(ErrorMessage = "Required")]
     public int Budget { get; set; }
+
+    //??????
+    [Display(Name = "Members", Prompt = "Add Member")]
+    public string UserId { get; set; } = null!;
+
+    [Display(Name = "Client Name", Prompt = "Enter Client name")]
+    [DataType(DataType.Text)]
+    [Required(ErrorMessage = "Required")]
+    public string ClientId { get; set; } = null!;
 }

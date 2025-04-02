@@ -10,4 +10,9 @@ public class DataContext(DbContextOptions<DataContext> options) : IdentityDbCont
     // ALLA EGNA TABLLER
 
     public virtual DbSet<MemberAddressEntity> MemberAddresses { get; set; } = null!;
+    public virtual DbSet<ClientEntity> Clients { get; set; } = null!;
+
+    public virtual DbSet<ProjectEntity> Projects { get; set; } = null!;
+
+    public virtual DbSet<StatusEntity> Statuses { get; set; } = null!;
 }

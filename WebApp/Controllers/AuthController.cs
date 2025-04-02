@@ -1,6 +1,7 @@
 ﻿using Business.Services;
 using Data.Entities;
 using Domain.Dtos;
+using Domain.Extentions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.ViewModels;
@@ -20,7 +21,7 @@ public class AuthController : Controller
     [Route("signin")]
     public IActionResult SignIn(string returnUrl = "~/")
     {
-        ViewBag.ErrorMessage = "";
+        ViewBag.ErrorMessage = null;
         ViewBag.ReturnUrl = returnUrl;
 
         return View();
@@ -29,14 +30,17 @@ public class AuthController : Controller
 
     [HttpPost]
     [Route("signin")]
-    public async Task<IActionResult> SignIn(MemberSignInDto dto, string returnUrl = "~/")
+    public async Task<IActionResult> SignIn(MemberSignInViewModel model, string returnUrl = "~/")
     {
         ViewBag.ErrorMessage = null;
 
+        MemberSignInDto dto = model;
+
+
         if (ModelState.IsValid)
         {
-            var result = await _authService.SignInAsync(dto);
-            if (result)
+            var result = await _authService.SignInAsync(model);
+            if (result.Succeeded)
             {
                 return Redirect(returnUrl);
             }
@@ -45,12 +49,12 @@ public class AuthController : Controller
         {
             ViewBag.ReturnUrl = returnUrl;
             ViewBag.ErrorMessage = "Invalid Account Info";
-            return View(dto);
+            return View(model);
         }
 
         ViewBag.ReturnUrl = returnUrl;
         ViewBag.ErrorMessage = "Unable to login wait a bit";
-        return View(dto);
+        return View(model);
     }
 
 
@@ -69,19 +73,21 @@ public class AuthController : Controller
     [Route("signup")]
     public async Task<IActionResult> SignUp(MemberSignUpViewModel model)
     {
+        ViewBag.ErrorMessage = null ;
+
         MemberSignUpDto dto = model;
 
         if (ModelState.IsValid)
         {
             var result = await _authService.SignUpAsync(model);
-            if (result)
+            if (result.Succeeded)
             {
+                ViewBag.ErrorMessage = result.Error;
                 return LocalRedirect("~/");
             }
 
         }
 
-        ViewBag.ErrorMessage = "";
         return View();
     }
 
@@ -89,7 +95,7 @@ public class AuthController : Controller
     public async Task<IActionResult> SignOut(string returnUrl = "~/")
     {
        var result = await _authService.SignOutAsync();
-        if (!result)
+        if (!result.Succeeded)
         {
             Console.WriteLine("error Signing out");
         }

@@ -1,21 +1,22 @@
-﻿<div class="project-card">
+﻿@model Project
+<div class="project-card">
     <div class="upper-card">
         <div class="project-img-container"><img src="/images/Image.svg" alt=""></div>
         <div class="card-title">
-            <h6 class="card-title">ASP.NET Web App</h6>
-            <p class="card-company">GitLab Inc.</p>
+            <h6 class="card-title">@Model.ProjectName</h6>
+            <p class="card-company">@Model.Client</p>
         </div>
         <button class="dots-container" data-modal="true" data-target="#projectModal">
             <img src="/images/Dot_2.svg" alt="">
         </button>
         @await Html.PartialAsync("Partials/ManagementComponents/_ProjectDropdown")
     </div>
-    <p class="card-description">It is necessary to develop a website redesign in a corporate style.</p>
+    <p class="card-description">@Model.Description</p>
     <div class="lower-card">
         <div class="deadline-card">
             <i class="fa-regular fa-clock"></i>
             <p>1 Week left</p>
         </div>
-        @await Html.PartialAsync("Partials/ManagementComponents/_ProjectMembers")
+        @* @await Html.PartialAsync("Partials/ManagementComponents/_ProjectMembers") *@
     </div>
 </div>

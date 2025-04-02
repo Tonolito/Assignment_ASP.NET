@@ -1,5 +1,5 @@
 ﻿
-@model MemberSignInDto
+@model MemberSignInViewModel
 <form asp-action="SignIn" asp-controller="Auth" method="post" novalidate>
     <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl"/>
     @if(!string.IsNullOrEmpty(ViewBag?.ErrorMessage))

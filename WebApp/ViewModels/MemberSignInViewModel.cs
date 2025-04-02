@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Domain.Dtos;
+using System.ComponentModel.DataAnnotations;
 
 namespace WebApp.ViewModels;
 
@@ -12,4 +13,15 @@ public class MemberSignInViewModel
     [Display(Name = "Password", Prompt = "Enter Password")]
     [DataType(DataType.Password)]
     public string Password { get; set; } = null!;
+
+    public static implicit operator MemberSignInDto(MemberSignInViewModel model)
+    {
+        return model == null
+            ? null!
+            : new MemberSignInDto
+            {
+                Email = model.Email,
+                Password = model.Password,  
+            };
+    }
 }

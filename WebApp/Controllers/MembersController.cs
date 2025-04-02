@@ -1,8 +1,8 @@
 ﻿using Domain.Dtos;
-using Business.Services;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.ViewModels;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using Business.Interfaces;
 
 namespace WebApp.Controllers;
 
@@ -18,6 +18,7 @@ public class MembersController : Controller
     [HttpPost]
     public async Task<IActionResult> Add(AddMemberViewModel model)
     {
+        AddMemberDto dto = model;
         if (!ModelState.IsValid)
         {
             var errors = ModelState
@@ -29,22 +30,12 @@ public class MembersController : Controller
         }
 
         var result = await _memberService.AddMemberAsync(model);
-        if (result)
+        if (result.Succeeded)
         {
-            return Ok(new { succes = true });
+            return Ok(new { success = true });
         }
-       
-
-        //var result = await _clientService.AddClientAsync(form);
-        //if(result)
-        //{
-        //    return Ok(new { succes = true });
-        //}
-        //else
-        //{
-        //    return Problem("Unable to submit data");
-        //}
-        return Ok(new { succes = true });
+      
+        return Ok(new { success = true });
 
     }
     [HttpPost]
@@ -52,6 +43,9 @@ public class MembersController : Controller
     {
         try
         {
+            EditMemberDto dto = model;
+
+
             if (!ModelState.IsValid)
             {
                 var errors = ModelState
@@ -63,9 +57,9 @@ public class MembersController : Controller
             }
 
             var result = await _memberService.EditMemberAsync(model);
-            if (result)
+            if (result.Succeeded)
             {
-                return Ok(new { succes = true });
+                return Ok(new { success = true });
             }
 
 
@@ -78,7 +72,7 @@ public class MembersController : Controller
             //{
             //    return Problem("Unable to submit data");
             //}
-            return Ok(new { succes = true });
+            return Ok(new { success = true });
         }
         catch (Exception ex)
         {

@@ -5,7 +5,7 @@ namespace Domain.Dtos;
 
 public class EditProjectDto
 {
-    //public int Id { get; set; }
+    public string Id { get; set; }
 
     [DataType(DataType.Upload)]
     [Display(Name = "Project Image", Prompt = "Select a image")]
@@ -37,12 +37,15 @@ public class EditProjectDto
     [Required(ErrorMessage = "Required")]
     public DateOnly EndDate { get; set; }
 
-
-    //??????
-    [Display(Name = "Members", Prompt = "Add Member")]
-    public string? Members { get; set; }
-
     [Display(Name = "Budget", Prompt = "0")]
     [Required(ErrorMessage = "Required")]
     public int Budget { get; set; }
+
+    //??????
+    [Display(Name = "Members", Prompt = "Add Member")]
+    public string? UserId { get; set; }
+
+    [Display(Name = "Client", Prompt = "Add Client")]
+    public string? ClientId { get; set; }
+
 }

@@ -1,4 +1,5 @@
-﻿<div class="client-card" >
+﻿@model Client
+<div class="client-card" >
     <div class="client-checkbox-container">
         <input type="checkbox" name="" id="">
     </div>
@@ -7,18 +8,20 @@
             <img src="/images/avatar1.svg" alt="">
         </div>
         <div class="client-list-item">
-            <p>Tono Ab</p>
-            <p>Antonio@domain.com</p>
+            <p>@Model.ClientName</p>
+            <p>@Model.Email</p>
         </div>
     </div>
     <div class="client-list-item">
-        <p>Örebro, Sweden</p>
+        <p>@Model.Location</p>
     </div>
     <div class="client-list-item">
-        <p>0725056260</p>
+        <p>@Model.Phone</p>
     </div>
     <div class="client-list-item">
-        <p>25/3 -25</p>
+        <p>25/3 -25
+            @* @Model.Client.Created *@
+        </p>
     </div>
     <div class="client-list-item">
         <div class="active-container">

@@ -1,4 +1,5 @@
-﻿@{
+﻿@model ClientsViewModel 
+@{
     ViewData["Title"] = "Clients";
 }
 
@@ -11,10 +12,10 @@
             </button>
         </div>
     </div>
-    @await Html.PartialAsync("Partials/ManagementComponents/_ClientAddModal")
-    @await Html.PartialAsync("Partials/ManagementComponents/_ClientEditModal")
+     @await Html.PartialAsync("Partials/ManagementComponents/_ClientAddModal", Model.AddClient) 
+     @await Html.PartialAsync("Partials/ManagementComponents/_ClientEditModal", Model.EditClient)
 
 </div>
 <div class="container">
-    @await Html.PartialAsync("Partials/ManagementComponents/_ClientFlexLayout")
+    @await Html.PartialAsync("Partials/ManagementComponents/_ClientFlexLayout", Model.Clients)
 </div>

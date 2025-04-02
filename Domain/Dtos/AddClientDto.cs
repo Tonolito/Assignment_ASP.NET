@@ -10,10 +10,10 @@ public class AddClientDto
     public IFormFile? ClientImage { get; set; }
 
 
-    [Display(Name = "Company Name", Prompt = "Enter company name")]
+    [Display(Name = "Client Name", Prompt = "Enter company name")]
     [DataType(DataType.Text)]
     [Required(ErrorMessage = "Required")]
-    public string CompanyName { get; set; } = null!;
+    public string ClientName { get; set; } = null!;
 
     [Display(Name = "Email", Prompt = "Enter email address")]
     [RegularExpression(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", ErrorMessage = "Invalid Email")]
