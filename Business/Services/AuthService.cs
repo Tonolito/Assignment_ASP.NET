@@ -4,7 +4,7 @@ using Data.Entities;
 using Domain.Dtos;
 using Domain.Extentions;
 using Microsoft.AspNetCore.Identity;
-
+using System.Security.Claims;
 namespace Business.Services;
 
 public interface IAuthService
@@ -29,9 +29,32 @@ public class AuthService(SignInManager<MemberEntity> signInManager, UserManager<
 
         var result = await _signInManager.PasswordSignInAsync(dto.Email, dto.Password, false, false);
 
+        if (result.Succeeded)
+        {
+            var user = await _userManager.FindByEmailAsync(dto.Email);
+            if (user != null)
+            {
+                await AddClaimByEmailAsync(user, "DisplayName", $"{user.FirstName} {user.LastName}");
+            }
+        }
         return result.Succeeded
             ? new AuthResult { Succeeded = true, StatusCode = 200 }
             : new AuthResult { Succeeded = false, StatusCode = 401, Error = "Invalid email or password" };
+    }
+
+    public async Task AddClaimByEmailAsync(MemberEntity user, string typeName, string value)
+    {
+        if (user != null)
+        {
+            
+            var claims = await _userManager.GetClaimsAsync(user);
+
+            if (!claims.Any(x => x.Type == typeName))
+            {
+                    await _userManager.AddClaimAsync(user, new Claim(typeName, value));
+            }
+            
+        }
     }
 
     public async Task<AuthResult> SignUpAsync(MemberSignUpDto dto)
