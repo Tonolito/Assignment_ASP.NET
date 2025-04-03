@@ -2,12 +2,22 @@
 
 @{
     var displayName = User.Claims.FirstOrDefault(x => x.Type == "DisplayName")?.Value;
+
+    var provider = User?.FindFirstValue(ClaimTypes.AuthenticationMethod);
+    if(string.IsNullOrEmpty(provider))
+    {
+        provider = "Local Identity";
+    }
+
+    var email = User?.FindFirstValue(ClaimTypes.Email);
 }
 
 <div class="profile-dropdown dropdown" >
     <div class="profile-bar">
         <img src="/images/avatar1.svg" alt="">
         <p>@displayName</p>
+        <p>@email</p>
+        <p>@provider</p>
     </div>
     <div class="darkmode-bar">
         <img src="/images/Setting.svg" alt="">
@@ -16,4 +26,4 @@
     </div>
     <div class="horizontal-line"></div>
     <a asp-action="SignOut" asp-controller="Auth" class="logout-bar"> <img src="/images/Logout.svg" alt=""> Logout</a>
-</div>
+</div>  
