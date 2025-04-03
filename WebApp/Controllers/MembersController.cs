@@ -9,6 +9,7 @@ using Domain.Models;
 
 namespace WebApp.Controllers;
 
+[Route("members")]
 public class MembersController : Controller
 {
     private readonly IMemberService _memberService;

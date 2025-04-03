@@ -4,10 +4,12 @@ using Data.Contexts;
 using Data.Entities;
 using Data.Interfaces;
 using Data.Repositories;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
@@ -57,6 +59,43 @@ builder.Services.ConfigureApplicationCookie(options =>
 //    options.AddPolicy("Authenticated", policy => policy.RequireRole("Administrator", "User"));
 //});
 
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+
+})
+    .AddCookie()
+    .AddGitHub(options =>
+    {
+        options.ClientId = builder.Configuration["Authentication:GitHub:ClientId"]!;
+        options.ClientSecret = builder.Configuration["Authentication:GitHub:ClientSecret"]!;
+        options.Scope.Add("user:email");
+        options.Scope.Add("read:user");
+
+        options.Events.OnCreatingTicket = async context =>
+        {
+            await Task.Delay(0);
+
+            if (context.User.TryGetProperty("name", out var name))
+            {
+                var fullName = name.GetString();
+                if (!string.IsNullOrEmpty(fullName))
+                {
+                    var names = fullName.Split(' ', 2, StringSplitOptions.RemoveEmptyEntries);
+                    if (names.Length > 0)
+                    {
+                        context.Identity?.AddClaim(new Claim(ClaimTypes.GivenName, names[0]));
+                    }
+
+                    if (names.Length > 1)
+                    {
+                        context.Identity?.AddClaim(new Claim(ClaimTypes.Surname, names[1]));
+                    }
+                }
+            }
+        };
+
+    });
 
 var app = builder.Build();
 
@@ -71,6 +110,7 @@ app.UseHttpsRedirection();
 app.UseRouting();
 
 app.UseAuthentication();
+
 app.UseAuthorization();
 using (var scope = app.Services.CreateScope())
 {

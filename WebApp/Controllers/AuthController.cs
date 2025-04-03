@@ -142,7 +142,11 @@ public class AuthController : Controller
             return RedirectToAction("SignIn");
         }
 
-        var signInResult = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
+        var signInResult = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent:false, bypassTwoFactor:true);
+        Console.Write($"Sign-in result: {signInResult.Succeeded}, " +
+                  $"LockedOut: {signInResult.IsLockedOut}, " +
+                  $"NotAllowed: {signInResult.IsNotAllowed}, " +
+                  $"RequiresTwoFactor: {signInResult.RequiresTwoFactor}");
         if (signInResult.Succeeded)
         {
             return LocalRedirect(returnUrl);

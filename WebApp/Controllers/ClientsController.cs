@@ -4,6 +4,7 @@ using WebApp.ViewModels;
 
 namespace WebApp.Controllers;
 
+[Route("clients")]
 public class ClientsController : Controller
 {
     private readonly IClientService _clientService;
