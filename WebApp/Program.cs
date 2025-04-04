@@ -10,9 +10,12 @@ using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.Security.Claims;
+using WebApp.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
+builder.Services.AddSignalR();
+
 
 builder.Services.AddDbContext<DataContext>(x => x.UseSqlServer(builder.Configuration.GetConnectionString("AlphaDB")));
 
@@ -105,6 +108,8 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.MapHub<ChatHub>("/chathub");
+
 app.UseRewriter(new Microsoft.AspNetCore.Rewrite.RewriteOptions().AddRedirect("^$", "projects"));
 app.UseHttpsRedirection();
 app.UseRouting();
@@ -127,7 +132,7 @@ using (var scope = app.Services.CreateScope())
     }
 
     var userManger = scope.ServiceProvider.GetRequiredService<UserManager<MemberEntity>>();
-    var user = new MemberEntity { UserName = "admin@domain.com", Email = "admin@domain.com" };
+    var user = new MemberEntity { UserName = "admin@domain.com", Email = "admin@domain.com", FirstName = "Admin"};
 
     var userExists = await userManger.Users.AnyAsync(x => x.Email == user.Email);
     if (!userExists)

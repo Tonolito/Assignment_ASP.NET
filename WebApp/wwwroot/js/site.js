@@ -255,7 +255,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         })
     })
+
+
+
 })
+
+
 
 function clearErrorMessages(form) {
     form.querySelectorAll('[data-val="true"]').forEach(input => {

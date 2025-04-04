@@ -19,6 +19,12 @@ public class MembersController : Controller
         _memberService = memberService;
     }
 
+    [Route("chat")]
+    public IActionResult Chat()
+    {
+        return View();
+    }
+
     [HttpPost]
     public async Task<IActionResult> Add(AddMemberViewModel model)
     {

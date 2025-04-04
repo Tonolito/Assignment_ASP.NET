@@ -93,6 +93,9 @@ html, body {
     color: var(--body-dark-color);
     background-color: var(--background)
 }
+a {
+    text-decoration: none;
+}
 
 /*---- Layout Structure ----*/
 .layout-nav {
@@ -273,6 +276,8 @@ main .container {
 .blue-btn {
     background-color: var(--accent);
     color: var(--white);
+    display: flex;
+    justify-content: center;
 }
     .blue-btn:hover {
         background-color: var(--dark-accent);
