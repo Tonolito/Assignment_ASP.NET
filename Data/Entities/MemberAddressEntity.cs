@@ -1,11 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Data.Entities;
 
 public class MemberAddressEntity
 {
-    [Key, ForeignKey("Member")]
+    public int Id { get; set; }
+
+    [ForeignKey("Member")]
     public string UserId { get; set; } = null!;
 
     public string StreetName { get; set; } = null!;
