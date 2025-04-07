@@ -24,6 +24,7 @@ builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddScoped<IMemberService, MemberService>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IStatusService, StatusService>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
 
 
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
@@ -109,6 +110,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.MapHub<ChatHub>("/chathub");
+app.MapHub<NotificationHub>("/notificationHub");
 
 app.UseRewriter(new Microsoft.AspNetCore.Rewrite.RewriteOptions().AddRedirect("^$", "projects"));
 app.UseHttpsRedirection();

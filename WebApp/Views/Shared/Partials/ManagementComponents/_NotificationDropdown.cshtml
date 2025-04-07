@@ -1,19 +1,146 @@
-﻿<div class="notification dropdown">
-    <div class="notification-header">
-        <p>Notifications</p>
-        <span>1</span>
-    </div>
-    <div class="notification-main">
-        <div class="notification-main-container">
-            <div class="notfication-img-container">
-                <img class="notification-img" src="/images/avatar1.svg" alt="">
-            </div>
-            <div class="notification-main-text">
-                <p class="notification-title">Hans Mattin-Lassei updated</p>
-                <p class="notification-time">1 min ago</p>
-            </div>
-            <p>X</p>
-        </div>
+﻿@{
+    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? "anonymous";
+    var notifications = await notificationService.GetNotificationsAsync(userId);
+}
+<div class="notification-dropdown-container">
+    <button id="notification-dropdown-button" data-type="dropdown" data-target="#notification-dropdown" class="notification-btn">
+        <i class="fa-duotone fa-solid fa-bell"></i>
+        @if (notifications.Any())
+        {
+            <div class="dot dot-red"></div>
+        }
+    </button>
 
+    <div id="notification-dropdown" class="notification-dropdown">
+        <div class="notification-header">
+            <h4>Notifications</h4>
+            <span class="notification-number">@notifications.Count()</span>
+        </div>
+        <div class="dropdown-divider"></div>
+        <div class="notifications">
+            @foreach(var notification in notifications)
+            {
+                <div class="notification-item">
+                    <img class="notification-image" src="@notification.Icon" />
+                    <div class="notification-message">@notification.Message</div>
+                    <div class="notification-time" data-created="@notification.Created.ToString("s")">"@notification.Created</div>
+                    <button class="btn-close" onclick="dismissNotification(@notification.Id)">
+                        <i class="fa-duotone fa-regular fa-xmark"></i>
+                    </button>
+                </div>
+            }
+            <div class="notification-item">
+                <img class="" src="/images/avatar-150px.svg" />
+                <div class="notification-message">UPDATED</div>
+                <div class="notification-time">1 week ago</div>
+                <button class="btn-close" onclick="dismissNotification()">
+                    <i></i>
+                </button>
+            </div>
+        </div>
     </div>
 </div>
+
+
+<script>
+    const connection = new SignalR.HubConnectionBuilder()
+        .withUrl("/notificationHub")
+        .build()
+
+    connection.on("ReceiveNotification", function(notification){
+        const notifications = document.querySelector('.notifications')
+
+        const item = document.createElement('div')
+        item.className = 'notification-item'
+        item.setAttribute('data-id', notification.id)
+        item.innerHtml = 
+        `
+            <img class="notification-image" src="${notification.icon}" />
+            <div class="notification-message">${notification.message}</div>
+            <div class="notification-time" data-created="${new Date(notification.created).toISOString()}">${notification.created}</div>
+            <button class="btn-close" onclick="dismissNotification('${notification.id}')">
+                        <i class="fa-duotone fa-regular fa-xmark"></i>
+                    </button>
+
+        `
+        notifications.insertBefore(item, notifications.FirstChild)
+        updateRelativeTimes()
+        updateNotificationCount()
+    })
+
+    connection.on("NotificationDismissed", function(notificationId)){
+        removeNotification(notificationId)
+    }
+
+    connection.start().catch(error => console.error(error))
+    
+    async function dismissNotification(notificationId) {
+        try{
+            const = res await fetch(`/api/notifications/dismiss/${notificationId}`, {method : 'POST'})
+            if(res.ok) {
+                removeNotification(notificationId)
+            }
+            else{
+                console.error('Error removing notification')
+            }
+        }
+        catch(error) {
+            console.error('Error removing notification : ', error)
+        }
+    }
+
+    function removeNotification(notificationId) {
+        const elemet = document.querySelector(`notification-main-container[data-id"${notificationId}"]`)
+        if(element) {
+            element.remove()
+            updateNotificationCount()
+        }
+    }
+
+    function updateNotificationCount() {
+        const notifications = document.querySelector('')
+        const notificationNumber = document.querySelector('.notification-number')
+        const notificationDropdownButton = document.querySelector('#notification-dropdown-button')
+        const count = notifications.querySelector('notification-main-container')
+
+        if(notificationNumber) {
+            notificationNumber.textContet = count
+        }
+        let dot = notificationdropdownButton.querySelector('.dot.dot-red')
+        if(count > 0 && !dot) {
+            dot = document.createElement('div')
+            dot.callName = 'dot dot-red'
+            notificationDropdownButton.appendChild(dot)
+        }
+        if(count === 0 && dot)
+        {
+            dot.remove()
+        }
+    }
+</script>
+
+
+
+
+
+// <div class="notification dropdown" id="notification-dropdown">
+//     <div class="notification-header">
+//         <p>Notifications</p>
+//         <span class=" notfication-number badge badge-red">1</span>
+//     </div>
+//     <div class="notification-main">
+//         <div class="notification-main-container" data-id="">
+//             <div class="notfication-img-container">
+//                 <img class="notification-img" src="/images/avatar1.svg" alt="">
+//             </div>
+//             <div class="notification-main-text">
+//                 <p class="notification-title">Hans Mattin-Lassei was here</p>
+//                 <div class="notification-time"> 1 day ago</div>
+//             </div>
+//             <button class="btn-close" onclick="dissmissNotification()">
+//                 <i class="fa-duotone fa-regular fa-xmark"></i>
+//             </button>
+//         </div>
+
+//     </div>
+// </div>

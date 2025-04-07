@@ -111,7 +111,7 @@ public class MembersController : Controller
         var result = await _memberService.GetMemberByIdAsync(id);
         if (result.Succeeded)
         {
-            var member = result.Result.FirstOrDefault();
+            var member = result.Result?.FirstOrDefault();
 
             var memberViewModel = new MemberViewModel
             {

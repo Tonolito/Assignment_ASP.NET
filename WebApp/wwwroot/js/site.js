@@ -3,6 +3,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const previewSize = 150
 
 
+    // DROPDOWN
+    initializeDropdowns();
+    updateRelativeTimes();
+    setInterval(updateRelativeTimes, 60000);
+
     const form = document.querySelector("form");
 
     if (!form) return;
@@ -106,84 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
         })
     })
 
-    document.querySelectorAll(".icon-trigger").forEach(trigger => {
-        trigger.addEventListener("click", (e) => {
-            e.stopPropagation(); // Förhindrar att klick utanför stänger direkt
-
-            let dropdown = null;
-
-            // Kontrollera vilken ikon som klickades
-            if (trigger.classList.contains("fa-bell")) {
-                dropdown = document.querySelector(".notification");
-            } else if (trigger.classList.contains("fa-gear")) {
-                dropdown = document.querySelector(".profile-dropdown");
-            }
-
-            if (dropdown) {
-                // Stäng alla andra dropdowns först
-                document.querySelectorAll(".dropdown").forEach(d => {
-                    if (d !== dropdown) d.style.display = "none";
-                });
-
-                // Växla synlighet på den aktuella dropdownen
-                dropdown.style.display = dropdown.style.display === "flex" ? "none" : "flex";
-            }
-        });
-    });
-
-    // Klick utanför → stäng alla dropdowns
-    document.addEventListener("click", () => {
-        document.querySelectorAll(".dropdown").forEach(dropdown => {
-            dropdown.style.display = "none";
-        });
-    });
-
-
-    // Dropdown för alla cards
-    document.querySelectorAll(".dots-container").forEach(button => {
-        button.addEventListener("click", (event) => {
-            event.stopPropagation(); // Förhindrar att klick utanför stänger direkt
-
-            let dropdown = null;
-
-            // Kontrollera om knappen finns i .upper-card (för project och members)
-            const upperCard = button.closest(".upper-card");
-            if (upperCard) {
-                dropdown = upperCard.querySelector(".dropdown");
-            }
-
-            // Om knappen finns i .client-card istället
-            const clientCard = button.closest(".client-card");
-            if (clientCard) {
-                dropdown = clientCard.querySelector(".dropdown-client");
-            }
-
-            if (dropdown) {
-                // Stäng alla andra dropdowns först
-                document.querySelectorAll(".dropdown, .dropdown-client").forEach(d => {
-                    if (d !== dropdown) d.style.display = "none";
-                });
-
-                // Växla synlighet på denna dropdown
-                dropdown.style.display = dropdown.style.display === "flex" ? "none" : "flex";
-            }
-        });
-    });
-
-    // Klicka utanför dropdown → stäng alla dropdowns
-    document.addEventListener("click", () => {
-        document.querySelectorAll(".dropdown, .dropdown-client").forEach(dropdown => {
-            dropdown.style.display = "none";
-        });
-    });
-
-
-    // Klicka utanför dropdown → stäng alla dropdowns
-    document.addEventListener("click", () => {
-        document.querySelectorAll(".dropdown").forEach(dropdown => {
-            dropdown.style.display = "none";
-        });
-    });
+    
 
 
     // Handel image previewer
@@ -364,3 +292,177 @@ function populateModalFields(modal, data) {
     });
 }
 
+
+// HANS VIDEO
+
+function closeALlDropdowns(exceptDorpdown, dropdownElements) {
+    dropdownElements.forEach(dropdown => {
+        if (dropdown != exceptDorpdown) {
+            dropdown.classList.remove('show')
+        }
+    })
+}
+function initializeDropdowns() {
+    const dropdownTriggers = document.querySelectorAll('[data-type="dropdown"]');
+
+    const dropdownElements = new Set();
+
+    dropdownTriggers.forEach(trigger => {
+        const targetSelector = trigger.getAttribute('data-target');
+        if (targetSelector) {
+            const dropdown = document.querySelector(targetSelector);
+            if (dropdown) {
+                dropdownElements.add(dropdown);
+            }
+        }
+
+        trigger.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const targetSelector = trigger.getAttribute('data-target');
+            if (!targetSelector) return;
+
+            const dropdown = document.querySelector(targetSelector);
+            if (!dropdown) return;
+
+            closeAllDropdowns(dropdown, dropdownElements);
+            dropdown.classList.toggle('show');
+        });
+    });
+
+    dropdownElements.forEach(dropdown => {
+        dropdown.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+    });
+
+    document.addEventListener('click', () => {
+        closeAllDropdowns(null, dropdownElements);
+    });
+
+    function closeAllDropdowns(excludeDropdown, allDropdowns) {
+        allDropdowns.forEach(dropdown => {
+            if (dropdown !== excludeDropdown) {
+                dropdown.classList.remove('show');
+            }
+        });
+    }
+}
+
+function updateRelativeTimes() {
+    const elements = document.querySelectorAll('.notification-item .time');
+    const now = new Date();
+
+    elements.forEach(el => {
+        const created = new Date(el.getAttribute('data-created'));
+        const diff = now - created;
+        const diffSeconds = Math.floor(diff / 1000);
+        const diffMinutes = Math.floor(diffSeconds / 60);
+        const diffHours = Math.floor(diffMinutes / 60);
+        const diffDays = Math.floor(diffHours / 24);
+        const diffWeeks = Math.floor(diffDays / 7);
+
+        let relativeTime = '';
+
+        if (diffMinutes < 1) {
+            relativeTime = '0 min ago';
+        } else if (diffMinutes < 60) {
+            relativeTime = diffMinutes + ' min ago';
+        } else if (diffHours < 2) {
+            relativeTime = diffHours + ' hour ago';
+        } else if (diffHours < 24) {
+            relativeTime = diffHours + ' hours ago';
+        } else if (diffDays < 2) {
+            relativeTime = diffDays + ' day ago';
+        } else if (diffDays < 7) {
+            relativeTime = diffDays + ' days ago';
+        } else {
+            relativeTime = diffWeeks + ' weeks ago';
+        }
+
+        el.textContent = relativeTime;
+    });
+}
+
+
+
+
+
+//LEGACY CODE
+//document.querySelectorAll(".icon-trigger").forEach(trigger => {
+//    trigger.addEventListener("click", (e) => {
+//        e.stopPropagation(); // Förhindrar att klick utanför stänger direkt
+
+//        let dropdown = null;
+
+//        // Kontrollera vilken ikon som klickades
+//        if (trigger.classList.contains("fa-bell")) {
+//            dropdown = document.querySelector(".notification");
+//        } else if (trigger.classList.contains("fa-gear")) {
+//            dropdown = document.querySelector(".profile-dropdown");
+//        }
+
+//        if (dropdown) {
+//            // Stäng alla andra dropdowns först
+//            document.querySelectorAll(".dropdown").forEach(d => {
+//                if (d !== dropdown) d.style.display = "none";
+//            });
+
+//            // Växla synlighet på den aktuella dropdownen
+//            dropdown.style.display = dropdown.style.display === "flex" ? "none" : "flex";
+//        }
+//    });
+//});
+
+//// Klick utanför → stäng alla dropdowns
+//document.addEventListener("click", () => {
+//    document.querySelectorAll(".dropdown").forEach(dropdown => {
+//        dropdown.style.display = "none";
+//    });
+//});
+
+
+//// Dropdown för alla cards
+//document.querySelectorAll(".dots-container").forEach(button => {
+//    button.addEventListener("click", (event) => {
+//        event.stopPropagation(); // Förhindrar att klick utanför stänger direkt
+
+//        let dropdown = null;
+
+//        // Kontrollera om knappen finns i .upper-card (för project och members)
+//        const upperCard = button.closest(".upper-card");
+//        if (upperCard) {
+//            dropdown = upperCard.querySelector(".dropdown");
+//        }
+
+//        // Om knappen finns i .client-card istället
+//        const clientCard = button.closest(".client-card");
+//        if (clientCard) {
+//            dropdown = clientCard.querySelector(".dropdown-client");
+//        }
+
+//        if (dropdown) {
+//            // Stäng alla andra dropdowns först
+//            document.querySelectorAll(".dropdown, .dropdown-client").forEach(d => {
+//                if (d !== dropdown) d.style.display = "none";
+//            });
+
+//            // Växla synlighet på denna dropdown
+//            dropdown.style.display = dropdown.style.display === "flex" ? "none" : "flex";
+//        }
+//    });
+//});
+
+//// Klicka utanför dropdown → stäng alla dropdowns
+//document.addEventListener("click", () => {
+//    document.querySelectorAll(".dropdown, .dropdown-client").forEach(dropdown => {
+//        dropdown.style.display = "none";
+//    });
+//});
+
+
+//// Klicka utanför dropdown → stäng alla dropdowns
+//document.addEventListener("click", () => {
+//    document.querySelectorAll(".dropdown").forEach(dropdown => {
+//        dropdown.style.display = "none";
+//    });
+//});

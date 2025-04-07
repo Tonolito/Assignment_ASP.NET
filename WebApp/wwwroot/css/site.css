@@ -144,6 +144,58 @@ header {
         width: 40px;
         height: 40px;
     }
+.notification-btn {
+    transition: background-color 0.1s ease-in-out, border-color 0.1s ease-in-out, color 0.1s ease-in-out;
+    background-color: var(--btn-notification-background-color);
+    border: 1px solid var(--btn-notification-border-color);
+    color: var(--btn-notification-text-color);
+    font-size: 1.4em;
+    position: relative;
+    z-index: 0;
+    cursor: pointer;
+}
+
+.dot {
+    position: absolute;
+    right: 3px;
+    top: -1px;
+    z-index: 1;
+}
+
+.dot {
+    font-size: 0.5em;
+    background-color: var(--);
+    padding: 2px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dot-red {
+    color: red;
+}
+
+.dot-yellow {
+    color: red;
+}
+
+.badge{
+    
+    border-radius: 16px;
+    padding: 0.5rem 0.5rem;
+    font-size:0.9em;
+    font-weight:var(--weight-regular);
+
+    
+}
+    .badge.badge-red {
+        background-color: red;
+        border: 1px solid white;
+        color: white;
+    }
+
+
 
 /* Aside */
 aside {
@@ -295,6 +347,28 @@ main .container {
 button{
     cursor:pointer;
 }
+.btn-close{
+    background-color: transparent;
+    border: none;
+    padding:0.2rem;
+    border-radius:16px;
+}
+    .btn-close:hover
+    {
+        background-color:grey;
+    }
+
+
+
+
+/*HELPERS*/
+.show{
+    display:flex;
+}
+.hide
+{
+
+}
 /*Links*/
 
 
@@ -412,58 +486,119 @@ button{
 }
 
 /*Notification Drowdown*/
-.notification {
-    flex-direction: column;
-    display: none;
-    position: absolute;
-    background-color: var(--white);
-    top: 72px;
-    right: 135px;
-    border-radius: 14px;
-    z-index:2;
+.notification-dropdown-container {
+    position: relative;
+    display: inline-block;
+    z-index: 0;
 }
 
-.notification-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid var(--border-200);
-    padding-left: 1.5rem;
-    padding-right: 2rem;
-    padding-top: 1.5rem;
-}
-
-    .notification-header p {
-        font-size: 20px;
+    .notification-dropdown-container .btn-notification {
+        position: relative;
+        border: none;
+        transition: background-color 0.1s ease-in-out, border-color 0.1s ease-in-out, color 0.1s ease-in-out;
     }
 
-.notification-title {
-    font-size: 15px;
-}
+        .notification-dropdown-container.btn-notification:hover {
+            background-color: var(--gray-100) !important;
+            border: 0px solid var(--gray-100);
+            color: var(--text-color);
+            transition: background-color 0.1s ease-in-out, border-color 0.1s ease-in-out, color 0.1s ease-in-out;
+        }
 
-.notification-time {
-    font-size: 14px;
-    color: #637085;
-}
+    .notification-dropdown-container .notification-dropdown {
+        position: absolute;
+        top: 50px;
+        right: 0;
+        background: var(--card-background-color);
+        border: var(--card-border-color);
+        border-radius: 16px;
+        min-width: 450px;
+        min-height: 150px;
+        box-shadow: var(--box-shadow);
+        display: none;
+        z-index: 999;
+    }
 
-.notification-main {
-    padding: 1rem;
-}
+        .notification-dropdown-container .notification-dropdown.show {
+            display: block;
+        }
 
-.notification-main-container {
-    display: flex;
+        .notification-dropdown-container .notification-dropdown .notification-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            color: var(--profile-info-text-color);
+            border-radius: 14px;
+            margin: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .notification-dropdown-container .notification-dropdown .notification-number {
+            background: #FF6648;
+            color: var(--white-100);
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.9em;
+        }
+
+.notification-item {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas: "img message btn" "img time btn";
     align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    padding: 10px;
-    background-color: var(--grey-100);
+    column-gap: 1rem;
+    padding: 1rem;
+    margin: 1rem;
     border-radius: 14px;
+    transition: background-color 0.1s ease-in-out;
 }
+    .notification-item .image {
+        grid-area: img;
+        height: 48px;
+        width: 48px;
+    }
 
-.notification-main-text {
-    padding-right: 55px;
-}
+        .notification-item .image.user {
+            border-radius: 50%;
+        }
+
+        .notification-item .image.project {
+            border-radius: 14px;
+        }
+
+    .notification-item .message {
+        grid-area: message;
+    }
+
+    .notification-item .time {
+        grid-area: time;
+        font-size: 0.9em;
+        color: var(--text-extra-muted-color);
+    }
+
+    .notification-item .btn-close {
+        grid-area: btn;
+        opacity: 0;
+        transition: opacity 0.1s ease-in-out;
+        pointer-events: none;
+    }
+
+    .notification-item:hover {
+        background-color: var(--white-200);
+    }
+
+        .notification-item:hover .btn-close {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
 
 /*---- main Components ----*/
 
@@ -550,6 +685,7 @@ button{
 
 .dropdown-member {
     position: absolute;
+    display: none;
     flex-direction: column;
     background-color: #ffffff;
     padding: 0.5rem;
@@ -558,14 +694,16 @@ button{
     top: 1.9rem;
     min-width: 14rem;
 }
+    .dropdown-member.show {
+        display: flex;
+        flex-direction: column
+    }
 
 .horizontal-line {
     margin: 0.5rem 0;
     border-bottom: 1px solid #ebeef2;
 }
-.dropdown{
-    display: none;
-}
+
 /*.dropdown-option {
     display: flex;
     align-items: center;
@@ -643,6 +781,10 @@ button{
     min-width: 14rem;
     cursor: pointer;
 }
+    .dropdown-project.show {
+        display: flex;
+        flex-direction: column; /* Behövs eftersom det fanns i originalet */
+    }
 
 .dropdown-option {
     display: flex;
@@ -768,6 +910,7 @@ button{
 }
 .dropdown-client {
     position: absolute;
+    display: none;
     flex-direction: column;
     background-color: #ffffff;
     padding: 0.5rem;
@@ -777,6 +920,10 @@ button{
     min-width: 14rem;
     z-index: 1;
 }
+ .dropdown-client.show{
+     display:flex;
+     flex-direction:column
+ }
 
 /* Modal Component */
 .modal-container {

@@ -1,10 +1,11 @@
 ﻿using Business.Services;
 using Data.Entities;
 using Domain.Dtos;
-using Domain.Extentions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;
+using WebApp.Hubs;
 using WebApp.ViewModels;
 
 namespace WebApp.Controllers;
@@ -15,12 +16,16 @@ public class AuthController : Controller
     private readonly IAuthService _authService;
     private readonly SignInManager<MemberEntity> _signInManager;
     private readonly UserManager<MemberEntity> _userManager;
+    private readonly INotificationService _notificationService;
+    private readonly IHubContext<NotificationHub> _notificationHub;
 
-    public AuthController(IAuthService authService, SignInManager<MemberEntity> signInManager, UserManager<MemberEntity> userManager)
+    public AuthController(IAuthService authService, SignInManager<MemberEntity> signInManager, UserManager<MemberEntity> userManager, INotificationService notificationService, IHubContext<NotificationHub> notificationHub)
     {
         _authService = authService;
         _signInManager = signInManager;
         _userManager = userManager;
+        _notificationService = notificationService;
+        _notificationHub = notificationHub;
     }
 
     [Route("signin")]
@@ -47,6 +52,24 @@ public class AuthController : Controller
             var result = await _authService.SignInAsync(model);
             if (result.Succeeded)
             {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? "Anon";
+
+                // Skapa notification
+                var notification = new NotificationEntity
+                {
+                    Message = $"{model.Email} signed in",
+                    NotificationTypeId = 1,
+                    Created = DateTime.Now
+                };
+
+                // Lägg till notifikation i databasen
+                await _notificationService.AddNotificitionAsync(notification, userId);
+
+                // Hämta alla synliga notifikationer för användaren
+                var notifications = await _notificationService.GetNotificationsAsync(userId);
+
+                // Skicka listan till alla via SignalR (du kan byta till .User(userId) om du vill skicka privat)
+                await _notificationHub.Clients.All.SendAsync("ReceiveNotification", notifications);
                 return Redirect(returnUrl);
             }
         }

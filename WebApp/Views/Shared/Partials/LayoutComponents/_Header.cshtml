@@ -2,14 +2,19 @@
     <div class="header">
         <div class="container">
             @await Html.PartialAsync("Partials/ManagementComponents/_SearchBar")
-            <i class="fa-duotone fa-solid fa-bell icon-trigger"></i>
+
             <i class="fa-duotone fa-solid fa-gear icon-trigger"></i>
+
+             @await Html.PartialAsync("Partials/ManagementComponents/_NotificationDropdown")
+            
+
             <div class="vertical-line"></div>
+
             <div class="profile-img-container">
-                <img src="/images/avatar1.svg" alt="">
+                <img src="/images/avatar1.svg" alt="Profile">
             </div>
+
             @await Html.PartialAsync("Partials/ManagementComponents/_ProfileDropdown")
-            @await Html.PartialAsync("Partials/ManagementComponents/_NotificationDropdown")
         </div>
     </div>
 </header>

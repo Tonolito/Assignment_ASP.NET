@@ -14,11 +14,12 @@ public interface IAuthService
     Task<AuthResult> SignUpAsync(MemberSignUpDto dto);
 }
 
-public class AuthService(SignInManager<MemberEntity> signInManager, UserManager<MemberEntity> userManager, IMemberService memberService) : IAuthService
+public class AuthService(SignInManager<MemberEntity> signInManager, UserManager<MemberEntity> userManager, IMemberService memberService, INotificationService notificationService) : IAuthService
 {
     private readonly SignInManager<MemberEntity> _signInManager = signInManager;
     private readonly UserManager<MemberEntity> _userManager = userManager;
     private readonly IMemberService _memberService = memberService;
+    private readonly INotificationService _notificationService = notificationService;
 
     public async Task<AuthResult> SignInAsync(MemberSignInDto dto)
     {
@@ -35,6 +36,12 @@ public class AuthService(SignInManager<MemberEntity> signInManager, UserManager<
             if (user != null)
             {
                 await AddClaimByEmailAsync(user, "DisplayName", $"{user.FirstName} {user.LastName}");
+                var notificationEntity = new NotificationEntity()
+                {
+                    Message = $"{user.FirstName} {user.LastName} signed in.",
+                    NotificationTypeId = 1
+                };
+                await _notificationService.AddNotificitionAsync(notificationEntity, user.Id);
             }
         }
         return result.Succeeded
@@ -46,14 +53,14 @@ public class AuthService(SignInManager<MemberEntity> signInManager, UserManager<
     {
         if (user != null)
         {
-            
+
             var claims = await _userManager.GetClaimsAsync(user);
 
             if (!claims.Any(x => x.Type == typeName))
             {
-                    await _userManager.AddClaimAsync(user, new Claim(typeName, value));
+                await _userManager.AddClaimAsync(user, new Claim(typeName, value));
             }
-            
+
         }
     }
 
@@ -77,7 +84,7 @@ public class AuthService(SignInManager<MemberEntity> signInManager, UserManager<
 
         var entity = dto.MapTo<MemberEntity>();
         entity.UserName = dto.Email;
-        
+
         var result = await _userManager.CreateAsync(entity, dto.Password);
 
 
@@ -85,7 +92,7 @@ public class AuthService(SignInManager<MemberEntity> signInManager, UserManager<
         ? new AuthResult { Succeeded = true, StatusCode = 201 }
         : new AuthResult { Succeeded = false, StatusCode = 999, Error = "FAILED" };
 
-        
+
 
     }
 
@@ -94,7 +101,7 @@ public class AuthService(SignInManager<MemberEntity> signInManager, UserManager<
         try
         {
             await _signInManager.SignOutAsync();
-            return new AuthResult { Succeeded = true, StatusCode = 200 }; 
+            return new AuthResult { Succeeded = true, StatusCode = 200 };
         }
         catch (Exception ex)
         {

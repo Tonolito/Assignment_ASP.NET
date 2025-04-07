@@ -19,4 +19,6 @@ public class MemberEntity : IdentityUser
 
     public virtual ICollection<ProjectEntity> Projects { get; set; } = [];
 
+    public ICollection<NotificationDismissedEntity> DismissedNotifications { get; set; } = [];
+
 }
