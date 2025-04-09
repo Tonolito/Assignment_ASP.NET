@@ -12,7 +12,7 @@ public class NotificationDismissedEntity
 
     [ForeignKey(nameof(User))]
     public string UserId { get; set; } = null!;
-    public Member User { get; set; } = null!;
+    public MemberEntity User { get; set; } = null!;
 
 
     [ForeignKey(nameof(Notification))]

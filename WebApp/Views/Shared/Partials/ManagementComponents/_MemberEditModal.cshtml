@@ -10,7 +10,7 @@
         </div>
        
         <form novalidate method="post" asp-action="Edit" asp-controller="Members">
-            <input asp-for="Id" type="hidden" />
+            <input asp-for="Id" type="hidden" /> 
             <div class="image-previewer circle">
                 <img src="" class="image-preview" />
                 <input asp-for="MemberImage" accept="image/*" class="hide" />
@@ -19,14 +19,14 @@
                 <div class="labelgroup-modal">
                     <label asp-for="FirstName"></label>
                     <div class="field-group">
-                        <input asp-for="FirstName" />
+                        <input asp-for="FirstName" value="@Model.FirstName" />
                         <span asp-validation-for="FirstName"></span>
                     </div>
                 </div>
                 <div class="labelgroup-modal">
                     <label asp-for="LastName"></label>
                     <div class="field-group">
-                        <input asp-for="LastName" />
+                        <input asp-for="LastName" value="@Model.LastName"/>
                         <span asp-validation-for="LastName"></span>
                     </div>
                 </div>
@@ -35,7 +35,7 @@
             <div class="labelgroup-modal">
                 <label asp-for="Email"></label>
                 <div class="field-group">
-                    <input asp-for="Email" />
+                    <input asp-for="Email" value="@Model.Email"/>
                     <span asp-validation-for="Email"></span>
                 </div>
             </div>
@@ -43,7 +43,7 @@
             <div class="labelgroup-modal">
                 <label asp-for="Phone"></label>
                 <div class="field-group">
-                    <input asp-for="Phone" />
+                    <input asp-for="Phone" value="@Model.Phone" />
                     <span asp-validation-for="Phone"></span>
                 </div>
             </div>
@@ -51,7 +51,7 @@
             <div class="labelgroup-modal">
                 <label asp-for="JobTitle"></label>
                 <div class="field-group">
-                    <input asp-for="JobTitle" />
+                    <input asp-for="JobTitle" value="@Model.JobTitle" />
                     <span asp-validation-for="JobTitle"></span>
                 </div>
             </div>

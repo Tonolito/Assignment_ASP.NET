@@ -44,6 +44,9 @@ public class AddProjectViewModel
     [Required(ErrorMessage = "Required")]
     public string ClientId { get; set; } = null!;
 
+    //[Display(Name = "Selected Users")]
+    //public List<string> SelectedUserIds { get; set; } = new();
+
     public static implicit operator AddProjectDto(AddProjectViewModel model)
     {
         return model == null

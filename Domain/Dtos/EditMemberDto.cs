@@ -3,9 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Dtos;
 
-public class EditMemberDto
+public class  EditMemberDto
 {
-    //public int Id { get; set; }
+    public string? Id { get; set; } 
 
     [DataType(DataType.Upload)]
     [Display(Name = "Member Image", Prompt = "Select a image")]

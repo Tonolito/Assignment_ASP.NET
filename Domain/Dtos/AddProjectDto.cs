@@ -44,4 +44,6 @@ public class AddProjectDto
     [DataType(DataType.Text)]
     [Required(ErrorMessage = "Required")]
     public string ClientId { get; set; } = null!;
+
+    //public List<string> SelectedUserIds { get; set; } = new();
 }

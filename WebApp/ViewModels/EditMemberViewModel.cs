@@ -49,6 +49,7 @@ public class EditMemberViewModel
             ? null!
             : new EditMemberDto
             {
+                Id = model.Id,
                 MemberImage = model.MemberImage,
                 FirstName = model.FirstName,
                 LastName = model.LastName,

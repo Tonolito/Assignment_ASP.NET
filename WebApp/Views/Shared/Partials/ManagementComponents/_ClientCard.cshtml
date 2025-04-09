@@ -31,9 +31,9 @@
     </div>
     <div class="client-list-item">
         <button class="dots-container" data-type="dropdown"
-                data-target="#client-dropdown">
+                data-target="#client-dropdown-@Model.Id">
              <i class="fa-solid fa-ellipsis"></i>
         </button>
     </div>
-    @await Html.PartialAsync("Partials/ManagementComponents/_ClientDropdown")
+    @await Html.PartialAsync("Partials/ManagementComponents/_ClientDropdown", Model.Id)
 </div>

@@ -436,6 +436,32 @@ button{
   
 }
 /*Profile Dropdown*/
+
+.profile-dropdown-dropdown-container .profile-dropdown.show {
+    display: block;
+}
+.profile-dropdown-container {
+    position: relative;
+    display: inline-block;
+    z-index: 0;
+}
+
+    .profile-dropdown-container .btn-profile {
+        position: relative;
+        border: none;
+        transition: background-color 0.1s ease-in-out, border-color 0.1s ease-in-out, color 0.1s ease-in-out;
+    }
+
+    .profile-dropdown-container.btn-profile:hover {
+        background-color: var(--gray-100) !important;
+        border: 0px solid var(--gray-100);
+        color: var(--text-color);
+        transition: background-color 0.1s ease-in-out, border-color 0.1s ease-in-out, color 0.1s ease-in-out;
+    }
+    .profile-dropdown-container .profile-dropdown.show {
+        display: block;
+    }
+
 .profile-dropdown {
     display: none;
     flex-direction:column;
@@ -509,8 +535,8 @@ button{
         position: absolute;
         top: 50px;
         right: 0;
-        background: var(--card-background-color);
-        border: var(--card-border-color);
+        background: white;
+        border: white;
         border-radius: 16px;
         min-width: 450px;
         min-height: 150px;
@@ -1177,3 +1203,97 @@ form .field-validation-error{
     .auth .already-account span {
         color: var(--accent);
     }
+
+/* -- TAGGAR -- */
+.form-tag-input {
+    font-size:1em;
+    outline: none;
+    border: none;
+    flex-grow:1;
+    font-weight: 400;
+    font-family: var(--font-family);
+    background-color: transparent;
+}
+.form-tag-select.focused,
+search-results.focused{
+    border-color:red;
+
+}
+
+.form-tag-input::placeholder{
+    color:black;
+    font-size: 14px;
+    font-style:normal;
+    font-weight:400;
+}
+.form-tag-select label,
+form-tag-select i {
+    cursor: pointer;
+    position: absolute;
+    font-size: 1.1em;
+    right: 1rem;
+    top: 0.8rem;
+}
+.search-results {
+    background-color:white;
+    border: 1px solid red;
+    border-top: none;
+    border-radius: 0 0 13px 13px;
+    width:100%;
+
+    position: absolute;
+    top: 85%;
+    left:0;
+    z-index: 10;
+/*    display:none;*/
+}
+.search-item{
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    display:flex;
+    align-items:center;
+    gap:0.5rem;
+    font-size: 0.8rem;
+}
+    .search-item:hover{
+        background-color:blue;
+        border-radius:12px;
+    }
+
+    .search-item.active {
+        background-color: blue;
+        border-radius: 12px;
+    }
+
+user-avatar{
+    width:24px;
+    height:24px;
+    border-radius:50%;
+    background-color: #cdb5e1;
+    display:flex;
+    align-items:center;
+    justify-content: center;
+    font-weight:bold;
+    color:white;
+    font-size:0.8rem;
+}
+
+.reomve-btn{
+    cursor:pointer;
+    color: grey;
+}
+ .reomve-btn:hover{
+     cursor:pointer;
+     color:black;
+ }
+
+ .tag {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     background-color: #f1f5f9;
+     border-radius: 12px;
+     padding: 0.3rem 0.6rem;
+     font-size: 0.9em;
+ }
+ 

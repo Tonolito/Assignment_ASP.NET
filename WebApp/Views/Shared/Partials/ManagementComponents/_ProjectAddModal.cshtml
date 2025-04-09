@@ -1,4 +1,16 @@
-﻿@model AddProjectViewModel
+﻿@using System.Text.Json
+@model AddProjectViewModel
+
+ @* @{  *@
+ @*     var selectedUsersJson = JsonSerializer.Serialize(  *@
+ @*                Model.UserId.Select(m => m. *@
+ @*               {  *@
+ @*                   id = m.user.id,  *@
+ @*                    imageurl = m.User.ImageUrl,  *@
+ @*                    fullname = m.userFirstName + " " + m.user.Lastname  *@
+ @*                })  *@
+ @*            );   *@
+ @* }  *@
 <div class="modal-container" id="addProjectModal">
     <div class="modal-card">
         <div class="top-card">
@@ -8,8 +20,9 @@
             </button>
         </div>
 
-        <form novalidate method="post" asp-action="AddProject" asp-controller="Projects">
-
+        <form novalidate method="post" asp-action="Add" asp-controller="Projects">
+            @* <input type="hidden" asp-for"Id" /> *@
+            <input type="hidden" name="SelectedUserIds" id="SelectedUserIds" />
             <div class="image-previewer circle">
                 <img src="" class="image-preview" />
                 <input asp-for="ProjectImage" accept="image/*" class="hide" />
@@ -31,11 +44,32 @@
 
             <div class="labelgroup-modal">
                 <label asp-for="Description"></label>
-                <div class="field-group">
-                    <input asp-for="Description" />
-                    <span asp-validation-for="Description"></span>
+                <div class="wysiwyg">
+                    <textarea id="Description" asp-for="Description" style="display: none;"></textarea>
+                    <div id="project-wysiwyg-editor"></div>
+                    <div id="project-wysiwyg-toolbar">
+                        <span class="ql-formats">
+                            <button class="ql-bold"></button>
+                            <button class="ql-italic"></button>
+                            <button class="ql-underline"></button>
+                        </span>
+                        <span class="ql-formats">
+                            <button class="ql-align" value=""></button>
+                            <button class="ql-align" value="center"></button>
+                            <button class="ql-align" value="right"></button>
+                        </span>
+                        <span class="ql-formats">
+                            <button class="ql-list" value="bullet"></button>
+                            <button class="ql-list" value="ordered"></button>
+                        </span>
+                        <span class="ql-formats">
+                            <button class="ql-link"></button>
+                        </span>
+                    </div>
+                    
                 </div>
             </div>
+
 
             <div class="dates-flex">
                 <div class="labelgroup-modal">
@@ -55,12 +89,14 @@
             </div>
 
             <div class="labelgroup-modal">
-                <label asp-for="UserId"></label>
-                <div class="search-icon-container">
-                    <img class="search-icon" src="/css/images/Search.svg" alt="" />
-                </div>
-                <input  asp-for="UserId"/>
-                <span asp-validation-for="UserId"></span>
+              <div class="modal-label"></div>
+              <div id="tagged-users" class="form-input form-tag-select">
+                  <input type="text" id="user-search" class="form-tag-input" placeholder="Add Member..." />
+                  <label for="user-search">
+                      <i></i>
+                  </label>
+                  <div id="user-search-results" class="search-results"></div>
+              </div>
             </div>
 
             <div class="labelgroup-modal">
@@ -76,3 +112,55 @@
         </form>
     </div>
 </div>
+
+
+<script>
+        document.addEventListener('DOMContentLoaded', function(){
+        initWysiwyg('#project-wysiwyg-editor', '#project-wysiwyg-toolbar', '#Description', '@Html.Raw(ViewBag.RichTextContent ?? "")');
+    });
+
+    function initWysiwyg(wysiwygEditorId, wysiwygToolbar, textareaId, content) {
+        const textarea = document.getElementById(textareaId);
+
+        const quill = new Quill(wysiwygEditorId, {
+            modules: {
+                syntax: true,
+                toolbar: wysiwygToolbar,
+            },
+            placeholder: 'Type something...',
+            theme: 'snow',
+        });
+
+        if (content) {
+            quill.root.innerHTML = content;
+        }
+
+        quill.on('text-change', function() {
+            textarea.value = quill.root.innerHTML;
+        });
+    }
+
+
+
+    initTagSelector({
+        containerId: 'tagged-users',
+        inputId: 'user-search',
+        resultId: 'users-search-results',
+        searchUrl: (query) => '@Url.Action("SearchTags", "Users")' + '?term=' + encodeURIComponent(query),
+        displayProperty: 'fullName',
+        imageProperty: 'imageUrl',
+        tagClass: 'user-tag',
+        emptyMessage: 'No users found.',
+        preselected: preSelectedUserTags,
+        selectedInputIds: 'SelectedUserIds'
+    });
+
+</script>
+        @* const preSelectedUserTags = @Html.Raw(selectedUsersJson); *@
+
+@* <label asp-for="UserId"></label> *@
+@* <div class="search-icon-container"> *@
+@*     <img class="search-icon" src="/css/images/Search.svg" alt="" /> *@
+@* </div> *@
+@* <input asp-for="UserId" /> *@
+@* <span asp-validation-for="UserId"></span> *@

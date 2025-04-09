@@ -6,9 +6,7 @@ namespace Data.Entities;
 
 public class MemberAddressEntity
 {
-    public int Id { get; set; }
-
-    [ForeignKey("Member")]
+    [Key, ForeignKey("Member")]
     public string UserId { get; set; } = null!;
 
     public string StreetName { get; set; } = null!;

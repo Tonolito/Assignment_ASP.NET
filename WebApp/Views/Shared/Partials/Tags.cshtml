@@ -1,0 +1,32 @@
+﻿<div class="container">
+    <div class="form-container">
+        <form method="post" novalidate>
+            <div class="input-group">
+                <label class="form-label">Tags</label>
+                <div id="tags" class="forminput form-tag-select">
+                    <input type="text" id="tag-search" class="form-tag-input" placeholder="Add Tags" />
+                    <label for="tag-search">
+                        <i></i>
+                    </label>
+                    <div id="tag-search-result" class="search-results"></div>
+                </div>
+            </div>
+            <button type="submit" class="blue-btn btn">search</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    const preSelectedTags = []
+    initTagSelector({
+        containerId: 'tags',
+        inputId: 'tag-search',
+        resultId: 'tag-search-results',
+        searchUrl: (query) => '@Url.Action("SearchTags", "Tags")' + '?term=' + encodeURIComponent(query),
+        displayProperty: 'tagName',
+        tagClass: 'tag',
+        emptyMessage: 'No tags found.',
+        preselected: preSelectedTags
+    });
+
+</script>

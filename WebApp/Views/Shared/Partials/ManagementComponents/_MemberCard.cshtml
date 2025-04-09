@@ -2,10 +2,10 @@
 
 <div class="member-card">
         <div class="upper-card">
-        <button class="dots-container" data-type="dropdown" data-target="#member-dropdown" >
+        <button class="dots-container" data-type="dropdown" data-target="#member-dropdown-@Model.Member.Id" >
                 <img src="/images/Dot_2.svg" alt="" />
             </button>
-            @await Html.PartialAsync("Partials/ManagementComponents/_MemberDropdown")
+            @await Html.PartialAsync("Partials/ManagementComponents/_MemberDropdown", Model.Member.Id)
         </div>
         <div class="member-img-container">
             <img src="/images/avatar1.svg" alt="" />

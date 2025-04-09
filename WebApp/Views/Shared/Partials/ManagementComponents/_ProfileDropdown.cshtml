@@ -11,19 +11,25 @@
 
     var email = User?.FindFirstValue(ClaimTypes.Email);
 }
+<div class="profile-dropdown-container">
+    <button class="btn-profile" id="profile-dropdown-button" data-type="dropdown" data-target="#profile-dropdown">
+        <i class="fa-duotone fa-solid fa-gear icon-trigger"></i>
+    </button>
+    <div class="profile-dropdown" id="profile-dropdown">
+        <div class="profile-bar">
+            <img src="/images/avatar1.svg" alt="">
+            <p>@displayName</p>
+            <p>@email</p>
+            <p>@provider</p>
+        </div>
+        <div class="darkmode-bar">
+            <img src="/images/Setting.svg" alt="">
+            <p>DarkMode</p>
+            Icon
+        </div>
+        <div class="horizontal-line"></div>
+        <a asp-action="SignOut" asp-controller="Auth" class="logout-bar"> <img src="/images/Logout.svg" alt=""> Logout</a>
+    </div>
+</div>
 
-<div class="profile-dropdown dropdown" >
-    <div class="profile-bar">
-        <img src="/images/avatar1.svg" alt="">
-        <p>@displayName</p>
-        <p>@email</p>
-        <p>@provider</p>
-    </div>
-    <div class="darkmode-bar">
-        <img src="/images/Setting.svg" alt="">
-        <p>DarkMode</p>
-        Icon
-    </div>
-    <div class="horizontal-line"></div>
-    <a asp-action="SignOut" asp-controller="Auth" class="logout-bar"> <img src="/images/Logout.svg" alt=""> Logout</a>
-</div>  
+ 

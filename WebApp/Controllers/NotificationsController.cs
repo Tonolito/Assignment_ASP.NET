@@ -22,7 +22,7 @@ public class NotificationsController : ControllerBase
         _notificationService = notificationService;
     }
 
-    [HttpPost]
+
     [HttpPost]
     public async Task<IActionResult> CreateNotification(NotificationEntity notificationEntity)
     {
@@ -39,6 +39,7 @@ public class NotificationsController : ControllerBase
 
         return Ok(new { success = true });
     }
+
 
 
     [HttpGet]

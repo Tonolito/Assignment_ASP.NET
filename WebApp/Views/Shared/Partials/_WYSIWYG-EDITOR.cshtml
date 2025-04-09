@@ -1,14 +1,76 @@
-﻿<div class="container">
+﻿@model EditorViewModel
+@* https://youtu.be/nvaZhCqolMQ *@
+<div class="container">
     <div class="form-container" >
         <form>
             <div class="input-group">
-
+                <label asp-for="Title"> </label>
+                <input asp-for="Title" />
             </div>
 
             <div class="input-group">
-
+                <label asp-for="RichTextContent"> </label>
+                <div class="wysiwyg">
+                    <textarea asp-for="RichTextContent"></textarea>
+                    <div id="project-wysiwyg-editor"></div>
+                    <div id="project-wysiwyg-toolbar"></div>
+                        <span class="ql-formats">
+                            <button class="ql-bold"></button>
+                            <button class="ql-italic"></button>
+                            <button class="ql-underline"></button>
+                        </span>
+                    <span class="ql-formats">
+                        <button class="ql-align" value=""></button>
+                        <button class="ql-align" value="center"></button>
+                        <button class="ql-align" value="right"></button>
+                    </span>
+                    <span class="ql-formats">
+                        <button class="ql-list" value="bullet"></button>
+                        <button class="ql-list" value="ordered"></button>
+                    </span>
+                    <span class="ql-formats">
+                        <button class="ql-link"></button>
+                    </span>
+                </div>
             </div>
-
+            <button type="submit" class="blue-btn btn">Save</button>
         </form>
     </div>
 </div>
+
+
+@* [HttpPost] *@
+@* public IAcitonResult Name(EditorViewModel) *@
+@* { *@
+@*     Viewbag.ContentTitle = model.Title; *@
+@*     Viewbag.RichTextContent = model.RichTextContent *@
+@* } *@
+
+@* för att få ut så gör vi @Html.Raw(ViewBag.RichTextContent) *@
+
+<script>
+    document.addEventListener('DOMContentLoaded'), function(){
+        initWysiwyg('#project-wysiwyg-editor','#project-wysiwyg-toolbar','#RichTextContent', '@Html.Raw(ViewBag.RichTextContent ?? "")')
+    }
+    
+    
+    function initWysiwyg(wysiwygEditorId, wysiwygToolbar,textareaId, content) {
+        const textare = document.getElementById(textareaId)
+
+        const quill = new Quill(wysiwygEditorId, {
+            modules: {
+                syntax: true,
+                toolbar: wysiwygToolbar,
+            },
+            placeholder: 'Type something',
+            theme: 'snow'
+        })
+
+        if (content)
+        quill.root.innerHTML = content;
+
+        quill.on('text-change', () => {
+            textarea.value = quill.root.innerHTML;
+        })
+    }
+</script>

@@ -5,6 +5,6 @@ using Domain.Models;
 
 namespace Data.Repositories;
 
-public class MemberRepository(DataContext context) : BaseRepository<MemberEntity, Member>(context), IMemberRepository
+public class MemberRepository(AppDbContext context) : BaseRepository<MemberEntity, Member>(context), IMemberRepository
 {
 }

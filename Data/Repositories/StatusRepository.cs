@@ -5,6 +5,6 @@ using Domain.Models;
 
 namespace Data.Repositories;
 
-public class StatusRepository(DataContext context) : BaseRepository<StatusEntity, Status>(context), IStatusRepository
+public class StatusRepository(AppDbContext context) : BaseRepository<StatusEntity, Status>(context), IStatusRepository
 {
 }

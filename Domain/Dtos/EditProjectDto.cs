@@ -5,7 +5,7 @@ namespace Domain.Dtos;
 
 public class EditProjectDto
 {
-    public string Id { get; set; }
+    public string? Id { get; set; }
 
     [DataType(DataType.Upload)]
     [Display(Name = "Project Image", Prompt = "Select a image")]

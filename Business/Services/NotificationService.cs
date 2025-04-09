@@ -1,7 +1,6 @@
 ﻿using Data.Contexts;
 using Data.Entities;
 using Microsoft.EntityFrameworkCore;
-
 namespace Business.Services;
 
 public interface INotificationService
@@ -15,9 +14,9 @@ public class NotificationService : INotificationService
 {
     // GÅ TILL REPOSITORY?
 
-    private readonly DataContext _context;
+    private readonly AppDbContext _context;
 
-    public NotificationService(DataContext context)
+    public NotificationService(AppDbContext context)
     {
         _context = context;
     }
@@ -35,51 +34,42 @@ public class NotificationService : INotificationService
                     notificationEntity.Icon = "~/images/projects/project-tempalte.svg";
                     break;
             }
-        }   
-        
+        }
+
         _context.Add(notificationEntity);
         await _context.SaveChangesAsync();
-
-        //var notifications = await GetNotificationsAsync(userId);
-        //var newNotification = notifications.OrderByDescending(x => x.Created).FirstOrDefault();
-
-        //if (newNotification != null)
-        //{
-        //    await _notificationHub.Clients.All.SendAsync("ReceiveNotification", notifications);
-
-        //}
-        //;
     }
+
 
     public async Task<IEnumerable<NotificationEntity>> GetNotificationsAsync(string userId, int take = 5)
     {
-        //var dismissedIds = await _context.DismissedNotifications
-        //    .Where(x => x.UserId == userId)
-        //    .Select(x => x.NotificationId)
-        //    .ToListAsync();
+        var dismissedIds = await _context.DismissedNotifications
+            .Where(x => x.UserId == userId)
+            .Select(x => x.NotificationId)
+            .ToListAsync();
 
-        //var notifications = await _context.Notifications
-        //    .Where(x => !dismissedIds.Contains(x.Id))
-        //    .OrderByDescending(x => x.Created)
-        //    .Take(take)
-        //    .ToListAsync();
+        var notifications = await _context.Notifications
+            .Where(x => !dismissedIds.Contains(x.Id))
+            .OrderByDescending(x => x.Created)
+            .Take(take)
+            .ToListAsync();
 
-        //return notifications;
-        return [];
+        return notifications;
+        //return [];
     }
 
     public async Task DismissNotificationAsync(string notificationId, string userId)
     {
-        //var alreadyDismissed = await _context.DismissedNotifications.AnyAsync(x => x.NotificationId == notificationId && x.UserId == userId);
-        //if (!alreadyDismissed)
-        //{
-        //    var dismissed = new NotificationDismissedEntity()
-        //    {
-        //        NotificationId = notificationId,
-        //        UserId = userId
-        //    };
-        //    _context.Add(dismissed);
-        //    await _context.SaveChangesAsync();
-        //}
+        var alreadyDismissed = await _context.DismissedNotifications.AnyAsync(x => x.NotificationId == notificationId && x.UserId == userId);
+        if (!alreadyDismissed)
+        {
+            var dismissed = new NotificationDismissedEntity()
+            {
+                NotificationId = notificationId,
+                UserId = userId
+            };
+            _context.Add(dismissed);
+            await _context.SaveChangesAsync();
+        }
     }
 }

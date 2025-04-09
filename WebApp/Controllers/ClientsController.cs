@@ -15,7 +15,8 @@ public class ClientsController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddClient(AddClientViewModel model)
+    [Route("clients/Add")]
+    public async Task<IActionResult> Add(AddClientViewModel model)
     {
         if (!ModelState.IsValid)
         {
@@ -39,7 +40,9 @@ public class ClientsController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> EditClient(EditClientViewModel model)
+    [Route("clients/Edit")]
+
+    public async Task<IActionResult> Edit(EditClientViewModel model)
     {
         if (!ModelState.IsValid)
         {
@@ -62,7 +65,7 @@ public class ClientsController : Controller
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> EditClient(string id)
+    public async Task<IActionResult> Edit(string id)
     {
         if (!ModelState.IsValid)
         {

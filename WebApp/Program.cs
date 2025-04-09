@@ -17,7 +17,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddSignalR();
 
 
-builder.Services.AddDbContext<DataContext>(x => x.UseSqlServer(builder.Configuration.GetConnectionString("AlphaDB")));
+builder.Services.AddDbContext<AppDbContext>(x => x.UseSqlServer(builder.Configuration.GetConnectionString("AlphaDB")));
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IClientService, ClientService>();
@@ -42,7 +42,7 @@ builder.Services.AddIdentity<MemberEntity, IdentityRole>(opions =>
     opions.User.RequireUniqueEmail = true;
     opions.Password.RequiredLength = 8;
 })
-    .AddEntityFrameworkStores<DataContext>()
+    .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
 
 builder.Services.ConfigureApplicationCookie(options =>

@@ -26,6 +26,8 @@ public class MembersController : Controller
     }
 
     [HttpPost]
+    [Route("members/add")]
+
     public async Task<IActionResult> Add(AddMemberViewModel model)
     {
         AddMemberDto dto = model;
@@ -48,12 +50,14 @@ public class MembersController : Controller
         return Ok(new { success = true });
 
     }
-    [HttpPost]
+    [HttpPost("edit/{id}")]
+
     public async Task<IActionResult> Edit(EditMemberViewModel model)
     {
         try
         {
             EditMemberDto dto = model;
+
 
 
             if (!ModelState.IsValid)
@@ -73,15 +77,7 @@ public class MembersController : Controller
             }
 
 
-            //var result = await _clientService.AddClientAsync(form);
-            //if(result)
-            //{
-            //    return Ok(new { succes = true });
-            //}
-            //else
-            //{
-            //    return Problem("Unable to submit data");
-            //}
+           
             return Ok(new { success = true });
         }
         catch (Exception ex)
@@ -93,46 +89,37 @@ public class MembersController : Controller
         }
 
     }
-    [HttpGet("{id}")]
+
+    [HttpGet("edit/{id}")]
     public async Task<IActionResult> Edit(string id)
     {
-        
-
-        if (!ModelState.IsValid)
-        {
-            var errors = ModelState
-                .Where(x => x.Value?.Errors.Count > 0)
-                .ToDictionary(kvp => kvp.Key,
-                kvp => kvp.Value?.Errors.Select(x => x.ErrorMessage).ToArray()
-                );
-            return BadRequest(new { success = false, errors });
-        }
+        Console.WriteLine($"Received ID: {id}");  // Logga ID här för att se vad som skickas
 
         var result = await _memberService.GetMemberByIdAsync(id);
+        Console.WriteLine($"Result Succeeded: {result.Succeeded}");
+        Console.WriteLine($"Result Count: {result.Result?.Count()}");
+
         if (result.Succeeded)
         {
             var member = result.Result?.FirstOrDefault();
 
-            var memberViewModel = new MemberViewModel
+            var editMemberViewModel = new EditMemberViewModel
             {
-                Member = new Member()
-                {
-                    Id = member.Id,
-                    FirstName = member.FirstName,
-                    LastName = member.LastName,
-                    Email = member.Email,
-                    Phone = member.Phone,
-                    JobTitle = member.JobTitle,
-                    Address = member.Address
-                }
+                Id = member.Id,
+                FirstName = member.FirstName,
+                LastName = member.LastName,
+                Email = member.Email,
+                Phone = member.Phone,
+                JobTitle = member.JobTitle
             };
 
-
-            return Ok(new { success = true, member = memberViewModel});
+            return Json(new { success = true, data = editMemberViewModel });
         }
 
-        return NotFound(new { success = false, error = "Member not found." });
+        return Json(new { success = false, error = "Member not found." });
     }
-    
+
+
+
 
 }

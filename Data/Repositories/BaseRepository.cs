@@ -10,10 +10,10 @@ namespace Data.Repositories;
 
 public abstract class BaseRepository<TEntity, TModel> : IBaseRepository<TEntity, TModel> where TEntity : class
 {
-    protected readonly DataContext _context;
+    protected readonly AppDbContext _context;
     protected readonly DbSet<TEntity> _table;
 
-    protected BaseRepository(DataContext context)
+    protected BaseRepository(AppDbContext context)
     {
         _context = context;
         _table = _context.Set<TEntity>();

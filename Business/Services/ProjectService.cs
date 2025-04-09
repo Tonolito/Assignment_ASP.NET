@@ -1,21 +1,25 @@
 ﻿using Business.Interfaces;
 using Business.Models;
+using Data.Contexts;
 using Data.Entities;
 using Data.Interfaces;
 using Domain.Dtos;
 using Domain.Extentions;
 using Domain.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 
 namespace Business.Services;
 
-public class ProjectService(IProjectRepository projectRepository, IStatusService statusService) : IProjectService
+public class ProjectService(IProjectRepository projectRepository, IStatusService statusService, AppDbContext context) : IProjectService
 {
     private readonly IProjectRepository _projectRepository = projectRepository;
     private readonly IStatusService _statusService = statusService;
+    private readonly AppDbContext _context = context;
 
     //CREATE
-    public async Task<ProjectResult> CreateProjectAsync(AddProjectDto dto)
+    //, List<string> selectedUserIds
+    public async Task<ProjectResult> CreateProjectAsync(AddProjectDto dto) 
     {
         if (dto == null)
         {
@@ -29,6 +33,22 @@ public class ProjectService(IProjectRepository projectRepository, IStatusService
         projectEntity.StatusId = status!.Id;
 
         var result = await _projectRepository.AddAsync(projectEntity);
+
+        //if (selectedUserIds != null && selectedUserIds.Any())
+        //{
+        //    foreach (var userId in selectedUserIds)
+        //    {
+        //        var projectMember = new ProjectMemberEntity
+        //        {
+        //            ProjectId = projectEntity.Id,
+        //            MemberId = userId
+        //        };
+        //        await _context.AddAsync(projectMember);  // Lägg till koppling mellan projekt och medlem
+        //    }
+        //}
+
+        //// Spara alla ändringar i databasen
+        //await _context.SaveChangesAsync();
 
         return result.Succeeded
             ? new ProjectResult { Succeeded = true, StatusCode = 201 }
@@ -64,12 +84,12 @@ public class ProjectService(IProjectRepository projectRepository, IStatusService
 
         if (dto == null)
         {
-            return new ProjectResult { Succeeded = false, StatusCode = 400, Error = "Invalid project data."};
+            return new ProjectResult { Succeeded = false, StatusCode = 400, Error = "Invalid project data." };
         }
 
         var projectEntity = dto.MapTo<ProjectEntity>();
         var projectResult = await _projectRepository.GetAsync(x => x.Id == dto.Id);
-       
+
         var result = await _projectRepository.UpdateAsync(projectEntity);
 
         return result.Succeeded
