@@ -50,8 +50,8 @@ public class MembersController : Controller
         return Ok(new { success = true });
 
     }
-    [HttpPost("edit/{id}")]
 
+    [HttpPost("edit/{id}")]
     public async Task<IActionResult> Edit(EditMemberViewModel model)
     {
         try
@@ -90,7 +90,8 @@ public class MembersController : Controller
 
     }
 
-    [HttpGet("edit/{id}")]
+    [HttpGet]
+    [Route("members/edit/{id}")]
     public async Task<IActionResult> Edit(string id)
     {
         Console.WriteLine($"Received ID: {id}");  // Logga ID här för att se vad som skickas

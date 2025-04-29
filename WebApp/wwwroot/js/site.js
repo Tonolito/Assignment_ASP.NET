@@ -43,7 +43,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-  
+    const openEditMemberModal = async (memberId) => {
+        const modal = document.getElementById('editMemberModal');
+        const response = await fetch(`members/edit/${memberId}`);
+        const data = await response.json();
+
+        if (data.success) {
+            populateModalFields(modal, data.data); // Fyll i modalens fält med den hämtade datan
+            modal.style.display = 'block'; // Visa modalen
+        } else {
+            console.error("Failed to load member data", data.error);
+        }
+    };
 
     // Open modals
     const modalButtons = document.querySelectorAll('[data-modal="true"]');
@@ -68,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         console.log("1")
                         if (data.success) {
-                            populateModalFields(modal, data.entity);
+                                (modal, data.entity);
                             console.log("2")
 
                         } else {
@@ -283,14 +294,28 @@ function validateField(field) {
     }
 
 }
-function populateModalFields(modal, data) {
-    Object.keys(data).forEach(key => {
-        const input = modal.querySelector(`[name="${key}"]`);
-        if (input) {
-            input.value = data[key] || "";
+function populateModalFields(modal, entity) {
+    const inputs = modal.querySelectorAll("input, select, textarea");
+
+    inputs.forEach(input => {
+        const name = input.getAttribute("name");
+        if (!name || !entity.hasOwnProperty(name)) return;
+
+        if (input.type === "checkbox") {
+            input.checked = Boolean(entity[name]);
+        } else if (input.type === "file") {
+            // Hantera filförhandsvisning separat
+            const preview = modal.querySelector(".image-preview");
+            if (preview && entity.imageUrl) {
+                preview.src = entity.imageUrl;
+                preview.closest(".image-previewer")?.classList.add("selected");
+            }
+        } else {
+            input.value = entity[name] ?? "";
         }
     });
 }
+
 
 
 // HANS VIDEO
