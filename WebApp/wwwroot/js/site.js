@@ -2,7 +2,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const previewSize = 150
 
-
+    // ÄNDRING.
     // DROPDOWN
     initializeDropdowns();
     updateRelativeTimes();
