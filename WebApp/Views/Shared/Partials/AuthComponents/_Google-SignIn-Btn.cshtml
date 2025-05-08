@@ -1,3 +1,8 @@
-﻿<button class="google-btn btn">
-    <img src="/images/google-icon.svg" alt=""> Sign up with Google
-</button>
+﻿<form asp-controller="Auth" asp-action="ExternalSignIn" method="post" novalidate>
+    <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl">
+    <button type="submit" name="provider" value="Google" class="google-btn btn">
+        <img src="/images/google-icon.svg" alt="">
+        Sign In with Google
+    </button>
+
+</form>

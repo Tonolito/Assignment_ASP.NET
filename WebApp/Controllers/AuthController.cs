@@ -147,8 +147,9 @@ public class AuthController : Controller
         return Challenge(properties, provider);
     }
 
-    [Route("signin/externalcallback")]
 
+
+    [Route("signin/externalcallback")]
     public async Task<IActionResult> ExternalSignInCallback(string returnUrl = null!, string remoteError = null!)
     {
         returnUrl ??= Url.Content("~/");
@@ -166,36 +167,46 @@ public class AuthController : Controller
         }
 
         var signInResult = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent:false, bypassTwoFactor:true);
-        Console.Write($"Sign-in result: {signInResult.Succeeded}, " +
-                  $"LockedOut: {signInResult.IsLockedOut}, " +
-                  $"NotAllowed: {signInResult.IsNotAllowed}, " +
-                  $"RequiresTwoFactor: {signInResult.RequiresTwoFactor}");
+
         if (signInResult.Succeeded)
         {
+            // Parts help with ChatGpt cuase of not showing External provider in profiledropdown
+            var user = await _userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
+            var existingClaims = await _userManager.GetClaimsAsync(user);
+            if (!existingClaims.Any(c => c.Type == ClaimTypes.AuthenticationMethod))
+            {
+                await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.AuthenticationMethod, info.LoginProvider));
+            }
+
             return LocalRedirect(returnUrl);
         }
         else
         {
             string firstName = string.Empty;
             string lastName = string.Empty;
+
             try
             {
-                firstName = info.Principal.FindFirstValue(ClaimTypes.GivenName)!;
+                 firstName = info.Principal.FindFirstValue(ClaimTypes.GivenName)!;
                 lastName = info.Principal.FindFirstValue(ClaimTypes.Surname)!;
-            }
-            catch { }
+
+            }catch { }
 
 
             string email = info.Principal.FindFirstValue(ClaimTypes.Email)!;
-            string userName = $"ext_{info.LoginProvider.ToLower()}{email}";
+            string userName = $"ext_{info.LoginProvider.ToLower()}_{email}";
 
-            var user = new MemberEntity { UserName = firstName, Email = email, FirstName = firstName, LastName = lastName };
+            var user = new MemberEntity { UserName = userName, Email = email, FirstName = firstName, LastName = lastName };
+
 
             var IdentityResult = await _userManager.CreateAsync(user);
             if (IdentityResult.Succeeded)
             {
+                // Parts help with ChatGpt cuase of not showing External provider in profiledropdown
                 await _userManager.AddLoginAsync(user, info);
+                await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.AuthenticationMethod, info.LoginProvider));
                 await _signInManager.SignInAsync(user, isPersistent: false);
+
 
                 return LocalRedirect(returnUrl);
             }

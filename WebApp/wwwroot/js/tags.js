@@ -1,44 +1,42 @@
-﻿
-function initTagSelector(config) {
+﻿function initTagSelector(config) {
     let activeIndex = -1;
     let selectedIds = [];
 
-    const tagContainer = document.getElementById(config.containerId)
-    const input = document.getElementById(config.inputId)
-    const results = document.getElementById(config.resultId)
-    const selectedInputIds = document.getElementById(config.selectedInputIds)
+    const tagContainer = document.getElementById(config.containerId);
+    const input = document.getElementById(config.inputId);
+    const results = document.getElementById(config.resultId);
+    const selectedInputIds = document.getElementById(config.selectedInputIds);
 
     if (Array.isArray(config.preselected)) {
-        config.preselected.forEach(item => addTag(item))
+        config.preselected.forEach(item => addTag(item));
     }
 
     input.addEventListener('focus', () => {
-        tagContainer.classList.add('focused')
-        results.classList.add('focused')
-    })
+        tagContainer.classList.add('focused');
+        results.classList.add('focused');
+    });
 
     input.addEventListener('blur', () => {
         setTimeout(() => {
-            tagContainer.classList.remove('focused')
-            results.classList.remove('focused')
-        }, 100)
-    })
+            tagContainer.classList.remove('focused');
+            results.classList.remove('focused');
+        }, 100);
+    });
 
     input.addEventListener('input', () => {
         const query = input.value.trim();
         activeIndex = -1;
 
         if (query.length === 0) {
-            results.style.display = 'none'
-            result.innerHTML = ''
+            results.style.display = 'none';
+            results.innerHTML = '';
             return;
         }
 
         fetch(config.searchUrl(query))
             .then(r => r.json())
-            .then(data => renderSearchResults(data))
-    })
-
+            .then(data => renderSearchResults(data));
+    });
 
     function renderSearchResults(data) {
         results.innerHTML = '';
@@ -50,21 +48,21 @@ function initTagSelector(config) {
             results.appendChild(noResult);
         } else {
             data.forEach(item => {
-                if (!selectedIds.includes(item.id)) {
+                const id = parseInt(item.id);
+                if (!selectedIds.includes(id)) {
                     const resultItem = document.createElement('div');
                     resultItem.classList.add('search-item');
-                    resultItem.dataset.id = item.id;
+                    resultItem.dataset.id = id;
 
                     if (config.tagClass === 'tag') {
-                        tag.innerHTML = `<span>${item[config.displayProperty]}`
+                        resultItem.innerHTML = `<span>${item[config.displayProperty]}</span>`;
+                    } else if (config.tagClass === 'user-tag') {
+                        resultItem.innerHTML = `
+<img class="user-avatar" src="${config.avatarFolder || ''}${item[config.imageProperty]}" />
+<span>${item[config.displayProperty]}</span>
+                        `;
                     }
-                    else if (config.tagClass === 'user-tag') {
-                        tag.innerHTML =
-                            `
-                                <img class="user-avatar" src="${config.avatarFolder || ''}${item[config.imageProperty]}">
-                                <span>${item[config.displayProperty]}
-                            `
-                    }
+
                     resultItem.addEventListener('click', () => addTag(item));
                     results.appendChild(resultItem);
                 }
@@ -74,46 +72,43 @@ function initTagSelector(config) {
         results.style.display = 'block';
     }
 
-    
     function addTag(item) {
-        const id = parseInt(item.id)
-        if (selectedIds.includes(id))
-            return;
+        const id = parseInt(item.id);
+        if (selectedIds.includes(id)) return;
 
-        const tag = document.createElement('div')
-        tag.classList.add(config.tagClass || 'tag')
+        selectedIds.push(id);
+
+        const tag = document.createElement('div');
+        tag.classList.add(config.tagClass || 'tag');
 
         if (config.tagClass === 'tag') {
-            tag.innerHTML = `<span>${item[config.displayProperty]}`
-        }
-        else if (config.tagClass === 'user-tag') {
-            tag.innerHTML=
-            `
-                <img class="user-avatar" src="${config.avatarFolder || ''}${item[config.imageProperty]}">
-                <span>${item[config.displayProperty]}
-            `
+            tag.innerHTML = `<span>${item[config.displayProperty]}</span>`;
+        } else if (config.tagClass === 'user-tag') {
+            tag.innerHTML = `
+<img class="user-avatar" src="${config.avatarFolder || ''}${item[config.imageProperty]}" />
+<span>${item[config.displayProperty]}</span>
+            `;
         }
 
-
-        const removeBtn = document.createElement('span')
-        removeBtn.textContent = 'x'
-        removeBtn.classList.add('remove-btn')
+        const removeBtn = document.createElement('span');
+        removeBtn.textContent = 'x';
+        removeBtn.classList.add('remove-btn');
         removeBtn.dataset.id = id;
         removeBtn.addEventListener('click', (e) => {
             selectedIds = selectedIds.filter(i => i !== id);
             tag.remove();
             updateSelectedIdsInput();
-            e.stopPropagation;
-        })
+            e.stopPropagation();
+        });
 
+        tag.appendChild(removeBtn);
+        tagContainer.insertBefore(tag, input);
 
-        tag.appendChild(removeBtn)
-        tagContainer.insertBefore(tag, input)
+        input.value = '';
+        results.innerHTML = '';
+        results.style.display = 'none';
 
-        input.value = ''
-        results.innerHTML = ''
-        results.style.display = 'none'
-
+        updateSelectedIdsInput();
     }
 
     function removeLastTag() {
@@ -121,7 +116,7 @@ function initTagSelector(config) {
         if (tags.length === 0) return;
 
         const lastTag = tags[tags.length - 1];
-        const lastId = parseInt(lastTag.querySelector('.btn-remove').dataset.id);
+        const lastId = parseInt(lastTag.querySelector('.remove-btn').dataset.id);
 
         selectedIds = selectedIds.filter(id => id !== lastId);
         lastTag.remove();
@@ -129,9 +124,8 @@ function initTagSelector(config) {
     }
 
     function updateSelectedIdsInput() {
-        const hiddenInput = selectedInputIds;
-        if (hiddenInput) {
-            hiddenInput.value = JSON.stringify(selectedIds);
+        if (selectedInputIds) {
+            selectedInputIds.value = JSON.stringify(selectedIds);
         }
     }
 
@@ -177,5 +171,4 @@ function initTagSelector(config) {
                 break;
         }
     });
-
 }

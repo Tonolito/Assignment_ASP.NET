@@ -141,20 +141,20 @@
         });
     }
 
-    const preSelectedMembers = @Html.Raw(selectedUsersJson);
+     const preSelectedMembers = @Html.Raw(selectedUsersJson);
 
     initTagSelector({
         containerId: 'tagged-users',
         inputId: 'user-search',
         resultId: 'user-search-results',
-        searchUrl:  (query) => '/members/search-members?term=' + encodeURIComponent(query),
+        searchUrl: (query) => '/members/search-members?term=' + encodeURIComponent(query),
         displayProperty: 'fullName',
         imageProperty: 'imageUrl',
         avatarFolder: '',
         tagClass: 'user-tag',
         emptyMessage: 'No users found.',
-        preselected: SelectedMembers,
-        selectedInputIds: 'SelectedMembersId'
+        preselected: preSelectedMembers,
+        selectedInputIds: 'SelectedMemberIds'
     });
 
 </script>

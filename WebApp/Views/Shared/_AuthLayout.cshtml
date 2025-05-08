@@ -7,11 +7,15 @@
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/WebApp.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://kit.fontawesome.com/a576612222.css" crossorigin="anonymous" />
 </head>
 <body>
     <main class="auth">
         @RenderBody()
     </main>
+    @await Html.PartialAsync("Partials/CookieConsent")
+
+    <script src="~/js/CookieConsent.js" asp-append-version="true"></script>
     @* <script src="~/js/site.js" asp-append-version="true"></script> *@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
