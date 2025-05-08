@@ -31,11 +31,11 @@ public class ClientService(IClientRepository clientRepository) : IClientService
 
     }
     //READ
-    public async Task<ClientResult> GetAllClientsAsync()
+    public async Task<ClientsResult> GetAllClientsAsync()
     {
         var result = await _clientRepository.GetAllAsync();
 
-        return result.MapTo<ClientResult>();
+        return result.MapTo<ClientsResult>();
 
     }
     public async Task<ClientResult> GetClientByIdAsync(string id)

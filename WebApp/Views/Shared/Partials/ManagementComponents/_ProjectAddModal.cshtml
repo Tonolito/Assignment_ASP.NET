@@ -1,16 +1,17 @@
 ﻿@using System.Text.Json
 @model AddProjectViewModel
 
- @* @{  *@
- @*     var selectedUsersJson = JsonSerializer.Serialize(  *@
- @*                Model.UserId.Select(m => m. *@
- @*               {  *@
- @*                   id = m.user.id,  *@
- @*                    imageurl = m.User.ImageUrl,  *@
- @*                    fullname = m.userFirstName + " " + m.user.Lastname  *@
- @*                })  *@
- @*            );   *@
- @* }  *@
+@{
+    var selectedUsersJson = JsonSerializer.Serialize(
+                         Model.SelectedMembers.Select(m => new
+                         {
+                             // id = m.,
+                             // imageUrl = m. ,
+                             fullName = m.FirstName + " " + m.LastName,
+                 })
+             );
+}
+
 <div class="modal-container" id="addProjectModal">
     <div class="modal-card">
         <div class="top-card">
@@ -21,8 +22,8 @@
         </div>
 
         <form novalidate method="post" asp-action="Add" asp-controller="Projects">
-            @* <input type="hidden" asp-for"Id" /> *@
-            <input type="hidden" name="SelectedUserIds" id="SelectedUserIds" />
+            <input type="hidden" asp-for= "Id" />
+            <input type="hidden" name="SelectedMemberIds" id="SelectedMemberIds" />
             <div class="image-previewer circle">
                 <img src="" class="image-preview" />
                 <input asp-for="ProjectImage" accept="image/*" class="hide" />
@@ -140,23 +141,23 @@
         });
     }
 
-
+    const preSelectedMembers = @Html.Raw(selectedUsersJson);
 
     initTagSelector({
         containerId: 'tagged-users',
         inputId: 'user-search',
-        resultId: 'users-search-results',
-        searchUrl: (query) => '@Url.Action("SearchTags", "Users")' + '?term=' + encodeURIComponent(query),
+        resultId: 'user-search-results',
+        searchUrl:  (query) => '/members/search-members?term=' + encodeURIComponent(query),
         displayProperty: 'fullName',
         imageProperty: 'imageUrl',
+        avatarFolder: '',
         tagClass: 'user-tag',
         emptyMessage: 'No users found.',
-        preselected: preSelectedUserTags,
-        selectedInputIds: 'SelectedUserIds'
+        preselected: SelectedMembers,
+        selectedInputIds: 'SelectedMembersId'
     });
 
 </script>
-        @* const preSelectedUserTags = @Html.Raw(selectedUsersJson); *@
 
 @* <label asp-for="UserId"></label> *@
 @* <div class="search-icon-container"> *@

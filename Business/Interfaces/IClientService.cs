@@ -8,7 +8,7 @@ namespace Business.Interfaces
     {
         Task<ClientResult> AddClientAsync(AddClientDto dto);
         Task<ClientResult> EditClientAsync(EditClientDto dto);
-        Task<ClientResult> GetAllClientsAsync();
+        Task<ClientsResult> GetAllClientsAsync();
         Task<ClientResult> GetClientByIdAsync(string id);
     }
 }

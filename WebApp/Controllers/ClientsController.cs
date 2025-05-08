@@ -64,9 +64,12 @@ public class ClientsController : Controller
 
     }
 
-    [HttpGet("{id}")]
+    [HttpGet]
+    [Route("edit/{id}")]
     public async Task<IActionResult> Edit(string id)
     {
+        Console.WriteLine($"Edit Client - ID received: {id}");
+
         if (!ModelState.IsValid)
         {
             var errors = ModelState
@@ -78,12 +81,21 @@ public class ClientsController : Controller
         }
 
         var result = await _clientService.GetClientByIdAsync(id);
-        if (result.Succeeded)
+
+        if (result.Succeeded && result.Result != null)
         {
-            return Ok(new { success = true});
+            return Json(new
+            {
+                id = result.Result.Id,
+                clientName = result.Result.ClientName,
+                email = result.Result.Email,
+                location = result.Result.Location,
+                phone = result.Result.Phone,
+                
+            });
         }
 
-        return NotFound(new { success = false, error = "Client not found." });
+        return Json(new { success = false, error = "Client not found." });
     }
 
 }

@@ -34,7 +34,7 @@ public class ProjectEntity
     public int StatusId { get; set; }
     public StatusEntity Status { get; set; } = null!;
 
-    //public virtual ICollection<ProjectMemberEntity> ProjectMembers { get; set; } = [];
+    public virtual ICollection<ProjectMemberEntity> ProjectMembers { get; set; } = [];
 
 }
 

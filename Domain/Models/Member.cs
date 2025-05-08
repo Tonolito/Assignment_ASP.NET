@@ -7,7 +7,7 @@ public class Member
     public string? LastName { get; set; }
     public string? JobTitle { get; set; }
     public string Email { get; set; } = null!;
-    public string? Phone { get; set; }
+    public string? PhoneNumber { get; set; }
     
     public MemberAddress? Address { get; set; }
 }

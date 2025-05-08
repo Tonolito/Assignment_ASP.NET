@@ -63,37 +63,104 @@ document.addEventListener('DOMContentLoaded', () => {
         button.addEventListener('click', async () => {
             const modalTarget = button.getAttribute('data-target');
             const modal = document.querySelector(modalTarget);
-            const entityType = button.getAttribute('data-type'); // Typ: Client, Member, Project
-            const entityId = button.getAttribute('data-id'); // ID för entiteten
+
+            //const entityType = button.getAttribute('data-type'); // Typ: Client, Member, Project
+            //const entityId = button.getAttribute('data-id'); // ID för entiteten
 
             if (modal) {
                 modal.style.display = 'flex';
                 console.log('Open');
 
-                if (entityType && entityId) {
-                    console.log("0")
+                //if (entityType && entityId) {
+                //    console.log("0")
 
-                    try {
-                        const response = await fetch(`/api/${entityType}/Get/${entityId}`);
-                        const data = await response.json();
+                //    try {
+                //        const response = await fetch(`/api/${entityType}/Get/${entityId}`);
+                //        const data = await response.json();
 
-                        console.log("1")
-                        if (data.success) {
-                                (modal, data.entity);
-                            console.log("2")
+                //        console.log("1")
+                //        if (data.success) {
+                //                (modal, data.entity);
+                //            console.log("2")
 
-                        } else {
-                            console.error('Data not found');
-                            alert('Data not found.');
-                            console.log("3")
-                        }
-                    } catch (error) {
-                        console.error('Error fetching data:', error);
-                    }
-                }
+                //        } else {
+                //            console.error('Data not found');
+                //            alert('Data not found.');
+                //            console.log("3")
+                //        }
+                //    } catch (error) {
+                //        console.error('Error fetching data:', error);
+                //    }
+                //}
             }
         });
     });
+
+    document.querySelectorAll('[data-modal="true"][data-target="#editMemberModal"]').forEach(button => {
+        button.addEventListener('click', async () => {
+
+            const memberId = button.getAttribute('data-id');
+
+            console.log(memberId)
+
+            try {
+                const response = await fetch(`/members/edit/${memberId}`)
+                const data = await response.json();
+
+                if (data) {
+                    console.log(data)
+
+                    const form = document.querySelector('#editMemberForm');
+
+                    form.querySelector('input[name="FirstName"]').value = data.firstName;
+                    form.querySelector('input[name="LastName"]').value = data.lastName;
+                    form.querySelector('input[name="Email"]').value = data.email;
+                    form.querySelector('input[name="PhoneNumber"]').value = data.phoneNumber;
+                    form.querySelector('input[name="JobTitle"]').value = data.jobTitle;
+                    form.querySelector('input[name="Address"]').value = data.address;
+                }
+
+                
+
+            } catch(error) {
+                console.log(error);
+            }
+
+        })
+    })
+
+    document.querySelectorAll('[data-modal="true"][data-target="#editClientModal"]').forEach(button => {
+        button.addEventListener('click', async () => {
+
+            const clientId = button.getAttribute('data-id');
+
+            console.log(clientId)
+
+            try {
+                const response = await fetch(`/clients/edit/${clientId}`)
+                const data = await response.json();
+
+                if (data) {
+                    console.log(data)
+
+                    const form = document.querySelector('#editClientForm');
+
+                    form.querySelector('input[name="ClientName"]').value = data.clientName;
+                    form.querySelector('input[name="Email"]').value = data.email;
+                    form.querySelector('input[name="Location"]').value = data.location;
+                    form.querySelector('input[name="Phone"]').value = data.phone;
+                    
+                }
+
+
+
+            } catch (error) {
+                console.log(error);
+            }
+
+        })
+    })
+
 
     // Close Modals
     const closeButtons = document.querySelectorAll('[data-close="true"]')

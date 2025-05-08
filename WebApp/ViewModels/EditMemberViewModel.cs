@@ -29,7 +29,7 @@ public class EditMemberViewModel
 
     [Display(Name = "Phone", Prompt = "Enter Phone")]
     [DataType(DataType.PhoneNumber)]
-    public string? Phone { get; set; }
+    public string? PhoneNumber { get; set; }
 
     [Display(Name = "Job Title", Prompt = "Enter your Job Title")]
     [DataType(DataType.Text)]
@@ -54,7 +54,7 @@ public class EditMemberViewModel
                 FirstName = model.FirstName,
                 LastName = model.LastName,
                 Email = model.Email,
-                Phone = model.Phone,
+                PhoneNumber = model.PhoneNumber,
                 JobTitle = model.JobTitle,
                 Address = model.Address,
                 //DateOfBirth = model.DateOfBirth,

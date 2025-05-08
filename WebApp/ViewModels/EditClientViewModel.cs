@@ -39,7 +39,7 @@ public class EditClientViewModel
             ? null!
             : new EditClientDto
             {
-                //Id = model.Id
+                Id = model.Id,
                 ClientImage = model.ClientImage,
                 ClientName = model.ClientName,
                 Email = model.Email,

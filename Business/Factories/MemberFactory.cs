@@ -30,7 +30,7 @@ public  class MemberFactory
                 FirstName = entity.FirstName,
                 LastName = entity.LastName,
                 Email = entity.Email,
-                Phone = entity.PhoneNumber,
+                PhoneNumber = entity.PhoneNumber,
                 JobTitle = entity.JobTitle,
                 //Address = entity.Address,
             };

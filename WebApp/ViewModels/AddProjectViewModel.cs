@@ -10,6 +10,7 @@ public class AddProjectViewModel
     [Display(Name = "Project Image", Prompt = "Select a image")]
     public IFormFile? ProjectImage { get; set; }
 
+    public string Id { get; set; } = null!;
 
     [Display(Name = "Project Name", Prompt = "Enter Project name")]
     [DataType(DataType.Text)]
@@ -44,8 +45,7 @@ public class AddProjectViewModel
     [Required(ErrorMessage = "Required")]
     public string ClientId { get; set; } = null!;
 
-    //[Display(Name = "Selected Users")]
-    //public List<string> SelectedUserIds { get; set; } = new();
+    public List<AddMemberDto> SelectedMembers{ get; set; } = new();
 
     public static implicit operator AddProjectDto(AddProjectViewModel model)
     {

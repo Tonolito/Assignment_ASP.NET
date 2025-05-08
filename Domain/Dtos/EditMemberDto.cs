@@ -29,7 +29,7 @@ public class  EditMemberDto
 
     [Display(Name = "Phone", Prompt = "Enter Phone")]
     [DataType(DataType.PhoneNumber)]
-    public string? Phone { get; set; }
+    public string? PhoneNumber { get; set; }
 
     [Display(Name = "Job Title", Prompt = "Enter your Job Title")]
     [DataType(DataType.Text)]

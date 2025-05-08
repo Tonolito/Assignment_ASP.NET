@@ -91,35 +91,57 @@ public class MembersController : Controller
     }
 
     [HttpGet]
-    [Route("members/edit/{id}")]
+    [Route("edit/{id}")]
     public async Task<IActionResult> Edit(string id)
     {
-        Console.WriteLine($"Received ID: {id}");  // Logga ID här för att se vad som skickas
+       
 
         var result = await _memberService.GetMemberByIdAsync(id);
-        Console.WriteLine($"Result Succeeded: {result.Succeeded}");
-        Console.WriteLine($"Result Count: {result.Result?.Count()}");
+       
 
-        if (result.Succeeded)
+        if (result.Succeeded && result.Result != null)
         {
-            var member = result.Result?.FirstOrDefault();
 
-            var editMemberViewModel = new EditMemberViewModel
+            return Json(new
             {
-                Id = member.Id,
-                FirstName = member.FirstName,
-                LastName = member.LastName,
-                Email = member.Email,
-                Phone = member.Phone,
-                JobTitle = member.JobTitle
-            };
+                id = result.Result.Id,
+                firstName = result.Result.FirstName,
+                lastName = result.Result.LastName,
+                email = result.Result.Email,
+                phoneNumber = result.Result.PhoneNumber,
+                jobTitle = result.Result.JobTitle,
+            });
+           
 
-            return Json(new { success = true, data = editMemberViewModel });
+
+            //var editMemberViewModel = new EditMemberViewModel
+            //{
+            //    Id = result.Result.Id,
+            //    FirstName = member.FirstName,
+            //    LastName = member.LastName,
+            //    Email = member.Email,
+            //    Phone = member.Phone,
+            //    JobTitle = member.JobTitle
+            //};
+
+            //return Json(new { success = true, data = editMemberViewModel });
         }
 
         return Json(new { success = false, error = "Member not found." });
     }
 
+
+
+
+
+    // TAGS
+
+    [HttpGet("search-members")]
+    public async Task<JsonResult> SearchMember(string term)
+    {
+        var users = await _memberService.SearchMemberAsync(term);
+        return Json(users);
+    }
 
 
 

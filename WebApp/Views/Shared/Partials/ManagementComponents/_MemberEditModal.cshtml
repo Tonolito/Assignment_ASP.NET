@@ -9,7 +9,7 @@
             </button>
         </div>
        
-        <form novalidate method="post" asp-action="Edit" asp-controller="Members">
+        <form id="editMemberForm" novalidate method="post" asp-action="Edit" asp-controller="Members">
             <input asp-for="Id" type="hidden" /> 
             <div class="image-previewer circle">
                 <img src="" class="image-preview" />
@@ -41,10 +41,10 @@
             </div>
 
             <div class="labelgroup-modal">
-                <label asp-for="Phone"></label>
+                <label asp-for="PhoneNumber"></label>
                 <div class="field-group">
-                    <input asp-for="Phone" value="@Model.Phone" />
-                    <span asp-validation-for="Phone"></span>
+                    <input asp-for="PhoneNumber" value="@Model.PhoneNumber" />
+                    <span asp-validation-for="PhoneNumber"></span>
                 </div>
             </div>
 

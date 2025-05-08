@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using WebApp.ViewModels;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace WebApp.Controllers;
 
@@ -37,7 +39,7 @@ public class ProjectsController(IProjectService projectService, AppDbContext dat
     [HttpPost]
     [Route("projects/Add")]
 
-    public async Task<IActionResult> Add(AddProjectViewModel model, string selectedUserIds)
+    public async Task<IActionResult> Add(AddProjectViewModel model, string SelectedMemberIds)
     {
         ViewBag.ErrorMessage = null;
 
@@ -54,26 +56,25 @@ public class ProjectsController(IProjectService projectService, AppDbContext dat
         }
 
 
-        //var existingMembers = await _context.Users
-        //    .Where(m => m.Id == model.id)
-        //    .ToListAsync();
+        var existingMembers = await _context.ProjectMembers
+            .Where(m => m.ProjectId == model.Id)
+            .ToListAsync();
 
-        //_context.Users.RemoveRange(existingMembers);
+        _context.ProjectMembers.RemoveRange(existingMembers);
 
-        //if (!string.IsNullOrEmpty(selectedUserIds))
-        //{
-        //    var userIds = JsonSerializer.Deserialize<List<int>>(selectedUserIds);
-        //    if (userIds != null)
-        //    {
-        //        var projectMember = new ProjectMemberEntity
-        //        {
-        //            ProjectId = projectEntity.Id,
-        //            MemberId = userId
-        //        };
-        //    }
-        //}
-        //_context.Update(model);
-        //await _context.SaveChangesAsync();
+        if (!string.IsNullOrEmpty(SelectedMemberIds))
+        {
+            var userIds = JsonSerializer.Deserialize<List<int>>(SelectedMemberIds);
+            if (userIds != null)
+            {
+                foreach (var user in userIds)
+                {
+                    _context.ProjectMembers.Add(new ProjectMemberEntity { ProjectId = model.Id, MemberId = model.UserId });
+                  }
+            }
+        }
+        _context.Update(model);
+        await _context.SaveChangesAsync();
 
         var result = await _projectService.CreateProjectAsync(model);
         if (result.Succeeded)
@@ -87,6 +88,7 @@ public class ProjectsController(IProjectService projectService, AppDbContext dat
         }
 
     }
+
     [HttpPost]
     [Route("projects/edit")]
 

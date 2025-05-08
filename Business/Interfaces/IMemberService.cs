@@ -11,5 +11,6 @@ public interface IMemberService
     Task<MemberResult> CreateMemberAsync(MemberSignUpDto dto, string roleName = "User");
     Task<MemberResult> EditMemberAsync(EditMemberDto dto);
     Task<MemberResult> GetMemberByIdAsync(string id);
-    Task<MemberResult> GetMembersAsnyc();
+    Task<MembersResult> GetMembersAsnyc();
+    Task<List<MemberSearchDto>> SearchMemberAsync(string term);
 }

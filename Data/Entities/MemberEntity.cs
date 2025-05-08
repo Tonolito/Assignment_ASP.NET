@@ -25,6 +25,6 @@ public class MemberEntity : IdentityUser
     public ICollection<NotificationDismissedEntity> DismissedNotifications { get; set; } = [];
 
 
-    //public virtual ICollection<ProjectMemberEntity> ProjectMembers { get; set; } = [];
+    public virtual ICollection<ProjectMemberEntity> ProjectMembers { get; set; } = [];
 
 }

@@ -117,7 +117,7 @@ function initTagSelector(config) {
     }
 
     function removeLastTag() {
-        const tags = tagContainer.querySelectorAll(`${config.tagClass}`);
+        const tags = tagContainer.querySelectorAll(`.${config.tagClass}`);
         if (tags.length === 0) return;
 
         const lastTag = tags[tags.length - 1];

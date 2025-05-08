@@ -6,8 +6,7 @@ namespace Domain.Dtos;
 
 public class EditClientDto
 {
-    //public int Id { get; set; }
-
+    public string? Id { get; set; }
 
     [DataType(DataType.Upload)]
     [Display(Name = "Client Image", Prompt = "Select a image")]

@@ -16,7 +16,7 @@
         </div>
         <div class="member-contact-info">
             <p>@Model.Member.Email</p>
-            <p>@Model.Member.Phone</p>
+            <p>@Model.Member.PhoneNumber</p>
         </div>
     <a class="btn blue-btn @(Context.Request.Path == "/members/chat" ? "active" : "")" asp-action="Chat" asp-controller="Members">Message</a>
     </div>

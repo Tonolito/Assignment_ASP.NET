@@ -30,24 +30,28 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
 
     public virtual DbSet<TagEntity> Tags { get; set; } = null!;
 
-        
-    //protected override void OnModelCreating(ModelBuilder builder)
-    //{
-    //    base.OnModelCreating(builder);
+    public virtual DbSet<ProjectMemberEntity> ProjectMembers { get; set; } = null!;
 
-    //    builder.Entity<ProjectMemberEntity>()
-    //        .HasKey(pm => new { pm.ProjectId, pm.MemberId });
 
-    //    builder.Entity<ProjectMemberEntity>()
-    //        .HasOne(pm => pm.Project)
-    //        .WithMany(p => p.ProjectMembers)
-    //        .HasForeignKey(pm => pm.ProjectId);
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        base.OnModelCreating(builder);
 
-    //    builder.Entity<ProjectMemberEntity>()
-    //        .HasOne(pm => pm.Member)
-    //        .WithMany(m => m.ProjectMembers)
-    //        .HasForeignKey(pm => pm.MemberId);
-    //}
+        // Prevent cascade delete from ProjectMemberEntity to MemberEntity
+        builder.Entity<ProjectMemberEntity>()
+            .HasOne(pm => pm.Member)
+            .WithMany(m => m.ProjectMembers)
+            .HasForeignKey(pm => pm.MemberId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // (Optional but recommended) Explicitly set delete behavior for ProjectEntity.Member too
+        builder.Entity<ProjectEntity>()
+            .HasOne(p => p.Member)
+            .WithMany(m => m.Projects)
+            .HasForeignKey(p => p.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
+    }
+
 }
 
 

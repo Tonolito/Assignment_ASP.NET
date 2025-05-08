@@ -126,12 +126,12 @@ public class MemberService(UserManager<MemberEntity> userManager, IMemberReposit
     }
 
     //READ
-    public async Task<MemberResult> GetMembersAsnyc()
+    public async Task<MembersResult> GetMembersAsnyc()
     {
 
         var result = await _memberRepository.GetAllAsync();
 
-        return result.MapTo<MemberResult>();
+        return result.MapTo<MembersResult>();
 
 
     }
@@ -205,5 +205,26 @@ public class MemberService(UserManager<MemberEntity> userManager, IMemberReposit
         ? new MemberResult { Succeeded = true, StatusCode = 200 }
         : new MemberResult { Succeeded = false, StatusCode = 500, Error = "Unable to add user" };
     }
+
+    public async Task<List<MemberSearchDto>> SearchMemberAsync(string term)
+    {
+        if (string.IsNullOrEmpty(term))
+            return new List<MemberSearchDto>();
+
+        var users = await _userManager.Users
+            .Where(x => x.FirstName.Contains(term) || x.LastName.Contains(term) || x.Email.Contains(term))
+            .Select(x => new MemberSearchDto
+            {
+                Id = x.Id,
+                FullName = x.FirstName + " " + x.LastName,
+                ImageUrl = x.Image,
+            })
+            .ToListAsync();
+
+        return users;
+
+    }
+
+
 
 }

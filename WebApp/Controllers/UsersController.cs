@@ -18,17 +18,5 @@ public class UsersController : Controller
         return View();
     }
 
-    [HttpGet]
-    public async Task<JsonResult> SearchUsers(string term)
-    {
-        if(string.IsNullOrEmpty(term))
-            return Json(new List<object>());
-
-        var users = await _dataContext.Users
-            .Where(x => x.FirstName.Contains(term) || x.LastName.Contains(term) || x.Email.Contains(term))
-            .Select(x => new { x.Id, Fullname = x.FirstName + " " + x.LastName})
-            .ToListAsync();
-
-        return Json(users);
-    }
+    
 }
