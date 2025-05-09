@@ -97,10 +97,39 @@ public class MemberService(UserManager<MemberEntity> userManager, IMemberReposit
 
         try
         {
+            // Hjäp av chatgtp
+            string imageUrl = string.Empty;
+            if (dto.MemberImage != null && dto.MemberImage.Length > 0)
+            {
+                
+                var fileName = $"{Guid.NewGuid()}{Path.GetExtension(dto.MemberImage.FileName)}";
 
-            var entity = dto.MapTo<MemberEntity>();
-            // VIKTIG
+                
+                var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "avatars");
+
+               
+                if (!Directory.Exists(folderPath))
+                    Directory.CreateDirectory(folderPath);
+
+                
+                var filePath = Path.Combine(folderPath, fileName);
+
+               
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await dto.MemberImage.CopyToAsync(stream);
+                }
+
+                imageUrl = $"/images/avatars/{fileName}";
+            }
+            else
+            {   
+                imageUrl =$"/images/avatars/templateavatar.svg";
+            }
+
+                var entity = dto.MapTo<MemberEntity>();
             entity.UserName = dto.Email;
+            entity.Image = imageUrl;
 
 
             var result = await _userManager.CreateAsync(entity, "BytMig123!");
