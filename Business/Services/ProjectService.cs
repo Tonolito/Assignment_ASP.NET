@@ -3,20 +3,21 @@ using Business.Models;
 using Data.Contexts;
 using Data.Entities;
 using Data.Interfaces;
+using Data.Repositories;
 using Domain.Dtos;
 using Domain.Extentions;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Text.Json;
 
 namespace Business.Services;
 
-public class ProjectService(IProjectRepository projectRepository, IStatusService statusService, AppDbContext context) : IProjectService
+public class ProjectService(IProjectRepository projectRepository, IStatusService statusService, IProjectMemberRepository projectMemberRepository) : IProjectService
 {
     private readonly IProjectRepository _projectRepository = projectRepository;
     private readonly IStatusService _statusService = statusService;
-    private readonly AppDbContext _context = context;
-
+private readonly IProjectMemberRepository _projectMemberRepository = projectMemberRepository;
     //CREATE
     //, List<string> selectedUserIds
     public async Task<ProjectResult> CreateProjectAsync(AddProjectDto dto) 
@@ -34,21 +35,7 @@ public class ProjectService(IProjectRepository projectRepository, IStatusService
 
         var result = await _projectRepository.AddAsync(projectEntity);
 
-        //if (selectedUserIds != null && selectedUserIds.Any())
-        //{
-        //    foreach (var userId in selectedUserIds)
-        //    {
-        //        var projectMember = new ProjectMemberEntity
-        //        {
-        //            ProjectId = projectEntity.Id,
-        //            MemberId = userId
-        //        };
-        //        await _context.AddAsync(projectMember);  // Lägg till koppling mellan projekt och medlem
-        //    }
-        //}
-
-        //// Spara alla ändringar i databasen
-        //await _context.SaveChangesAsync();
+        
 
         return result.Succeeded
             ? new ProjectResult { Succeeded = true, StatusCode = 201 }
@@ -114,5 +101,30 @@ public class ProjectService(IProjectRepository projectRepository, IStatusService
             ? new ProjectResult { Succeeded = true, StatusCode = 200 }
             : new ProjectResult { Succeeded = false, StatusCode = result.StatusCode, Error = result.Error };
     }
+
+    //MSC
+    public async Task<ProjectResult> UpdateProjectMembersAsync(string projectId, string selectedMemberIdsJson)
+    {
+        try
+        {
+            await _projectMemberRepository.RemoveAllByProjectIdAsync(projectId);
+
+            if (!string.IsNullOrWhiteSpace(selectedMemberIdsJson))
+            {
+                var memberIds = JsonSerializer.Deserialize<List<string>>(selectedMemberIdsJson);
+                if (memberIds != null && memberIds.Any())
+                {
+                    await _projectMemberRepository.AddMembersAsync(projectId, memberIds);
+                }
+            }
+
+            return new ProjectResult { Succeeded = true, StatusCode = 200 };
+        }
+        catch (Exception ex)
+        {
+            return new ProjectResult { Succeeded = false, StatusCode = 500, Error = ex.Message };
+        }
+    }
+
 
 }

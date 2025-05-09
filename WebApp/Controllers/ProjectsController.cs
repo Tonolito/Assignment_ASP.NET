@@ -56,25 +56,8 @@ public class ProjectsController(IProjectService projectService, AppDbContext dat
         }
 
 
-        var existingMembers = await _context.ProjectMembers
-            .Where(m => m.ProjectId == model.Id)
-            .ToListAsync();
+        await _projectService.UpdateProjectMembersAsync(model.Id, SelectedMemberIds);
 
-        _context.ProjectMembers.RemoveRange(existingMembers);
-
-        if (!string.IsNullOrEmpty(SelectedMemberIds))
-        {
-            var userIds = JsonSerializer.Deserialize<List<int>>(SelectedMemberIds);
-            if (userIds != null)
-            {
-                foreach (var user in userIds)
-                {
-                    _context.ProjectMembers.Add(new ProjectMemberEntity { ProjectId = model.Id, MemberId = model.UserId });
-                  }
-            }
-        }
-        _context.Update(model);
-        await _context.SaveChangesAsync();
 
         var result = await _projectService.CreateProjectAsync(model);
         if (result.Succeeded)
