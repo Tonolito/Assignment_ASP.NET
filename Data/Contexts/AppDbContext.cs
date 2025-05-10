@@ -32,24 +32,28 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
 
     public virtual DbSet<ProjectMemberEntity> ProjectMembers { get; set; } = null!;
 
+    public virtual DbSet<ProjectClientEntity> ProjectClients { get; set; } = null!;
 
-    protected override void OnModelCreating(ModelBuilder builder)
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        base.OnModelCreating(builder);
+        base.OnModelCreating(modelBuilder);
 
-        // Prevent cascade delete from ProjectMemberEntity to MemberEntity
-        builder.Entity<ProjectMemberEntity>()
-            .HasOne(pm => pm.Member)
-            .WithMany(m => m.ProjectMembers)
-            .HasForeignKey(pm => pm.MemberId)
-            .OnDelete(DeleteBehavior.Restrict);
+        // Define composite key for ProjectClientEntity
+        modelBuilder.Entity<ProjectClientEntity>()
+            .HasKey(pc => pc.Id);  // `Id` as the primary key
 
-        // (Optional but recommended) Explicitly set delete behavior for ProjectEntity.Member too
-        builder.Entity<ProjectEntity>()
-            .HasOne(p => p.Member)
-            .WithMany(m => m.Projects)
-            .HasForeignKey(p => p.UserId)
-            .OnDelete(DeleteBehavior.Restrict);
+        // Define the relationships with foreign keys explicitly
+        modelBuilder.Entity<ProjectClientEntity>()
+            .HasOne(pc => pc.Project)
+            .WithMany(p => p.ProjectClients)  // Assuming Project has a collection of ProjectClientEntity
+            .HasForeignKey(pc => pc.ProjectId)
+            .OnDelete(DeleteBehavior.Cascade); // Or NoAction, depending on your business rules
+
+        modelBuilder.Entity<ProjectClientEntity>()
+            .HasOne(pc => pc.Client)
+            .WithMany(c => c.ProjectClients)  // Assuming Client has a collection of ProjectClientEntity
+            .HasForeignKey(pc => pc.ClientId)
+            .OnDelete(DeleteBehavior.Cascade); // Or NoAction
     }
 
 }

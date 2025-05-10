@@ -22,19 +22,13 @@ public class ProjectEntity
 
     public DateTime Created { get; set; }  = DateTime.Now;
 
-    [ForeignKey(nameof(Client))]
-    public string ClientId { get; set; } = null!;
-    public ClientEntity Client { get; set; } =null!;
-
-    [ForeignKey(nameof(Member))]
-    public string UserId { get; set; } = null!;
-    public MemberEntity Member { get; set; } = null!;
-
     [ForeignKey(nameof(Status))]
     public int StatusId { get; set; }
     public StatusEntity Status { get; set; } = null!;
 
     public virtual ICollection<ProjectMemberEntity> ProjectMembers { get; set; } = [];
+    public virtual ICollection<ProjectClientEntity> ProjectClients { get; set; } = [];
+
 
 }
 

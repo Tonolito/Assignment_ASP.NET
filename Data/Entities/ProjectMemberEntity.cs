@@ -9,6 +9,7 @@ public class ProjectMemberEntity
     [Key]
     public string Id { get; set; } = Guid.NewGuid().ToString();
 
+    [ForeignKey("ProjectId")]
     public string ProjectId { get; set; } = null!;
     public ProjectEntity Project { get; set; } = null!;
 

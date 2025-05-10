@@ -10,7 +10,7 @@ public class AddProjectViewModel
     [Display(Name = "Project Image", Prompt = "Select a image")]
     public IFormFile? ProjectImage { get; set; }
 
-    public string Id { get; set; } = null!;
+    //public string Id { get; set; } = null!;
 
     [Display(Name = "Project Name", Prompt = "Enter Project name")]
     [DataType(DataType.Text)]
@@ -36,14 +36,7 @@ public class AddProjectViewModel
     [Required(ErrorMessage = "Required")]
     public int Budget { get; set; }
 
-    //??????
-    [Display(Name = "Members", Prompt = "Add Member")]
-    public string UserId { get; set; } = null!;
-
-    [Display(Name = "Client Name", Prompt = "Enter Client name")]
-    [DataType(DataType.Text)]
-    [Required(ErrorMessage = "Required")]
-    public string ClientId { get; set; } = null!;
+    
 
     public List<AddMemberDto> SelectedMembers{ get; set; } = new();
 
@@ -59,8 +52,7 @@ public class AddProjectViewModel
                 StartDate = model.StartDate,
                 EndDate = model.EndDate,
                 Budget = model.Budget,
-                UserId = model.UserId,
-                ClientId = model.ClientId,
+                
 
             };
     }

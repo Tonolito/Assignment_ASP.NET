@@ -43,34 +43,36 @@ public class ProjectsController(IProjectService projectService, AppDbContext dat
     {
         ViewBag.ErrorMessage = null;
 
+        // Convert view model to DTO
         AddProjectDto dto = model;
 
+        // Check for model validation
         if (!ModelState.IsValid)
         {
             var errors = ModelState
                 .Where(x => x.Value?.Errors.Count > 0)
                 .ToDictionary(kvp => kvp.Key,
-                kvp => kvp.Value?.Errors.Select(x => x.ErrorMessage).ToArray()
-                );
+                kvp => kvp.Value?.Errors.Select(x => x.ErrorMessage).ToArray());
             return BadRequest(new { success = false, errors });
         }
 
-
-        await _projectService.UpdateProjectMembersAsync(model.Id, SelectedMemberIds);
-
-
+        // Create project in the service
         var result = await _projectService.CreateProjectAsync(model);
         if (result.Succeeded)
         {
-            return Ok(new { success = true });
+          // Update members using the ProjectId that was returned in Result
+await _projectService.UpdateProjectMembersAsync(result.Result, SelectedMemberIds);
 
+// Return the success response with the ProjectId in the result
+return Ok(new { success = true, projectId = result.Result });
+;
         }
         else
         {
             return BadRequest(new { success = false });
         }
-
     }
+
 
     [HttpPost]
     [Route("projects/edit")]

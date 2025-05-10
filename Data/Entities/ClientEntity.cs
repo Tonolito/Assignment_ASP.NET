@@ -21,5 +21,5 @@ public class ClientEntity
 
     public DateTime Created { get; set; } = DateTime.Now;
 
-    public virtual ICollection<ProjectEntity> Projects { get; set; } = [];
+    public ICollection<ProjectClientEntity> ProjectClients { get; set; } = [];
 }
