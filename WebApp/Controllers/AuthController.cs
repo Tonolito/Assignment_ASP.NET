@@ -62,13 +62,13 @@ public class AuthController : Controller
                     Created = DateTime.Now
                 };
 
-                // Lägg till notifikation i databasen
+                
                 await _notificationService.AddNotificitionAsync(notification, userId);
 
                 // Hämta alla synliga notifikationer för användaren
                 var notifications = await _notificationService.GetNotificationsAsync(userId);
 
-                // Skicka listan till alla via SignalR (du kan byta till .User(userId) om du vill skicka privat)
+                // Skickar en  listan till alla via SignalR
                 await _notificationHub.Clients.All.SendAsync("ReceiveNotification", notifications);
                 return Redirect(returnUrl);
             }
@@ -76,7 +76,7 @@ public class AuthController : Controller
         if (!ModelState.IsValid)
         {
             ViewBag.ReturnUrl = returnUrl;
-            ViewBag.ErrorMessage = "You Forgot a field input";
+            ViewBag.ErrorMessage = "You forgot a field input";
             return View(model);
         }
 
@@ -259,5 +259,51 @@ public class AuthController : Controller
         return View(model);
 
     }
+
+
+    [HttpGet]
+    [Route("admin")]
+    public IActionResult AdminSignIn()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    [Route("admin")]
+    public async Task<IActionResult> AdminSignIn(MemberSignInViewModel model)
+    {
+        ViewBag.ErrorMessage = null;
+
+        if (!ModelState.IsValid)
+        {
+            ViewBag.ErrorMessage = "Please fill in all fields.";
+            return View(model);
+        }
+
+        var member = await _userManager.FindByEmailAsync(model.Email);
+        if (member == null)
+        {
+            ViewBag.ErrorMessage = "Member not found.";
+            return View(model);
+        }
+
+        // Kontrollera om användaren är admin
+        var isAdmin = await _userManager.IsInRoleAsync(member, "Administrator");
+        if (!isAdmin)
+        {
+            ViewBag.ErrorMessage = "Access denied. Not an admin.";
+            return View(model);
+        }
+
+        var result = await _signInManager.PasswordSignInAsync(member, model.Password, false, false);
+        if (result.Succeeded)
+        {
+            return LocalRedirect("~/");
+        }
+
+        ViewBag.ErrorMessage = "Invalid credentials.";
+        return View(model);
+    }
+
 
 }

@@ -1,0 +1,24 @@
+﻿@model WebApp.ViewModels.MemberSignInViewModel
+
+@{
+    ViewData["Title"] = "Forgot Password";
+    Layout = "_AuthLayout";
+}
+<form asp-action="AdminSignIn" method="post">
+    <div>
+        <label>Email</label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div>
+        <label>Password</label>
+        <input asp-for="Password" type="password" class="form-control" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Login as Admin</button>
+</form>
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+}
