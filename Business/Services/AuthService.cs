@@ -11,7 +11,7 @@ public interface IAuthService
 {
     Task<AuthResult> SignInAsync(MemberSignInDto dto);
     Task<AuthResult> SignOutAsync();
-    Task<AuthResult> SignUpAsync(MemberSignUpDto dto);
+    Task<AuthResult> SignUpAsync(MemberSignUpDto dto, string roleName = "User");
 }
 
 public class AuthService(SignInManager<MemberEntity> signInManager, UserManager<MemberEntity> userManager, IMemberService memberService, INotificationService notificationService) : IAuthService
@@ -64,7 +64,7 @@ public class AuthService(SignInManager<MemberEntity> signInManager, UserManager<
         }
     }
 
-    public async Task<AuthResult> SignUpAsync(MemberSignUpDto dto)
+    public async Task<AuthResult> SignUpAsync(MemberSignUpDto dto, string roleName = "User")
     {
 
         if (dto == null)
@@ -72,21 +72,20 @@ public class AuthService(SignInManager<MemberEntity> signInManager, UserManager<
             return new AuthResult { Succeeded = false, StatusCode = 400, Error = "Not all requried fields is filled" };
         }
 
-        //var memberEntity = new MemberEntity
-        //{
-        //    UserName = dto.Email,
-        //    Email = dto.Email,
-        //    FirstName = dto.FirstName,
-        //    LastName = dto.LastName,
-
-        //};
-        //var result = await _memberService.CreateMemberAsync(dto);
+        
 
         var entity = dto.MapTo<MemberEntity>();
         entity.UserName = dto.Email;
-
+        entity.Image = "/images/avatars/templateavatar.svg";
         var result = await _userManager.CreateAsync(entity, dto.Password);
 
+        if (result.Succeeded)
+        {
+            var addToRoleResult = await _memberService.AddMemberToRole(entity.Id, roleName);
+            return result.Succeeded
+        ? new AuthResult { Succeeded = true, StatusCode = 201, }
+        : new AuthResult { Succeeded = false, StatusCode = 201, Error = "Member created but not to role" };
+        }
 
         return result.Succeeded
         ? new AuthResult { Succeeded = true, StatusCode = 201 }

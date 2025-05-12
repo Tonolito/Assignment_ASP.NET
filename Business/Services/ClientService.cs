@@ -17,7 +17,36 @@ public class ClientService(IClientRepository clientRepository) : IClientService
     //CREATE
     public async Task<ClientResult> AddClientAsync(AddClientDto dto)
     {
+        string imageUrl = string.Empty;
+        if (dto.ClientImage != null && dto.ClientImage.Length > 0)
+        {
+
+            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(dto.ClientImage.FileName)}";
+
+
+            var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "avatars");
+
+
+            if (!Directory.Exists(folderPath))
+                Directory.CreateDirectory(folderPath);
+
+
+            var filePath = Path.Combine(folderPath, fileName);
+
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await dto.ClientImage.CopyToAsync(stream);
+            }
+
+            imageUrl = $"/images/avatars/{fileName}";
+        }
+        else
+        {
+            imageUrl = $"/images/avatars/templateavatar.svg";
+        }
         var entity = dto.MapTo<ClientEntity>();
+        entity.Image = imageUrl;
 
         var result = await _clientRepository.AddAsync(entity);
 

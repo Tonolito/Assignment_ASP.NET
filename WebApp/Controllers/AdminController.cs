@@ -54,6 +54,7 @@ public class AdminController : Controller
             Clients = clients.Result?.Select(x => new Client
             {
                 Id = x.Id,
+                Image = x.Image,
                 ClientName = x.ClientName,
                 Email = x.Email,
                 Location = x.Location,

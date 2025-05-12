@@ -2,6 +2,8 @@
 
 public class Client
 {
+    public string? Image { get; set; }
+
     public string? Id { get; set; }
     public string? ClientName { get; set; }
 

@@ -48,7 +48,9 @@ public class MemberService(UserManager<MemberEntity> userManager, IMemberReposit
         {
             var memberEntity = dto.MapTo<MemberEntity>();
             memberEntity.UserName = dto.Email;
+            memberEntity.Image = "/images/avatars/templateavatar.svg";
 
+            Console.WriteLine("Image: " + memberEntity.Image);
 
             var result = await _userManager.CreateAsync(memberEntity, dto.Password);
 
@@ -171,6 +173,18 @@ public class MemberService(UserManager<MemberEntity> userManager, IMemberReposit
         return result.MapTo<MemberResult>();
 
     }
+    //public async Task<string?> GetMemberImageAsync(string username)
+    //{
+    //    var member = await _userManager.FindByNameAsync(username);
+
+    //    if (member == null)
+    //    {
+    //        return null;
+    //    }
+
+    //    return member.Image ?? "/images/avatars/templateavatar.svg"; 
+    //}
+
 
     //UPDATE
     public async Task<MemberResult> EditMemberAsync(EditMemberDto dto)

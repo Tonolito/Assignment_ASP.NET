@@ -112,19 +112,6 @@ public class MembersController : Controller
                 jobTitle = result.Result.JobTitle,
             });
            
-
-
-            //var editMemberViewModel = new EditMemberViewModel
-            //{
-            //    Id = result.Result.Id,
-            //    FirstName = member.FirstName,
-            //    LastName = member.LastName,
-            //    Email = member.Email,
-            //    Phone = member.Phone,
-            //    JobTitle = member.JobTitle
-            //};
-
-            //return Json(new { success = true, data = editMemberViewModel });
         }
 
         return Json(new { success = false, error = "Member not found." });
