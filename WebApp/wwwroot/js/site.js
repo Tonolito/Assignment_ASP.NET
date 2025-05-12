@@ -43,18 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    const openEditMemberModal = async (memberId) => {
-        const modal = document.getElementById('editMemberModal');
-        const response = await fetch(`members/edit/${memberId}`);
-        const data = await response.json();
-
-        if (data.success) {
-            populateModalFields(modal, data.data); // Fyll i modalens fält med den hämtade datan
-            modal.style.display = 'block'; // Visa modalen
-        } else {
-            console.error("Failed to load member data", data.error);
-        }
-    };
+    
 
     // Open modals
     const modalButtons = document.querySelectorAll('[data-modal="true"]');
@@ -64,34 +53,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const modalTarget = button.getAttribute('data-target');
             const modal = document.querySelector(modalTarget);
 
-            //const entityType = button.getAttribute('data-type'); // Typ: Client, Member, Project
-            //const entityId = button.getAttribute('data-id'); // ID för entiteten
-
             if (modal) {
                 modal.style.display = 'flex';
                 console.log('Open');
 
-                //if (entityType && entityId) {
-                //    console.log("0")
-
-                //    try {
-                //        const response = await fetch(`/api/${entityType}/Get/${entityId}`);
-                //        const data = await response.json();
-
-                //        console.log("1")
-                //        if (data.success) {
-                //                (modal, data.entity);
-                //            console.log("2")
-
-                //        } else {
-                //            console.error('Data not found');
-                //            alert('Data not found.');
-                //            console.log("3")
-                //        }
-                //    } catch (error) {
-                //        console.error('Error fetching data:', error);
-                //    }
-                //}
             }
         });
     });
@@ -263,11 +228,47 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
 
-
 })
 
 
+function initializeDarkmode() {
+    const darkmodeSwitch = document.querySelector("#darkmode-switch");
+    if (!darkmodeSwitch) return;
 
+    const hasDarkmode = localStorage.getItem("darkmode");
+
+    if (hasDarkmode == null) {
+        if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+            enableDarkmode();
+        } else {
+            disableDarkmode();
+        }
+    } else if (hasDarkmode === "on") {
+        enableDarkmode();
+    } else {
+        disableDarkmode();
+    }
+
+    darkmodeSwitch.addEventListener("change", () => {
+        if (darkmodeSwitch.checked) {
+            enableDarkmode();
+            localStorage.setItem("darkmode", "on");
+        } else {
+            disableDarkmode();
+            localStorage.setItem("darkmode", "off");
+        }
+    });
+
+    function enableDarkmode() {
+        darkmodeSwitch.checked = true;
+        document.documentElement.classList.add("dark");
+    }
+
+    function disableDarkmode() {
+        darkmodeSwitch.checked = false;
+        document.documentElement.classList.remove("dark");
+    }
+}
 function clearErrorMessages(form) {
     form.querySelectorAll('[data-val="true"]').forEach(input => {
         input.classList.remove('input-validation-error')
@@ -361,27 +362,18 @@ function validateField(field) {
     }
 
 }
-function populateModalFields(modal, entity) {
-    const inputs = modal.querySelectorAll("input, select, textarea");
 
-    inputs.forEach(input => {
-        const name = input.getAttribute("name");
-        if (!name || !entity.hasOwnProperty(name)) return;
-
-        if (input.type === "checkbox") {
-            input.checked = Boolean(entity[name]);
-        } else if (input.type === "file") {
-            // Hantera filförhandsvisning separat
-            const preview = modal.querySelector(".image-preview");
-            if (preview && entity.imageUrl) {
-                preview.src = entity.imageUrl;
-                preview.closest(".image-previewer")?.classList.add("selected");
-            }
-        } else {
-            input.value = entity[name] ?? "";
-        }
-    });
+//DarkMode
+function enableDarkmode() {
+    darkmodeSwitch.checked = true;
+    document.documentElement.classList.add("dark");
 }
+
+function disableDarkmode() {
+    darkmodeSwitch.checked = false;
+    document.documentElement.classList.remove("dark");
+}
+
 
 
 
@@ -438,6 +430,10 @@ function initializeDropdowns() {
             }
         });
     }
+
+   
+
+
 }
 
 function updateRelativeTimes() {

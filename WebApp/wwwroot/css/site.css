@@ -24,7 +24,6 @@
     --font-family: "Nunito";
     --heading-color: #1A1926;
     --body-light-color: #637085;
-    --body-dark-color: #28263B;
     --grey-100: #F5F7FA;
     --grey-200: #F0F1F5;
     --grey-300: #E8EAED;
@@ -45,10 +44,21 @@
     --dark-red: #E94D3F;
     --dark-accent: #2682D9;
     --white: #FFFFFF;
+    --filter-btn-color: #637085;
+    --card-bg: #FFFFFF;
+    --card-text: #28263B;
+    --dropdown-card: #FFFFFF;
 }
-[data-theme="dark"]{
 
-}
+    :root.dark {
+        color-scheme: dark;
+        --background: #28263B;
+        --heading-color: #FFFFFF;
+        --filter-btn-color: #9E9E9E;
+        --card-bg: #202123;
+        --card-text: #E8E8E8;
+        --dropdown-card: #202123;
+    }
 
 /*Typograhpy*/
 h1, h2, h3, h4, h6 {
@@ -84,6 +94,7 @@ h6 {
 button{
     font-family:var(--font-family);
     font-size: var(--font-body-16);
+    
 }
 
 html, body {
@@ -255,6 +266,7 @@ aside {
             background-color: transparent;
             font-size: var(--font-body-16);
             font-weight: var(--weight-semi);
+            color:var(--filter-btn-color);
             cursor: pointer;
         }
 
@@ -437,9 +449,7 @@ button{
 }
 /*Profile Dropdown*/
 
-.profile-dropdown-dropdown-container .profile-dropdown.show {
-    display: block;
-}
+
 .profile-dropdown-container {
     position: relative;
     display: inline-block;
@@ -459,19 +469,20 @@ button{
         transition: background-color 0.1s ease-in-out, border-color 0.1s ease-in-out, color 0.1s ease-in-out;
     }
     .profile-dropdown-container .profile-dropdown.show {
-        display: block;
+        display: flex;
     }
 
 .profile-dropdown {
     display: none;
-    flex-direction:column;
+    flex-direction: row;
     position: absolute;
-    top: 4.4rem;
-    right: 6.6rem;
-    background-color: var(--white);
+    top: -3rem;
+    right: 1.5rem;
+    background-color: var(--card-bg);
+    color:var(--card-text);
     border-radius: 14px;
     padding: 0.5rem;
-    z-index:2;
+    z-index: 50;
 }
 .profile-bar {
     display: flex;
@@ -535,7 +546,8 @@ button{
         position: absolute;
         top: 50px;
         right: 0;
-        background: white;
+        background-color: var(--card-bg);
+        color: var(--card-text);
         border: white;
         border-radius: 16px;
         min-width: 450px;
@@ -678,7 +690,7 @@ button{
 .member-card {
     display: flex;
     flex-direction: column;
-    background-color: white;
+    background-color: var(--card-bg);
     border-radius: 14px;
     padding: 24px;
 }
@@ -713,7 +725,7 @@ button{
     position: absolute;
     display: none;
     flex-direction: column;
-    background-color: #ffffff;
+    background-color: var(--dropdown-card);
     padding: 0.5rem;
     border-radius: 1rem;
     right: -9.5rem;
@@ -782,6 +794,7 @@ button{
     align-items: center;
     gap: 1rem;
     margin-bottom: 1.5rem;
+    color: var(--card-text);
 }
 
     /*Card Dropdown*/
@@ -801,7 +814,7 @@ button{
 .dropdown-project {
     position: absolute;
     flex-direction: column;
-    background-color: #ffffff;
+    background-color: var(--dropdown-card);
     padding: 0.5rem;
     border-radius: 1rem;
     right: 0;
@@ -845,7 +858,8 @@ button{
 .info-row {
     display: flex;
     flex-direction: row;
-    background-color: white;
+    background-color: var(--card-bg);
+    color: var(--filter-btn-color);
     border-radius: 14px;
     padding: 1.5rem;
     margin-bottom: 2rem;
@@ -883,7 +897,8 @@ button{
     position: relative;
     display: grid;
     grid-template-columns: 1fr 3fr 3fr 3fr 3fr 3fr 1fr;
-    background-color: white;
+    background-color: var(--card-bg);
+    color:var(--card-text);
     border-radius: 14px;
     padding: 1.5rem;
 }
@@ -940,7 +955,7 @@ button{
     position: absolute;
     display: none;
     flex-direction: column;
-    background-color: #ffffff;
+    background-color: var(--dropdown-card);
     padding: 0.5rem;
     border-radius: 1rem;
     right: 5rem;
@@ -972,7 +987,7 @@ button{
     flex-direction: column;
     padding: 1.875rem;
     min-width: 35rem;
-    background-color: #fff;
+    background-color: var(--card-bg);
     border-radius: 1rem;
     margin-top: 1.25rem;
 }
@@ -1033,6 +1048,7 @@ button{
     margin-bottom: 1.875rem;
     width: 100%;
     position: relative;
+    color: var(--card-text);
 }
 
 .labelgroup-modal input {

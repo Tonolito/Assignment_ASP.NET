@@ -1,7 +1,25 @@
 ﻿document.addEventListener('DOMContentLoaded', () => {
-    if (!getCookie("cookieConsent"))
-    showCookieModal()
-})
+    const consentValue = getCookie("cookieConsent");
+
+    // Hjälp av chatgpt för cookie
+    if (consentValue) {
+        try {
+            const consent = JSON.parse(consentValue);
+            if (consent.functional) {
+                if (typeof initializeDarkmode === "function") {
+                    initializeDarkmode(); 
+                }
+            }
+        } catch (error) {
+            console.error("Failed to parse cookieConsent:", error);
+        }
+    }
+
+    if (!consentValue) {
+        showCookieModal();
+    }
+});
+
 
 function showCookieModal() {
     const modal = document.getElementById('cookieModal')
@@ -22,7 +40,7 @@ function showCookieModal() {
 function hideCookieModal() {
     const modal = document.getElementById('cookieModal')
     if (modal) modal.style.display = "none"
-
+        
 }
 function getCookie(name) {
     const nameEQ = name + "="

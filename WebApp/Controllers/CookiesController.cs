@@ -21,7 +21,7 @@ public class CookiesController : Controller
 
         if (consent.Functional)
         {
-            // ÄNDRA TILL DARKMODE
+            
             Response.Cookies.Append("FunctionalCookie", "Non-Essential", new CookieOptions
             {
                 IsEssential = false,

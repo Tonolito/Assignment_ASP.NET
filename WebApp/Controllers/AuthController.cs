@@ -76,12 +76,12 @@ public class AuthController : Controller
         if (!ModelState.IsValid)
         {
             ViewBag.ReturnUrl = returnUrl;
-            ViewBag.ErrorMessage = "Invalid Account Info";
+            ViewBag.ErrorMessage = "You Forgot a field input";
             return View(model);
         }
 
         ViewBag.ReturnUrl = returnUrl;
-        ViewBag.ErrorMessage = "Unable to login wait a bit";
+        ViewBag.ErrorMessage = "If you forgot your password use Forgot password";
         return View(model);
     }
 
@@ -219,5 +219,45 @@ public class AuthController : Controller
         }
     }
 
+
+    [HttpGet]
+    [Route("forgotpassword")]
+    public IActionResult ForgotPassword()
+    {
+        return View();
+    }
+
+
+    [Route("forgotpassword")]
+    [HttpPost]
+    public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
+    {
+
+        ViewBag.SuccessMessage = null;
+
+        if (!ModelState.IsValid)
+        {
+            ViewBag.ErrorMessage = "You Forgot a field input";
+            return View(model);
+        }
+
+        var email = await _userManager.FindByEmailAsync(model.Email);
+        
+        if (email == null)
+        {
+            ViewBag.ErrorMessage = "No email Found";
+            return View();
+        }
+        var token = await _userManager.GeneratePasswordResetTokenAsync(email);
+        
+        var result = await _userManager.ResetPasswordAsync(email, token, "BytMig123!");
+
+        if (result.Succeeded)
+        {
+            ViewBag.SuccessMessage = "Your password was changed";
+        }
+        return View(model);
+
+    }
 
 }
