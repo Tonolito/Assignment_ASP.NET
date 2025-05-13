@@ -155,6 +155,12 @@ header {
         width: 40px;
         height: 40px;
     }
+        header .profile-img-container img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+        }
+
 .notification-btn {
     transition: background-color 0.1s ease-in-out, border-color 0.1s ease-in-out, color 0.1s ease-in-out;
     background-color: var(--btn-notification-background-color);
@@ -493,6 +499,13 @@ button{
 /*    background-color: brown;*/
     margin-bottom: 12px;
 }
+
+
+    .profile-bar .img-container img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+    }
 .darkmode-bar {
     display: grid;
     grid-template-columns: auto 1fr auto;

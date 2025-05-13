@@ -173,17 +173,18 @@ public class MemberService(UserManager<MemberEntity> userManager, IMemberReposit
         return result.MapTo<MemberResult>();
 
     }
-    //public async Task<string?> GetMemberImageAsync(string username)
-    //{
-    //    var member = await _userManager.FindByNameAsync(username);
+        
+    public async Task<string?> GetMemberImageAsync(string username)
+    {
+        var member = await _userManager.FindByNameAsync(username);
 
-    //    if (member == null)
-    //    {
-    //        return null;
-    //    }
+        if (member == null)
+        {
+            return null;
+        }
 
-    //    return member.Image ?? "/images/avatars/templateavatar.svg"; 
-    //}
+        return member.Image ?? "/images/avatars/templateavatar.svg";
+    }
 
 
     //UPDATE

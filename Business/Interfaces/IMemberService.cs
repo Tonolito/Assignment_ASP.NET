@@ -10,7 +10,7 @@ public interface IMemberService
     Task<MemberResult> AddMemberToRole(string userId, string roleName);
     Task<MemberResult> EditMemberAsync(EditMemberDto dto);
     Task<MemberResult> GetMemberByIdAsync(string id);
-    //Task<string?> GetMemberImageAsync(string username);
+    Task<string?> GetMemberImageAsync(string username);
     Task<MembersResult> GetMembersAsnyc();
     Task<List<MemberSearchDto>> SearchMemberAsync(string term);
 }

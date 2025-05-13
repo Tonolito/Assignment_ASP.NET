@@ -1,5 +1,4 @@
 ﻿
-
 <header>
     <div class="header">
         <div class="container">
@@ -14,7 +13,7 @@
             <div class="vertical-line"></div>
 
             <div class="profile-img-container">
-                <img src="/images/avatar1.svg" alt="Profile">
+                @await Component.InvokeAsync("ProfileImage")
             </div>
 
         </div>
