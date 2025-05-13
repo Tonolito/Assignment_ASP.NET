@@ -6,6 +6,7 @@ using Business.Interfaces;
 using Business.Services;
 using Domain.Extentions;
 using Domain.Models;
+using System.Diagnostics;
 
 namespace WebApp.Controllers;
 
@@ -51,12 +52,11 @@ public class MembersController : Controller
 
     }
 
-    [HttpPost("edit/{id}")]
+    [HttpPost]
     public async Task<IActionResult> Edit(EditMemberViewModel model)
     {
         try
         {
-            EditMemberDto dto = model;
 
 
 
@@ -69,9 +69,11 @@ public class MembersController : Controller
                     );
                 return BadRequest(new { success = false, errors });
             }
+            EditMemberDto dto = model;
+
 
             var result = await _memberService.EditMemberAsync(model);
-            if (result.Succeeded)
+                if (result.Succeeded)
             {
                 return Ok(new { success = true });
             }
@@ -105,6 +107,7 @@ public class MembersController : Controller
             return Json(new
             {
                 id = result.Result.Id,
+                image = result.Result.Image,
                 firstName = result.Result.FirstName,
                 lastName = result.Result.LastName,
                 email = result.Result.Email,
@@ -117,6 +120,29 @@ public class MembersController : Controller
         return Json(new { success = false, error = "Member not found." });
     }
 
+
+
+    [HttpDelete("delete/{id}")]
+    public async Task<IActionResult> Delete(string id)
+    {
+
+        if (string.IsNullOrEmpty(id))
+        {
+            return BadRequest(new { success = false, message = "Member ID cannot be null or empty" });
+        }
+        
+        var result = await _memberService.DeleteMemberAsync(id);
+        if (result.Succeeded)
+        {
+            return Ok(new { success = true, message = "Member deleted successfully." });
+        }
+        if (!result.Succeeded)
+        {
+            Debug.WriteLine($"Failed to delete member: {result.Error}");
+        }
+
+        return BadRequest(new { success = false, message = result.Error });
+    }
 
 
 

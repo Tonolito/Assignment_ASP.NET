@@ -9,14 +9,16 @@ using Domain.Extentions;
 using Business.Interfaces;
 using System.Diagnostics;
 using Data.Repositories;
+using Data.Contexts;
 
 namespace Business.Services;
 
-public class MemberService(UserManager<MemberEntity> userManager, IMemberRepository memberRepository, RoleManager<IdentityRole> roleManger) : IMemberService
+public class MemberService(UserManager<MemberEntity> userManager, IMemberRepository memberRepository, RoleManager<IdentityRole> roleManger, AppDbContext context) : IMemberService
 {
     private readonly UserManager<MemberEntity> _userManager = userManager;
     private readonly IMemberRepository _memberRepository = memberRepository;
     private readonly RoleManager<IdentityRole> _roleManger = roleManger;
+    private readonly AppDbContext _context = context;
 
 
 
@@ -103,20 +105,20 @@ public class MemberService(UserManager<MemberEntity> userManager, IMemberReposit
             string imageUrl = string.Empty;
             if (dto.MemberImage != null && dto.MemberImage.Length > 0)
             {
-                
+
                 var fileName = $"{Guid.NewGuid()}{Path.GetExtension(dto.MemberImage.FileName)}";
 
-                
+
                 var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "avatars");
 
-               
+
                 if (!Directory.Exists(folderPath))
                     Directory.CreateDirectory(folderPath);
 
-                
+
                 var filePath = Path.Combine(folderPath, fileName);
 
-               
+
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
                     await dto.MemberImage.CopyToAsync(stream);
@@ -125,11 +127,11 @@ public class MemberService(UserManager<MemberEntity> userManager, IMemberReposit
                 imageUrl = $"/images/avatars/{fileName}";
             }
             else
-            {   
-                imageUrl =$"/images/avatars/templateavatar.svg";
+            {
+                imageUrl = $"/images/avatars/templateavatar.svg";
             }
 
-                var entity = dto.MapTo<MemberEntity>();
+            var entity = dto.MapTo<MemberEntity>();
             entity.UserName = dto.Email;
             entity.Image = imageUrl;
 
@@ -173,7 +175,7 @@ public class MemberService(UserManager<MemberEntity> userManager, IMemberReposit
         return result.MapTo<MemberResult>();
 
     }
-        
+
     public async Task<string?> GetMemberImageAsync(string username)
     {
         var member = await _userManager.FindByNameAsync(username);
@@ -206,29 +208,35 @@ public class MemberService(UserManager<MemberEntity> userManager, IMemberReposit
     }
 
     // DELETE
+    //Hjäp av chatgpt för den tidigare delen krockade med att läsa entiteten två gånger
     public async Task<MemberResult> DeleteMemberAsync(string id)
     {
         if (id == null)
         {
             return new MemberResult { Succeeded = false, StatusCode = 400, Error = "Id can't be found." };
-
         }
         try
         {
-            var memberResult = await _memberRepository.GetAsync(x => x.Id == id);
-            var memberEntity = memberResult.Result!.MapTo<MemberEntity>();
+            var memberEntity = await _context.Users.FindAsync(id);
 
-            var result = await _memberRepository.DeleteAsync(memberEntity);
-            return result.Succeeded
-            ? new MemberResult { Succeeded = true, StatusCode = 200 }
-            : new MemberResult { Succeeded = false, StatusCode = result.StatusCode, Error = result.Error };
+            if (memberEntity == null)
+            {
+                return new MemberResult { Succeeded = false, StatusCode = 404, Error = "Member not found." };
+            }
+
+            // Ta bort medlemmen
+            _context.Users.Remove(memberEntity);
+            await _context.SaveChangesAsync();
+
+            return new MemberResult { Succeeded = true, StatusCode = 200 };
         }
         catch (Exception ex)
         {
             Debug.WriteLine(ex);
-            return new MemberResult { Succeeded = false,StatusCode = 500, Error = ex.Message };
+            return new MemberResult { Succeeded = false, StatusCode = 500, Error = ex.Message };
         }
     }
+
 
     // MSC
     public async Task<MemberResult> AddMemberToRole(string userId, string roleName)

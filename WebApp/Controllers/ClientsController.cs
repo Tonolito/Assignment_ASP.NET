@@ -1,5 +1,7 @@
 ﻿using Business.Interfaces;
+using Business.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 using WebApp.ViewModels;
 
 namespace WebApp.Controllers;
@@ -87,6 +89,7 @@ public class ClientsController : Controller
             return Json(new
             {
                 id = result.Result.Id,
+                image = result.Result.Image,
                 clientName = result.Result.ClientName,
                 email = result.Result.Email,
                 location = result.Result.Location,
@@ -96,6 +99,28 @@ public class ClientsController : Controller
         }
 
         return Json(new { success = false, error = "Client not found." });
+    }
+
+    [HttpDelete("delete/{id}")]
+    public async Task<IActionResult> Delete(string id)
+    {
+
+        if (string.IsNullOrEmpty(id))
+        {
+            return BadRequest(new { success = false, message = "Client ID cannot be null or empty" });
+        }
+
+        var result = await _clientService.DeleteClientAsync(id);
+        if (result.Succeeded)
+        {
+            return Ok(new { success = true, message = "Delete deleted successfully." });
+        }
+        if (!result.Succeeded)
+        {
+            Debug.WriteLine($"Failed to delete client: {result.Error}");
+        }
+
+        return BadRequest(new { success = false, message = result.Error });
     }
 
 }

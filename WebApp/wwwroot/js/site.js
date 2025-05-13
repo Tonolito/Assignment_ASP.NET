@@ -77,12 +77,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     const form = document.querySelector('#editMemberForm');
 
+                    form.querySelector('input[name="Id"]').value = data.id;
                     form.querySelector('input[name="FirstName"]').value = data.firstName;
                     form.querySelector('input[name="LastName"]').value = data.lastName;
                     form.querySelector('input[name="Email"]').value = data.email;
                     form.querySelector('input[name="PhoneNumber"]').value = data.phoneNumber;
                     form.querySelector('input[name="JobTitle"]').value = data.jobTitle;
                     form.querySelector('input[name="Address"]').value = data.address;
+
+                    if (data.image) {
+                        const form = document.querySelector('#editMemberForm');
+                        const imagePreview = form.querySelector('.image-preview');
+
+                        imagePreview.src = data.image;
+
+                        
+                    }
+
                 }
 
                 
@@ -114,7 +125,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     form.querySelector('input[name="Email"]').value = data.email;
                     form.querySelector('input[name="Location"]').value = data.location;
                     form.querySelector('input[name="Phone"]').value = data.phone;
-                    
+
+
+                    if (data.image) {
+                        const form = document.querySelector('#editClientForm');
+                        const imagePreview = form.querySelector('.image-preview');
+
+                        imagePreview.src = data.image;
+
+
+                    }
                 }
 
 
@@ -226,6 +246,53 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         })
     })
+
+    // Chatgpt för att delete knappen ska fungera
+    const deleteButtons = document.querySelectorAll('.dropdown-option-delete');
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', async (event) => {
+            // Hämta ID för antingen medlem eller klient beroende på knappen
+            const parentId = button.closest('.dropdown-client')?.id || button.closest('.dropdown-member')?.id;
+            const entityId = parentId.split('-').slice(2).join('-'); // För att få ut id:t efter "client-dropdown-" eller "member-dropdown-"
+
+            // Bekräftelse på radering
+            const isConfirmed = confirm(`Are you sure you want to delete this ${parentId.startsWith('client') ? 'client' : 'member'}?`);
+            if (!isConfirmed) return;
+
+            try {
+                // Skicka DELETE-förfrågan till rätt URL (klient eller medlem)
+                const response = await fetch(`https://localhost:7023/${parentId.startsWith('client') ? 'clients' : 'members'}/delete/${entityId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    // Ta bort klienten eller medlemmen från UI:t
+                    const dropdownElement = document.getElementById(parentId);
+                    if (dropdownElement) {
+                        dropdownElement.remove(); // Ta bort dropdown eller hela klient-/medlem-cards
+                    }
+                    alert(`${parentId.startsWith('client') ? 'Client' : 'Member'} deleted successfully.`);
+                } else {
+                    const text = await response.text();
+                    try {
+                        const data = JSON.parse(text);
+                        alert(`Error deleting ${parentId.startsWith('client') ? 'client' : 'member'}: ${data.error || "An unexpected error occurred"}`);
+                    } catch (e) {
+                        alert(`Error deleting ${parentId.startsWith('client') ? 'client' : 'member'}: No valid response data.`);
+                    }
+                }
+            } catch (error) {
+                console.error(`Error deleting ${parentId.startsWith('client') ? 'client' : 'member'}:`, error);
+                alert(`Error deleting ${parentId.startsWith('client') ? 'client' : 'member'}.`);
+            }
+        });
+    });
+
+
+
 
 
 })
@@ -470,87 +537,3 @@ function updateRelativeTimes() {
         el.textContent = relativeTime;
     });
 }
-
-
-
-
-
-//LEGACY CODE
-//document.querySelectorAll(".icon-trigger").forEach(trigger => {
-//    trigger.addEventListener("click", (e) => {
-//        e.stopPropagation(); // Förhindrar att klick utanför stänger direkt
-
-//        let dropdown = null;
-
-//        // Kontrollera vilken ikon som klickades
-//        if (trigger.classList.contains("fa-bell")) {
-//            dropdown = document.querySelector(".notification");
-//        } else if (trigger.classList.contains("fa-gear")) {
-//            dropdown = document.querySelector(".profile-dropdown");
-//        }
-
-//        if (dropdown) {
-//            // Stäng alla andra dropdowns först
-//            document.querySelectorAll(".dropdown").forEach(d => {
-//                if (d !== dropdown) d.style.display = "none";
-//            });
-
-//            // Växla synlighet på den aktuella dropdownen
-//            dropdown.style.display = dropdown.style.display === "flex" ? "none" : "flex";
-//        }
-//    });
-//});
-
-//// Klick utanför → stäng alla dropdowns
-//document.addEventListener("click", () => {
-//    document.querySelectorAll(".dropdown").forEach(dropdown => {
-//        dropdown.style.display = "none";
-//    });
-//});
-
-
-//// Dropdown för alla cards
-//document.querySelectorAll(".dots-container").forEach(button => {
-//    button.addEventListener("click", (event) => {
-//        event.stopPropagation(); // Förhindrar att klick utanför stänger direkt
-
-//        let dropdown = null;
-
-//        // Kontrollera om knappen finns i .upper-card (för project och members)
-//        const upperCard = button.closest(".upper-card");
-//        if (upperCard) {
-//            dropdown = upperCard.querySelector(".dropdown");
-//        }
-
-//        // Om knappen finns i .client-card istället
-//        const clientCard = button.closest(".client-card");
-//        if (clientCard) {
-//            dropdown = clientCard.querySelector(".dropdown-client");
-//        }
-
-//        if (dropdown) {
-//            // Stäng alla andra dropdowns först
-//            document.querySelectorAll(".dropdown, .dropdown-client").forEach(d => {
-//                if (d !== dropdown) d.style.display = "none";
-//            });
-
-//            // Växla synlighet på denna dropdown
-//            dropdown.style.display = dropdown.style.display === "flex" ? "none" : "flex";
-//        }
-//    });
-//});
-
-//// Klicka utanför dropdown → stäng alla dropdowns
-//document.addEventListener("click", () => {
-//    document.querySelectorAll(".dropdown, .dropdown-client").forEach(dropdown => {
-//        dropdown.style.display = "none";
-//    });
-//});
-
-
-//// Klicka utanför dropdown → stäng alla dropdowns
-//document.addEventListener("click", () => {
-//    document.querySelectorAll(".dropdown").forEach(dropdown => {
-//        dropdown.style.display = "none";
-//    });
-//});

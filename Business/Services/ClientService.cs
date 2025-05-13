@@ -1,18 +1,21 @@
 ﻿using Business.Interfaces;
 using Business.Models;
+using Data.Contexts;
 using Data.Entities;
 using Data.Interfaces;
 using Data.Repositories;
 using Domain.Dtos;
 using Domain.Extentions;
 using Domain.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace Business.Services;
 
-public class ClientService(IClientRepository clientRepository) : IClientService
+public class ClientService(IClientRepository clientRepository, AppDbContext context) : IClientService
 {
     private readonly IClientRepository _clientRepository = clientRepository;
+    private readonly AppDbContext _context = context;
 
     //CREATE
     public async Task<ClientResult> AddClientAsync(AddClientDto dto)
@@ -92,24 +95,27 @@ public class ClientService(IClientRepository clientRepository) : IClientService
 
     }
     //DELETE
+    //Kopierat från min memberservice
     public async Task<ClientResult> DeleteClientAsync(string id)
     {
         if (id == null)
         {
             return new ClientResult { Succeeded = false, StatusCode = 400, Error = "Id can't be found." };
         }
-
         try
         {
-       
-            var clientResult = await _clientRepository.GetAsync(x => x.Id == id);
-            var clientEntity = clientResult.Result!.MapTo<ClientEntity>();
+            var clientEntity = await _context.Clients.FindAsync(id);
 
-            var result = await _clientRepository.DeleteAsync(clientEntity);
+            if (clientEntity == null)
+            {
+                return new ClientResult { Succeeded = false, StatusCode = 404, Error = "Client not found." };
+            }
 
-            return result.Succeeded
-                ? new ClientResult { Succeeded = true, StatusCode = 200 }
-                : new ClientResult { Succeeded = false, StatusCode = result.StatusCode, Error = result.Error };
+            // Ta bort medlemmen
+            _context.Clients.Remove(clientEntity);
+            await _context.SaveChangesAsync();
+
+            return new ClientResult { Succeeded = true, StatusCode = 200 };
         }
         catch (Exception ex)
         {

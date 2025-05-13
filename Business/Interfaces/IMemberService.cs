@@ -8,6 +8,7 @@ public interface IMemberService
 {
     Task<MemberResult> AddMemberAsync(AddMemberDto dto, string roleName = "User");
     Task<MemberResult> AddMemberToRole(string userId, string roleName);
+    Task<MemberResult> DeleteMemberAsync(string id);
     Task<MemberResult> EditMemberAsync(EditMemberDto dto);
     Task<MemberResult> GetMemberByIdAsync(string id);
     Task<string?> GetMemberImageAsync(string username);
