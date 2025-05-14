@@ -48,7 +48,7 @@
             results.appendChild(noResult);
         } else {
             data.forEach(item => {
-                const id = parseInt(item.id);
+                const id = String(item.id);
                 if (!selectedIds.includes(id)) {
                     const resultItem = document.createElement('div');
                     resultItem.classList.add('search-item');
@@ -73,7 +73,7 @@
     }
 
     function addTag(item) {
-        const id = parseInt(item.id);
+        const id = String(item.id);
         if (selectedIds.includes(id)) return;
 
         selectedIds.push(id);
@@ -116,7 +116,7 @@
         if (tags.length === 0) return;
 
         const lastTag = tags[tags.length - 1];
-        const lastId = parseInt(lastTag.querySelector('.remove-btn').dataset.id);
+        const lastId = String(lastTag.querySelector('.remove-btn').dataset.id);
 
         selectedIds = selectedIds.filter(id => id !== lastId);
         lastTag.remove();

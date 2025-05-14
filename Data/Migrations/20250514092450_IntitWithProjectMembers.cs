@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Data.Migrations
 {
     /// <inheritdoc />
-    public partial class InitWithRightConnectionTabels : Migration
+    public partial class IntitWithProjectMembers : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -290,17 +290,11 @@ namespace Data.Migrations
                     EndDate = table.Column<DateTime>(type: "date", nullable: true),
                     Budget = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    StatusId = table.Column<int>(type: "int", nullable: false),
-                    MemberEntityId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    StatusId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Projects", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Projects_AspNetUsers_MemberEntityId",
-                        column: x => x.MemberEntityId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Projects_Statuses_StatusId",
                         column: x => x.StatusId,
@@ -336,41 +330,15 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProjectClients",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProjectId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ClientId = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProjectClients", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ProjectClients_Clients_ClientId",
-                        column: x => x.ClientId,
-                        principalTable: "Clients",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ProjectClients_Projects_ProjectId",
-                        column: x => x.ProjectId,
-                        principalTable: "Projects",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ProjectMembers",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ProjectId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     MemberId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProjectMembers", x => x.Id);
+                    table.PrimaryKey("PK_ProjectMembers", x => new { x.ProjectId, x.MemberId });
                     table.ForeignKey(
                         name: "FK_ProjectMembers_AspNetUsers_MemberId",
                         column: x => x.MemberId,
@@ -451,29 +419,9 @@ namespace Data.Migrations
                 column: "NotificationTypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProjectClients_ClientId",
-                table: "ProjectClients",
-                column: "ClientId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProjectClients_ProjectId",
-                table: "ProjectClients",
-                column: "ProjectId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ProjectMembers_MemberId",
                 table: "ProjectMembers",
                 column: "MemberId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProjectMembers_ProjectId",
-                table: "ProjectMembers",
-                column: "ProjectId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Projects_MemberEntityId",
-                table: "Projects",
-                column: "MemberEntityId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Projects_StatusId",
@@ -506,13 +454,13 @@ namespace Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Clients");
+
+            migrationBuilder.DropTable(
                 name: "DismissedNotifications");
 
             migrationBuilder.DropTable(
                 name: "MemberAddresses");
-
-            migrationBuilder.DropTable(
-                name: "ProjectClients");
 
             migrationBuilder.DropTable(
                 name: "ProjectMembers");
@@ -527,7 +475,7 @@ namespace Data.Migrations
                 name: "Notifications");
 
             migrationBuilder.DropTable(
-                name: "Clients");
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Projects");
@@ -537,9 +485,6 @@ namespace Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "NotificationTypes");
-
-            migrationBuilder.DropTable(
-                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Statuses");

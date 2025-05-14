@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using WebApp.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Components.Forms;
 
 
 namespace WebApp.Controllers;
@@ -23,6 +24,7 @@ public class ProjectsController(IProjectService projectService, AppDbContext dat
     [Route("")]
     public async Task<IActionResult> Projects()
     {
+        //Får inte med status eller selectedMemberIDs
         var projects = await _projectService.GetProjectsAsync();
 
         var viewModel = new ProjectsViewModel()
@@ -38,13 +40,18 @@ public class ProjectsController(IProjectService projectService, AppDbContext dat
 
     [HttpPost]
     [Route("projects/Add")]
-
-    public async Task<IActionResult> Add(AddProjectViewModel model, string SelectedMemberIds)
+    public async Task<IActionResult> Add(AddProjectViewModel model, List<string> SelectedMemberIds)
     {
         ViewBag.ErrorMessage = null;
 
-        // Convert view model to DTO
         AddProjectDto dto = model;
+
+
+        var SelectedM = SelectedMemberIds;
+
+        dto.SelectedMemberIds = SelectedM;
+
+        // Convert view model to DTO    
 
         // Check for model validation
         if (!ModelState.IsValid)
@@ -57,15 +64,14 @@ public class ProjectsController(IProjectService projectService, AppDbContext dat
         }
 
         // Create project in the service
-        var result = await _projectService.CreateProjectAsync(model);
+        var result = await _projectService.CreateProjectAsync(dto);
         if (result.Succeeded)
         {
-          // Update members using the ProjectId that was returned in Result
-await _projectService.UpdateProjectMembersAsync(result.Result, SelectedMemberIds);
+            // Update members using the ProjectId that was returned in Result
+            //await _projectService.UpdateProjectMembersAsync(result.Result, SelectedMemberIds);
 
-// Return the success response with the ProjectId in the result
-return Ok(new { success = true, projectId = result.Result });
-;
+            // Return the success response with the ProjectId in the result
+            return Ok();
         }
         else
         {

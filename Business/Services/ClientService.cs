@@ -73,6 +73,7 @@ public class ClientService(IClientRepository clientRepository, AppDbContext cont
     public async Task<ClientResult> GetClientByIdAsync(string id)
     {
         var result = await _clientRepository.GetAsync(x => x.Id == id);
+        Console.WriteLine(result == null ? "Client not found in repository" : $"Client found: {result.Result.Id}");
 
         return result.MapTo<ClientResult>();
 

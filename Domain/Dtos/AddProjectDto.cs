@@ -34,16 +34,7 @@ public class AddProjectDto
 
     [Display(Name = "Budget", Prompt = "0")]
     [Required(ErrorMessage = "Required")]
-    public int Budget { get; set; }
+    public decimal? Budget { get; set; }
 
-    //??????
-    [Display(Name = "Members", Prompt = "Add Member")]
-    public string UserId { get; set; } = null!;
-
-    [Display(Name = "Client Name", Prompt = "Enter Client name")]
-    [DataType(DataType.Text)]
-    [Required(ErrorMessage = "Required")]
-    public string ClientId { get; set; } = null!;
-
-    //public List<string> SelectedUserIds { get; set; } = new();
+    public List<string> SelectedMemberIds { get; set; } = new();
 }

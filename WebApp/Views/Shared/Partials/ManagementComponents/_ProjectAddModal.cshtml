@@ -3,11 +3,11 @@
 
 @{
     var selectedUsersJson = JsonSerializer.Serialize(
-                         Model.SelectedMembers.Select(m => new
+                         Model.SelectedMembersIds.Select(m => new
                          {
                              // id = m.,
                              // imageUrl = m. ,
-                             fullName = m.FirstName + " " + m.LastName,
+                             // fullName = m.FirstName + " " + m.LastName,
                  })
              );
 }
@@ -117,11 +117,12 @@
 
 <script>
         document.addEventListener('DOMContentLoaded', function(){
-        initWysiwyg('#project-wysiwyg-editor', '#project-wysiwyg-toolbar', '#Description', '@Html.Raw(ViewBag.RichTextContent ?? "")');
+        initWysiwyg('#project-wysiwyg-editor', '#project-wysiwyg-toolbar', 'Description', '@Html.Raw(ViewBag.RichTextContent ?? "")'); 
     });
 
     function initWysiwyg(wysiwygEditorId, wysiwygToolbar, textareaId, content) {
         const textarea = document.getElementById(textareaId);
+        
 
         const quill = new Quill(wysiwygEditorId, {
             modules: {

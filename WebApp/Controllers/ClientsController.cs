@@ -41,9 +41,8 @@ public class ClientsController : Controller
 
     }
 
-    [HttpPost]
-    [Route("clients/Edit")]
-
+    [HttpPut]
+    [Route("edit")]
     public async Task<IActionResult> Edit(EditClientViewModel model)
     {
         if (!ModelState.IsValid)
@@ -60,11 +59,10 @@ public class ClientsController : Controller
         if (result.Succeeded)
         {
             return Ok(new { success = true });
-
         }
-        return Ok(new { succes = true });
-
+        return Ok(new { success = false, error = "Failed to update client." });
     }
+
 
     [HttpGet]
     [Route("edit/{id}")]

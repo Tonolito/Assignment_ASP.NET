@@ -13,21 +13,25 @@ using System.Text.Json;
 
 namespace Business.Services;
 
-public class ProjectService(IProjectRepository projectRepository, IStatusService statusService, IProjectMemberRepository projectMemberRepository) : IProjectService
+public class ProjectService(IProjectRepository projectRepository, IStatusService statusService, IProjectMemberRepository projectMemberRepository, AppDbContext context) : IProjectService
 {
     private readonly IProjectRepository _projectRepository = projectRepository;
     private readonly IStatusService _statusService = statusService;
-private readonly IProjectMemberRepository _projectMemberRepository = projectMemberRepository;
+    private readonly IProjectMemberRepository _projectMemberRepository = projectMemberRepository;
+    private readonly AppDbContext _context = context;
+
     //CREATE
     //, List<string> selectedUserIds
-    public async Task<ProjectResult<string>> CreateProjectAsync(AddProjectDto dto)
+    public async Task<ProjectResult> CreateProjectAsync(AddProjectDto dto)
     {
         if (dto == null)
         {
-            return new ProjectResult<string> { Succeeded = false, StatusCode = 400, Error = "Not all required fields are input." };
+            return new ProjectResult { Succeeded = false, StatusCode = 400, Error = "Not all required fields are input." };
         }
 
         var projectEntity = dto.MapTo<ProjectEntity>();
+
+
         var statusResult = await _statusService.GetStatusByIdAsync(1);
         var status = statusResult.Result;
 
@@ -37,44 +41,62 @@ private readonly IProjectMemberRepository _projectMemberRepository = projectMemb
 
         if (result.Succeeded)
         {
-            // Now fetch the created project with its details
-            var projectWithDetails = await _projectRepository.GetProjectWithDetailsAsync(projectEntity.Id);
+            // Skapa kopplinga  r till medlemmar i ProjectMember-tabellen
+            if (dto.SelectedMemberIds != null && dto.SelectedMemberIds.Any())
+            {
+                // dto.SelectedMemberIds innehåller EN sträng, som i sig är en JSON-lista → deserialisera den
+                var memberIdsJson = dto.SelectedMemberIds[0];  // "[\"id1\", \"id2\"]"
+                var memberIds = JsonSerializer.Deserialize<List<string>>(memberIdsJson);
 
-            return new ProjectResult<string>
-            {
-                Succeeded = true,
-                StatusCode = 201,
-                Result = projectEntity.Id // Return the generated ProjectId
-            };
+                if (memberIds != null && memberIds.Any())
+                {
+                    var projectMembers = new List<ProjectMemberEntity>();
+
+                    foreach (var memberId in memberIds)
+                    {
+                        var member = await _context.Users.FirstOrDefaultAsync(m => m.Id == memberId);
+
+                        if (member != null)
+                        {
+                            projectMembers.Add(new ProjectMemberEntity
+                            {
+                                ProjectId = projectEntity.Id,
+                                Member = member 
+                            });
+                        }
+                    }
+
+                    await _context.ProjectMembers.AddRangeAsync(projectMembers);
+                    await _context.SaveChangesAsync();
+                }
+            }
+
         }
-        else
+        return new ProjectResult
         {
-            return new ProjectResult<string>
-            {
-                Succeeded = false,
-                StatusCode = result.StatusCode,
-                Error = result.Error
-            };
-        }
+            Succeeded = true,
+            StatusCode = 201
+        };
     }
 
     //READ - Get all projects with members and clients
     public async Task<ProjectResult<IEnumerable<Project>>> GetProjectsAsync()
     {
-        var response = await _projectRepository.GetAllAsync(orderByDescending: true, sortBy: s => s.Created, where: null, include => include.ProjectMembers, include => include.Status, include => include.ProjectClients);
+        //include => include.ProjectClients
+        var response = await _projectRepository.GetAllAsync(orderByDescending: true, sortBy: s => s.Created, where: null, include => include.ProjectMembers, include => include.Status);
 
         return new ProjectResult<IEnumerable<Project>> { Succeeded = true, StatusCode = 200, Result = response.Result };
     }
 
     //READ - Get a specific project with members and clients
-    public async Task<ProjectResult<Project>> GetProjectsAsync(string id)
-    {
-        var projectEntity = await _projectRepository.GetProjectWithDetailsAsync(id);
+    //public async Task<ProjectResult<Project>> GetProjectsAsync(string id)
+    //{
+    //    //var projectEntity = await _projectRepository.GetProjectWithDetailsAsync(id);
 
-        return projectEntity != null
-            ? new ProjectResult<Project> { Succeeded = true, StatusCode = 200, Result = projectEntity.MapTo<Project>() }
-            : new ProjectResult<Project> { Succeeded = false, StatusCode = 404, Error = $"Project with '{id}' was not found" };
-    }
+    //    return projectEntity != null
+    //        ? new ProjectResult<Project> { Succeeded = true, StatusCode = 200, Result = projectEntity.MapTo<Project>() }
+    //        : new ProjectResult<Project> { Succeeded = false, StatusCode = 404, Error = $"Project with '{id}' was not found" };
+    //}
 
     //UPDATE
     public async Task<ProjectResult> UpdateProjectAsync(EditProjectDto dto)

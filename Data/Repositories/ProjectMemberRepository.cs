@@ -1,18 +1,16 @@
 ﻿using Data.Contexts;
 using Data.Entities;
+using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
 
 namespace Data.Repositories
 {
-    public class ProjectMemberRepository : IProjectMemberRepository
+    public class ProjectMemberRepository(AppDbContext context) : BaseRepository<ProjectMemberEntity, Tag>(context), IProjectMemberRepository
     {
-        private readonly AppDbContext _context;
+       
 
-        public ProjectMemberRepository(AppDbContext context)
-        {
-            _context = context;
-        }
+      
 
         public async Task RemoveAllByProjectIdAsync(string projectId)
         {

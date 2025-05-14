@@ -28,7 +28,6 @@ public class MembersController : Controller
 
     [HttpPost]
     [Route("members/add")]
-
     public async Task<IActionResult> Add(AddMemberViewModel model)
     {
         AddMemberDto dto = model;
@@ -52,45 +51,45 @@ public class MembersController : Controller
 
     }
 
-    [HttpPost]
+    [HttpPut]
+    [Route("edit")]
     public async Task<IActionResult> Edit(EditMemberViewModel model)
     {
+        if (!ModelState.IsValid)
+        {
+            var errors = ModelState
+                .Where(x => x.Value?.Errors.Count > 0)
+                .ToDictionary(
+                    kvp => kvp.Key,
+                    kvp => kvp.Value?.Errors.Select(e => e.ErrorMessage).ToArray()
+                );
+
+            return BadRequest(new { success = false, errors });
+        }
+
         try
         {
-
-
-
-            if (!ModelState.IsValid)
-            {
-                var errors = ModelState
-                    .Where(x => x.Value?.Errors.Count > 0)
-                    .ToDictionary(kvp => kvp.Key,
-                    kvp => kvp.Value?.Errors.Select(x => x.ErrorMessage).ToArray()
-                    );
-                return BadRequest(new { success = false, errors });
-            }
-            EditMemberDto dto = model;
-
-
             var result = await _memberService.EditMemberAsync(model);
-                if (result.Succeeded)
+
+            if (result.Succeeded)
             {
                 return Ok(new { success = true });
             }
 
-
-           
-            return Ok(new { success = true });
+            return Ok(new { success = false, error = "Failed to update member." });
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex);
-            return StatusCode(500, new { success = false, message = "An error occurred while processing the request." });
 
-
+            return StatusCode(500, new
+            {
+                success = false,
+                message = "An error occurred while processing the request."
+            });
         }
-
     }
+
 
     [HttpGet]
     [Route("edit/{id}")]

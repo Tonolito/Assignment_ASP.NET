@@ -1,17 +1,17 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿//using System.ComponentModel.DataAnnotations;
 
-namespace Data.Entities;
+//namespace Data.Entities;
 
-public class ProjectClientEntity
-{
+//public class ProjectClientEntity
+//{
 
-    [Key]
-    public string Id { get; set; } = Guid.NewGuid().ToString();
+//    [Key]
+//    public string Id { get; set; } = Guid.NewGuid().ToString();
 
-    public string ProjectId { get; set; } = null!;
-    public ProjectEntity Project { get; set; } = null!;
+//    public string ProjectId { get; set; } = null!;
+//    public ProjectEntity Project { get; set; } = null!;
 
-    public string ClientId { get; set; } = null!;
-    public ClientEntity Client { get; set; } = null!;
-}
+//    public string ClientId { get; set; } = null!;
+//    public ClientEntity Client { get; set; } = null!;
+//}
 

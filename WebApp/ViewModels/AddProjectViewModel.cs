@@ -17,7 +17,7 @@ public class AddProjectViewModel
     [Required(ErrorMessage = "Required")]
     public string ProjectName { get; set; } = null!;
 
-    [Display(Name = "Description", Prompt = "Enter Description")]
+    [Display(Name = "Description")]
     [Required(ErrorMessage = "Required")]
     [DataType(DataType.Text)]
     public string Description { get; set; } = null!;
@@ -38,7 +38,7 @@ public class AddProjectViewModel
 
     
 
-    public List<AddMemberDto> SelectedMembers{ get; set; } = new();
+    public List<string> SelectedMembersIds { get; set; } = new();
 
     public static implicit operator AddProjectDto(AddProjectViewModel model)
     {
@@ -52,6 +52,7 @@ public class AddProjectViewModel
                 StartDate = model.StartDate,
                 EndDate = model.EndDate,
                 Budget = model.Budget,
+                SelectedMemberIds = model.SelectedMembersIds
                 
 
             };

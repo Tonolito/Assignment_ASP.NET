@@ -190,22 +190,37 @@ public class MemberService(UserManager<MemberEntity> userManager, IMemberReposit
 
 
     //UPDATE
-    public async Task<MemberResult> EditMemberAsync(EditMemberDto dto)
-    {
-        var entity = dto.MapTo<MemberEntity>();
-
-        var result = await _memberRepository.UpdateAsync(entity);
-
-        if (result.Succeeded)
+        public async Task<MemberResult> EditMemberAsync(EditMemberDto dto)
         {
-            return result.Succeeded
-            ? new MemberResult { Succeeded = true, StatusCode = 201, }
-            : new MemberResult { Succeeded = false, StatusCode = 201, Error = "Member update but sometig went wrong" };
+
+        var existing = await _context.Users.FindAsync(dto.Id); // om du jobbar i service-lagret med context
+        if (existing == null)
+        {
+            return new MemberResult { Succeeded = false, StatusCode = 404, Error = "Member not found" };
         }
+            existing.Id = dto.Id;
+            //existing.Image = dto.MemberImage;
+            existing.FirstName = dto.FirstName;
+            existing.LastName = dto.LastName;
+            existing.Email = dto.Email;
+            existing.PhoneNumber = dto.PhoneNumber;
+            existing.JobTitle = dto.JobTitle;
+            //existing.Address = dto.Address;
 
-        return new MemberResult { Succeeded = false, StatusCode = 500, Error = "Unable to edit member" };
 
-    }
+
+        var result = await _memberRepository.UpdateAsync(existing);
+
+            if (result.Succeeded)
+            {
+                return result.Succeeded
+                ? new MemberResult { Succeeded = true, StatusCode = 201, }
+                : new MemberResult { Succeeded = false, StatusCode = 201, Error = "Member update but sometig went wrong" };
+            }
+            
+            return new MemberResult { Succeeded = false, StatusCode = 500, Error = "Unable to edit member" };
+
+        }
 
     // DELETE
     //Hjäp av chatgpt för den tidigare delen krockade med att läsa entiteten två gånger

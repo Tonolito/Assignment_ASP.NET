@@ -247,28 +247,6 @@ namespace Data.Migrations
                     b.ToTable("NotificationTypes");
                 });
 
-            modelBuilder.Entity("Data.Entities.ProjectClientEntity", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ClientId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ProjectId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClientId");
-
-                    b.HasIndex("ProjectId");
-
-                    b.ToTable("ProjectClients");
-                });
-
             modelBuilder.Entity("Data.Entities.ProjectEntity", b =>
                 {
                     b.Property<string>("Id")
@@ -289,9 +267,6 @@ namespace Data.Migrations
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("MemberEntityId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("ProjectName")
                         .HasColumnType("nvarchar(max)");
 
@@ -303,8 +278,6 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MemberEntityId");
-
                     b.HasIndex("StatusId");
 
                     b.ToTable("Projects");
@@ -312,22 +285,15 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Entities.ProjectMemberEntity", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<string>("ProjectId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("MemberId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ProjectId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
+                    b.HasKey("ProjectId", "MemberId");
 
                     b.HasIndex("MemberId");
-
-                    b.HasIndex("ProjectId");
 
                     b.ToTable("ProjectMembers");
                 });
@@ -551,31 +517,8 @@ namespace Data.Migrations
                     b.Navigation("TargetGroup");
                 });
 
-            modelBuilder.Entity("Data.Entities.ProjectClientEntity", b =>
-                {
-                    b.HasOne("Data.Entities.ClientEntity", "Client")
-                        .WithMany("ProjectClients")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Data.Entities.ProjectEntity", "Project")
-                        .WithMany("ProjectClients")
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Client");
-
-                    b.Navigation("Project");
-                });
-
             modelBuilder.Entity("Data.Entities.ProjectEntity", b =>
                 {
-                    b.HasOne("Data.Entities.MemberEntity", null)
-                        .WithMany("Projects")
-                        .HasForeignKey("MemberEntityId");
-
                     b.HasOne("Data.Entities.StatusEntity", "Status")
                         .WithMany("Projects")
                         .HasForeignKey("StatusId")
@@ -655,11 +598,6 @@ namespace Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Data.Entities.ClientEntity", b =>
-                {
-                    b.Navigation("ProjectClients");
-                });
-
             modelBuilder.Entity("Data.Entities.MemberEntity", b =>
                 {
                     b.Navigation("Address");
@@ -667,8 +605,6 @@ namespace Data.Migrations
                     b.Navigation("DismissedNotifications");
 
                     b.Navigation("ProjectMembers");
-
-                    b.Navigation("Projects");
                 });
 
             modelBuilder.Entity("Data.Entities.NotificationEntity", b =>
@@ -688,8 +624,6 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Entities.ProjectEntity", b =>
                 {
-                    b.Navigation("ProjectClients");
-
                     b.Navigation("ProjectMembers");
                 });
 

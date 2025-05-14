@@ -61,20 +61,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    document.querySelectorAll('[data-modal="true"][data-target="#editMemberModal"]').forEach(button => {
-        button.addEventListener('click', async () => {
+    const editMemberButtons = document.querySelectorAll('[data-modal="true"][data-target="#editMemberModal"]');
 
+    editMemberButtons.forEach(button => {
+        button.addEventListener('click', async () => {
             const memberId = button.getAttribute('data-id');
 
-            console.log(memberId)
-
             try {
-                const response = await fetch(`/members/edit/${memberId}`)
+                const response = await fetch(`/members/edit/${memberId}`);
                 const data = await response.json();
 
                 if (data) {
-                    console.log(data)
-
                     const form = document.querySelector('#editMemberForm');
 
                     form.querySelector('input[name="Id"]').value = data.id;
@@ -85,66 +82,102 @@ document.addEventListener('DOMContentLoaded', () => {
                     form.querySelector('input[name="JobTitle"]').value = data.jobTitle;
                     form.querySelector('input[name="Address"]').value = data.address;
 
-                    if (data.image) {
-                        const form = document.querySelector('#editMemberForm');
-                        const imagePreview = form.querySelector('.image-preview');
+                    const imagePreview = form.querySelector('.image-preview');
+                    imagePreview.src = data.image || '';
 
-                        imagePreview.src = data.image;
+                    const modal = document.querySelector('#editMemberModal');
+                    modal.style.display = 'flex';
 
-                        
+                    if (!form.hasAttribute('data-submit-bound')) {
+                        form.addEventListener('submit', async (e) => {
+                            e.preventDefault();
+                            const formData = new FormData(form);
+
+                            try {
+                                const updateResponse = await fetch(`/members/edit`, {
+                                    method: 'PUT',
+                                    body: formData
+                                });
+
+                                if (updateResponse.ok) {
+                                    modal.style.display = 'none';
+                                    window.location.reload();
+                                } else {
+                                    const errorData = await updateResponse.json();
+                                    alert(`Error updating member: ${errorData.error || "An unexpected error occurred"}`);
+                                }
+                            } catch (submitError) {
+                                console.log('Error submitting the form', submitError);
+                            }
+                        });
+                        form.setAttribute('data-submit-bound', 'true');
                     }
-
                 }
 
-                
-
-            } catch(error) {
-                console.log(error);
+            } catch (fetchError) {
+                console.log('Error loading member data', fetchError);
             }
+        });
+    });
 
-        })
-    })
+    // ====== CLIENT ======
+    const editClientButtons = document.querySelectorAll('[data-modal="true"][data-target="#editClientModal"]');
 
-    document.querySelectorAll('[data-modal="true"][data-target="#editClientModal"]').forEach(button => {
+    editClientButtons.forEach(button => {
         button.addEventListener('click', async () => {
-
             const clientId = button.getAttribute('data-id');
 
-            console.log(clientId)
-
             try {
-                const response = await fetch(`/clients/edit/${clientId}`)
+                const response = await fetch(`/clients/edit/${clientId}`);
                 const data = await response.json();
 
                 if (data) {
-                    console.log(data)
-
                     const form = document.querySelector('#editClientForm');
 
+                    form.querySelector('input[name="Id"]').value = data.id;
                     form.querySelector('input[name="ClientName"]').value = data.clientName;
                     form.querySelector('input[name="Email"]').value = data.email;
                     form.querySelector('input[name="Location"]').value = data.location;
                     form.querySelector('input[name="Phone"]').value = data.phone;
 
+                    const imagePreview = form.querySelector('.image-preview');
+                    imagePreview.src = data.image || '';
 
-                    if (data.image) {
-                        const form = document.querySelector('#editClientForm');
-                        const imagePreview = form.querySelector('.image-preview');
+                    const modal = document.querySelector('#editClientModal');
+                    modal.style.display = 'flex';
 
-                        imagePreview.src = data.image;
+                    if (!form.hasAttribute('data-submit-bound')) {
+                        form.addEventListener('submit', async (e) => {
+                            e.preventDefault();
+                            const formData = new FormData(form);
 
+                            try {
+                                const response = await fetch(`/clients/edit`, {
+                                    method: 'PUT',
+                                    body: formData
+                                });
 
+                                if (response.ok) {
+                                    modal.style.display = 'none';
+                                    window.location.reload();
+                                } else {
+                                    const data = await response.json();
+                                    alert(`Error updating client: ${data.error || "An unexpected error occurred"}`);
+                                }
+                            } catch (error) {
+                                console.log('Error submitting the form', error);
+                            }
+                        });
+                        form.setAttribute('data-submit-bound', 'true');
                     }
                 }
-
-
-
             } catch (error) {
-                console.log(error);
+                console.log('Error loading client data', error);
             }
+        });
+    });
 
-        })
-    })
+
 
 
     // Close Modals

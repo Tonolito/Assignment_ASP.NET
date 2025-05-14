@@ -62,7 +62,7 @@ public abstract class BaseRepository<TEntity, TModel> : IBaseRepository<TEntity,
         }
 
         var entities = await query.ToListAsync();
-
+        //Här får jag statusid och members
 
         var result = entities.Select(entity => entity.MapTo<TModel>());
         return new RepositoryResult<IEnumerable<TModel>> { Succeeded = true, StatusCode = 200, Result = result };

@@ -20,11 +20,8 @@ public class MemberEntity : IdentityUser
     public int AddressId { get; set; }
     public MemberAddressEntity? Address { get; set; }
 
-    public virtual ICollection<ProjectEntity> Projects { get; set; } = [];
-
     public ICollection<NotificationDismissedEntity> DismissedNotifications { get; set; } = [];
 
-
-    public virtual ICollection<ProjectMemberEntity> ProjectMembers { get; set; } = [];
+    public  ICollection<ProjectMemberEntity> ProjectMembers { get; set; } = [];
 
 }

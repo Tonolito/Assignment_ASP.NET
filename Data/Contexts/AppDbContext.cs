@@ -30,31 +30,35 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
 
     public virtual DbSet<TagEntity> Tags { get; set; } = null!;
 
-    public virtual DbSet<ProjectMemberEntity> ProjectMembers { get; set; } = null!;
+    public  DbSet<ProjectMemberEntity> ProjectMembers { get; set; } = null!;
 
-    public virtual DbSet<ProjectClientEntity> ProjectClients { get; set; } = null!;
+    //public virtual DbSet<ProjectClientEntity> ProjectClients { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
-        // Define composite key for ProjectClientEntity
-        modelBuilder.Entity<ProjectClientEntity>()
-            .HasKey(pc => pc.Id);  // `Id` as the primary key
+        modelBuilder.Entity<ProjectMemberEntity>()
+       .HasKey(pm => new
+       {
+           pm.ProjectId,
+           pm.MemberId
+       });
 
-        // Define the relationships with foreign keys explicitly
-        modelBuilder.Entity<ProjectClientEntity>()
-            .HasOne(pc => pc.Project)
-            .WithMany(p => p.ProjectClients)  // Assuming Project has a collection of ProjectClientEntity
-            .HasForeignKey(pc => pc.ProjectId)
-            .OnDelete(DeleteBehavior.Cascade); // Or NoAction, depending on your business rules
+        modelBuilder.Entity<ProjectMemberEntity>()
+            .HasOne(pm => pm.Project)
+            .WithMany(p => p.ProjectMembers)
+            .HasForeignKey(pm => pm.ProjectId)
+            .OnDelete(DeleteBehavior.Cascade); // Använd rätt DeleteBehavior
 
-        modelBuilder.Entity<ProjectClientEntity>()
-            .HasOne(pc => pc.Client)
-            .WithMany(c => c.ProjectClients)  // Assuming Client has a collection of ProjectClientEntity
-            .HasForeignKey(pc => pc.ClientId)
-            .OnDelete(DeleteBehavior.Cascade); // Or NoAction
+        modelBuilder.Entity<ProjectMemberEntity>()
+            .HasOne(pm => pm.Member)
+            .WithMany(m => m.ProjectMembers)
+            .HasForeignKey(pm => pm.MemberId)
+            .OnDelete(DeleteBehavior.Cascade); // Eller ett annat DeleteBehavior
     }
+
+
 
 }
 
