@@ -58,8 +58,14 @@
                         resultItem.innerHTML = `<span>${item[config.displayProperty]}</span>`;
                     } else if (config.tagClass === 'user-tag') {
                         resultItem.innerHTML = `
-<img class="user-avatar" src="${config.avatarFolder || ''}${item[config.imageProperty]}" />
-<span>${item[config.displayProperty]}</span>
+                        <img class="user-avatar" src="${config.avatarFolder || ''}${item[config.imageProperty]}" />
+                        <span>${item[config.displayProperty]}</span>
+                        `;
+                    } else if (config.tagClass === 'client-tag') {
+                        resultItem.innerHTML = `
+                        <img class="client-avatar" src="${config.avatarFolder || ''}${item[config.imageProperty]}" />
+                        <span>${item[config.displayProperty]}</span>
+
                         `;
                     }
 
@@ -85,8 +91,14 @@
             tag.innerHTML = `<span>${item[config.displayProperty]}</span>`;
         } else if (config.tagClass === 'user-tag') {
             tag.innerHTML = `
-<img class="user-avatar" src="${config.avatarFolder || ''}${item[config.imageProperty]}" />
-<span>${item[config.displayProperty]}</span>
+                <img class="user-avatar" src="${config.avatarFolder || ''}${item[config.imageProperty]}" />
+                <span>${item[config.displayProperty]}</span>
+            `;
+        }
+        else if (config.tagClass === 'client-tag') {
+            tag.innerHTML = `
+                <img class="client-avatar" src="${config.avatarFolder || ''}${item[config.imageProperty]}" />
+                <span>${item[config.displayProperty]}</span>
             `;
         }
 

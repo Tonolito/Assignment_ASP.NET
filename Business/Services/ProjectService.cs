@@ -66,6 +66,30 @@ public class ProjectService(IProjectRepository projectRepository, IStatusService
 
 
             projectEntity.Image = imageUrl;
+            string? actualClientId = null;
+
+            if (!string.IsNullOrEmpty(dto.SelectedClientId))
+            {
+                var clientIdList = JsonSerializer.Deserialize<List<string>>(dto.SelectedClientId);
+                actualClientId = clientIdList?.FirstOrDefault();
+            }
+
+            if (!string.IsNullOrEmpty(actualClientId))
+            {
+                var client = await _context.Clients.FirstOrDefaultAsync(c => c.Id == actualClientId);
+                if (client != null)
+                {
+                    projectEntity.ClientId = client.Id;
+                }
+                else
+                {
+                    return new ProjectResult { Succeeded = false, StatusCode = 404, Error = "Client not found." };
+                }
+            }
+            else
+            {
+                return new ProjectResult { Succeeded = false, StatusCode = 400, Error = "ClientId is required." };
+            }
 
 
             var statusResult = await _statusService.GetStatusByIdAsync(1);
@@ -139,11 +163,18 @@ public class ProjectService(IProjectRepository projectRepository, IStatusService
             sortBy: s => s.Created,
             where: null,
             include => include.ProjectMembers,
-            include => include.Status
+            include => include.Status,
+            include => include.Client // ⬅ Lägg till detta
+
         );
 
         var projectEntities = response.Result.ToList();
         var projects = response.Result?.ToList() ?? [];
+
+        var clientId = projects
+            .Select(p => p.ClientId)
+            .Distinct()
+            .ToList();
 
         // 2. Hämta alla unika memberIds från alla projekt
         var allMemberIds = projects
@@ -154,6 +185,10 @@ public class ProjectService(IProjectRepository projectRepository, IStatusService
         // 3. Hämta användare från databasen
         var members = await _context.Users
             .Where(u => allMemberIds.Contains(u.Id))
+            .ToDictionaryAsync(u => u.Id);
+
+        var clients = await _context.Clients
+            .Where(u => clientId.Contains(u.Id))
             .ToDictionaryAsync(u => u.Id);
 
         // 4. Fyll på Members-listan i varje projekt
@@ -173,6 +208,8 @@ public class ProjectService(IProjectRepository projectRepository, IStatusService
                     };
                 })
                 .ToList();
+
+            
         }
 
         return new ProjectsResult<IEnumerable<Project>>

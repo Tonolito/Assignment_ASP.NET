@@ -28,8 +28,8 @@ public class ProjectEntity
 
     public ICollection<ProjectMemberEntity> ProjectMembers { get; set; } = [];
 
-    //public virtual ICollection<ProjectClientEntity> ProjectClients { get; set; } = [];
-
+    public string? ClientId { get; set; } = null!;
+    public ClientEntity? Client { get; set; } = null!;
 
 }
 

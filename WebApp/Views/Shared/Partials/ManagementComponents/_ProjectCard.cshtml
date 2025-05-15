@@ -32,7 +32,7 @@
         <div class="project-img-container"><img src="@Model.Image" alt=""></div>
         <div class="card-title">
             <h6 class="card-title">@Model.ProjectName</h6>
-            @* <p class="card-company">@Model.Client</p> *@
+            <p class="card-company">@Model.Client?.ClientName</p>
         </div>
         <button class="dots-container" data-type="dropdown" data-target="#project-dropdown-@Model.Id">
             <img src="/images/Dot_2.svg" alt="" />

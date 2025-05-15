@@ -10,6 +10,13 @@
                              // fullName = m.FirstName + " " + m.LastName,
                  })
              );
+
+    var selectedClientsJson = JsonSerializer.Serialize(
+    string.IsNullOrEmpty(Model.SelectedClientId) ? null : new[] { new {
+        // id = Model.SelectedClientId,
+        // imageUrl = "", 
+    } }
+        );
 }
 
 <div class="modal-container" id="addProjectModal">
@@ -24,6 +31,8 @@
         <form novalidate method="post" asp-action="Add" asp-controller="Projects">
             @* <input type="hidden" asp-for= "Id" /> *@
             <input type="hidden" name="SelectedMemberIds" id="SelectedMemberIds" />
+            <input type="hidden" name="SelectedClientId" id="SelectedClientId" />
+
             <div class="image-previewer circle">
                 <img src="" class="image-preview" />
                 <input asp-for="ProjectImage" accept="image/*" class="hide" />
@@ -35,13 +44,17 @@
                     <span asp-validation-for="ProjectName"></span>
                 </div>
             </div>
-            @* <div class="labelgroup-modal"> *@
-            @*     <label asp-for="ClientId"></label> *@
-            @*     <div class="field-group"> *@
-            @*         <input asp-for="ClientId" /> *@
-            @*         <span asp-validation-for="ClientId"></span> *@
-            @*     </div> *@
-            @* </div> *@
+
+            <div class="labelgroup-modal">
+                <div class="modal-label"></div>
+                <div id="tagged-clients" class="form-input form-tag-select">
+                    <input type="text" id="client-search" class="form-tag-input" placeholder="Add Client..." />
+                    <label for="client-search">
+                        <i></i>
+                    </label>
+                    <div id="client-search-results" class="search-results"></div>
+                </div>
+            </div>
 
             <div class="labelgroup-modal">
                 <label asp-for="Description"></label>
@@ -156,6 +169,23 @@
         emptyMessage: 'No users found.',
         preselected: preSelectedMembers,
         selectedInputIds: 'SelectedMemberIds'
+    });
+
+
+    const preSelectedClient = @Html.Raw(selectedClientsJson);
+
+    initTagSelector({
+        containerId: 'tagged-clients',
+        inputId: 'client-search',
+        resultId: 'client-search-results',
+        searchUrl: (query) => '/clients/search-clients?term=' + encodeURIComponent(query),
+        displayProperty: 'clientName',
+        imageProperty: 'imageUrl',
+        avatarFolder: '',
+        tagClass: 'client-tag',
+        emptyMessage: 'No clients found.',
+        preselected: preSelectedClient,
+        selectedInputIds: 'SelectedClientId'
     });
 
 </script>

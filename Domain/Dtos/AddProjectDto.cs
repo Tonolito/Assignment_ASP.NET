@@ -37,4 +37,7 @@ public class AddProjectDto
     public decimal? Budget { get; set; }
 
     public List<string> SelectedMemberIds { get; set; } = new();
+
+    public string SelectedClientId { get; set; } = null!;
+
 }

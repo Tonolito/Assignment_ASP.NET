@@ -46,7 +46,14 @@ public class ProjectRepository(AppDbContext context) : BaseRepository<ProjectEnt
             EndDate = entity.EndDate,
             Budget = entity.Budget,
             StatusId = entity.StatusId,  // Mappa StatusId direkt från ProjectEntity
-            MemberIds = entity.ProjectMembers?.Select(pm => pm.MemberId.ToString()).ToList() ?? new List<string>() // Mappa ProjectMembers till MemberIds
+            MemberIds = entity.ProjectMembers?.Select(pm => pm.MemberId.ToString()).ToList() ?? new List<string>(), // Mappa ProjectMembers till MemberIds
+            Client = entity.Client != null
+            ? new Client
+            {
+                Id = entity.Client.Id,
+                ClientName = entity.Client.ClientName
+            }
+            : null
         });
 
         return new RepositoryResult<IEnumerable<Project>> { Succeeded = true, StatusCode = 200, Result = result };

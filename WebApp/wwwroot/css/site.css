@@ -1356,6 +1356,19 @@ form-tag-select i {
     font-size:0.8rem;
 }
 
+.client-avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: #cdb5e1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: white;
+    font-size: 0.8rem;
+}
+
 .reomve-btn{
     cursor:pointer;
     color: grey;

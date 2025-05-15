@@ -27,7 +27,6 @@ public class ProjectsController(IProjectService projectService, AppDbContext dat
     [Route("")]
     public async Task<IActionResult> Projects()
     {
-        //Får inte med status eller selectedMemberIDs
         var projects = await _projectService.GetProjectsAsync();
 
         var viewModel = new ProjectsViewModel()
@@ -43,7 +42,7 @@ public class ProjectsController(IProjectService projectService, AppDbContext dat
 
     [HttpPost]
     [Route("projects/Add")]
-    public async Task<IActionResult> Add(AddProjectViewModel model, List<string> SelectedMemberIds)
+    public async Task<IActionResult> Add(AddProjectViewModel model, List<string> SelectedMemberIds, string SelectedClientId)
     {
         ViewBag.ErrorMessage = null;
 
@@ -52,7 +51,11 @@ public class ProjectsController(IProjectService projectService, AppDbContext dat
 
         var SelectedM = SelectedMemberIds;
 
+        var SelectedC = SelectedClientId;
+
         dto.SelectedMemberIds = SelectedM;
+        dto.SelectedClientId = SelectedC;
+
 
         // Convert view model to DTO    
 

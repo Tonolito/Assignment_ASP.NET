@@ -121,4 +121,14 @@ public class ClientsController : Controller
         return BadRequest(new { success = false, message = result.Error });
     }
 
+
+    // TAGS
+
+    [HttpGet("search-clients")]
+    public async Task<JsonResult> SearchClient(string term)
+    {
+        var users = await _clientService.SearchClientAsync(term);
+        return Json(users);
+    }
+
 }

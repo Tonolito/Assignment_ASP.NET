@@ -11,5 +11,6 @@ namespace Business.Interfaces
         Task<ClientResult> EditClientAsync(EditClientDto dto);
         Task<ClientsResult> GetAllClientsAsync();
         Task<ClientResult> GetClientByIdAsync(string id);
+        Task<List<ClientSearchDto>> SearchClientAsync(string term);
     }
 }

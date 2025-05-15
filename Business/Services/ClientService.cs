@@ -7,6 +7,7 @@ using Data.Repositories;
 using Domain.Dtos;
 using Domain.Extentions;
 using Domain.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
@@ -125,5 +126,22 @@ public class ClientService(IClientRepository clientRepository, AppDbContext cont
         }
     }
 
+    public async Task<List<ClientSearchDto>> SearchClientAsync(string term)
+    {
+        if (string.IsNullOrEmpty(term))
+            return new List<ClientSearchDto>();
 
+        var clients = await _context.Clients
+            .Where(x => x.ClientName.Contains(term) || x.Email.Contains(term))
+            .Select(x => new ClientSearchDto
+            {
+                Id = x.Id,
+                ClientName = x.ClientName,
+                ImageUrl = x.Image,
+            })
+            .ToListAsync();
+
+        return clients;
+
+    }
 }

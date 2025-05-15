@@ -19,5 +19,7 @@ public class Project
 
     public List<Member> Members { get; set; } = [];
 
+    public string? ClientId { get; set; }
+    public Client? Client { get; set; } 
     public int? StatusId { get; set; }
 }

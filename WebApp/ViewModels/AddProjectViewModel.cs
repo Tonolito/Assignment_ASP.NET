@@ -40,6 +40,8 @@ public class AddProjectViewModel
 
     public List<string> SelectedMembersIds { get; set; } = new();
 
+    public string? SelectedClientId { get; set; }
+
     public static implicit operator AddProjectDto(AddProjectViewModel model)
     {
         return model == null
@@ -52,7 +54,8 @@ public class AddProjectViewModel
                 StartDate = model.StartDate,
                 EndDate = model.EndDate,
                 Budget = model.Budget,
-                SelectedMemberIds = model.SelectedMembersIds
+                SelectedMemberIds = model.SelectedMembersIds,
+                SelectedClientId = model.SelectedClientId
                 
 
             };
