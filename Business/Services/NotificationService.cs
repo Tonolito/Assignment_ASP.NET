@@ -54,6 +54,12 @@ public class NotificationService : INotificationService
             .Take(take)
             .ToListAsync();
 
+        foreach (var n in notifications)
+        {
+            if (!string.IsNullOrEmpty(n.Icon))
+                n.Icon = n.Icon.Replace("~", "");
+        }
+
         return notifications;
         //return [];
     }

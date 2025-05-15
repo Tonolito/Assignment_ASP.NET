@@ -39,7 +39,8 @@ public class AuthService(SignInManager<MemberEntity> signInManager, UserManager<
                 var notificationEntity = new NotificationEntity()
                 {
                     Message = $"{user.FirstName} {user.LastName} signed in.",
-                    NotificationTypeId = 1
+                    NotificationTypeId = 1,
+                    Icon = user.Image,
                 };
                 await _notificationService.AddNotificitionAsync(notificationEntity, user.Id);
             }

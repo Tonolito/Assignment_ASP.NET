@@ -610,11 +610,16 @@ button{
     border-radius: 14px;
     transition: background-color 0.1s ease-in-out;
 }
-    .notification-item .image {
-        grid-area: img;
-        height: 48px;
-        width: 48px;
+    .notification-item .notification-image {
+        height: 56px;
+        width: 56px;
+        border-radius: 14px;
     }
+.notification-item .image {
+    grid-area: img;
+    height: 48px;
+    width: 48px;
+}
 
         .notification-item .image.user {
             border-radius: 50%;
@@ -679,12 +684,23 @@ button{
         font-family: "Nunito";
     }
 
-.lower-card {
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-    justify-content: space-between;
-}
+    .upper-card .project-img-container {
+        height: 56px;
+        width: 56px;
+    }
+
+        .upper-card .project-img-container img {
+            height: 100%;
+            width: 100%;
+            border-radius:14px;
+        }
+
+    .lower-card {
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+        justify-content: space-between;
+    }
 
 .deadline-card {
     display: flex;

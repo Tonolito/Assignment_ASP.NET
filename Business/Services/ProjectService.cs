@@ -14,11 +14,12 @@ using System.Text.Json;
 
 namespace Business.Services;
 
-public class ProjectService(IProjectRepository projectRepository, IStatusService statusService, IProjectMemberRepository projectMemberRepository, AppDbContext context) : IProjectService
+public class ProjectService(IProjectRepository projectRepository, IStatusService statusService, IProjectMemberRepository projectMemberRepository, AppDbContext context, INotificationService notificationService) : IProjectService
 {
     private readonly IProjectRepository _projectRepository = projectRepository;
     private readonly IStatusService _statusService = statusService;
     private readonly IProjectMemberRepository _projectMemberRepository = projectMemberRepository;
+    private readonly INotificationService _notificationService = notificationService;
     private readonly AppDbContext _context = context;
 
     //CREATE
@@ -66,7 +67,7 @@ public class ProjectService(IProjectRepository projectRepository, IStatusService
 
             projectEntity.Image = imageUrl;
 
-            
+
             var statusResult = await _statusService.GetStatusByIdAsync(1);
             var status = statusResult.Result;
 
@@ -105,6 +106,15 @@ public class ProjectService(IProjectRepository projectRepository, IStatusService
                         await _context.SaveChangesAsync();
                     }
                 }
+
+                var notificationEntity = new NotificationEntity()
+                {
+                    Message = $"{projectEntity.ProjectName} was created!.",
+                    NotificationTypeId = 2,
+                    Icon = projectEntity.Image
+                };
+                await _notificationService.AddNotificitionAsync(notificationEntity, projectEntity.Id);
+
 
             }
             return new ProjectResult
@@ -209,7 +219,7 @@ public class ProjectService(IProjectRepository projectRepository, IStatusService
         //existing.Result.StartDate = dto.StartDate;
         //existing.Result.EndDate = dto.EndDate;
         //existing.Result.Budget = dto.Budget;
-           
+
         var projectEntity = dto.MapTo<ProjectEntity>();
 
 
