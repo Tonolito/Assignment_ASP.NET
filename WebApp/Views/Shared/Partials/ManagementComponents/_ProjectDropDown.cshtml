@@ -1,6 +1,7 @@
-﻿@model string
+﻿@model string 
 <div class="dropdown-project dropdown" id="project-dropdown-@Model">
-    <button class="dropdown-option" data-modal="true" data-target="#editProjectModal"> <i class="fa-duotone fa-solid fa-pen"></i> Edit</button>
+    <button class="dropdown-option" data-modal="true" data-target="#editProjectModal" data-type="Project" data-id="@Model"> 
+        <i class="fa-duotone fa-solid fa-pen"></i> Edit</button>
             <button class="dropdown-option dropdown-option-add">
                 <i class="fa-duotone fa-solid fa-user-plus"></i>
                 Add member

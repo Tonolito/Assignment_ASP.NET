@@ -9,12 +9,15 @@ public class Project
 
     public string? Description { get; set; }
 
-    public DateTime StartDate { get; set; }
+    public DateTime? StartDate { get; set; }
 
     public DateTime? EndDate { get; set; }
 
     public decimal? Budget { get; set; }
 
     public List<string> MemberIds { get; set; } = new();
+
+    public List<Member> Members { get; set; } = [];
+
     public int? StatusId { get; set; }
 }

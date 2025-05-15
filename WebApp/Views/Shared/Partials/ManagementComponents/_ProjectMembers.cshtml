@@ -1,4 +1,10 @@
-﻿<div class="members-card">
-    <img src="/images/avatar2.svg" alt="">
-    <img src="/images/avatar2.svg" alt="">
+﻿@model IEnumerable<Member>
+
+
+<div class="members-card"> 
+    @foreach (var member in Model)
+    {
+        <img src="@member.Image" alt="@member.FirstName" class="member-image"/>
+    } 
 </div>
+

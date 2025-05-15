@@ -1,11 +1,10 @@
-﻿namespace Business.Models;
+﻿using Domain.Models;
 
-public class ProjectResult<T> : ServiceResult
-{
-    public T? Result { get; set; }
-}
+namespace Business.Models;
 
 public class ProjectResult : ServiceResult
 {
-    
+    public Project Result { get; set; } = new();
+
 }
+

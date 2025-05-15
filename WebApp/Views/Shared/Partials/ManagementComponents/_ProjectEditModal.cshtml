@@ -8,7 +8,7 @@
             </button>
         </div>
 
-        <form novalidate method="post" asp-action="Edit" asp-controller="Projects">
+        <form id="editProjectForm"  novalidate method="post" asp-action="Edit" asp-controller="Projects">
             <input asp-for="Id" type="hidden" />
             <div class="image-previewer circle">
                 <img src="" class="image-preview" />
@@ -21,14 +21,7 @@
                     <span asp-validation-for="ProjectName"></span>
                 </div>
             </div>
-            <div class="labelgroup-modal">
-                <label asp-for="ClientId"></label>
-                <div class="field-group">
-                    <input asp-for="ClientId" />
-                    <span asp-validation-for="ClientId"></span>
-                </div>
-            </div>
-
+           
             <div class="labelgroup-modal">
                 <label asp-for="Description"></label>
                 <div class="field-group">

@@ -656,6 +656,7 @@ button{
 /* Project Card Components */
 .project-card {
     display: grid;
+    position: relative;
     background-color: white;
     grid-template-rows: auto 1fr auto;
     padding: 1.5rem;
@@ -698,6 +699,13 @@ button{
 .members-card {
     display: flex;
     gap: 0.5rem;
+}
+
+.members-card .member-image
+{
+    height:40px;
+    width:40px;
+    border-radius:50%;
 }
 /*Members Card Components*/
 .member-card {
@@ -826,12 +834,13 @@ button{
 
 .dropdown-project {
     position: absolute;
+    display: none;
     flex-direction: column;
     background-color: var(--dropdown-card);
     padding: 0.5rem;
     border-radius: 1rem;
-    right: 0;
-    top: 1.9rem;
+    right: 0.5rem;
+    top: 4rem;
     min-width: 14rem;
     cursor: pointer;
 }
@@ -839,6 +848,26 @@ button{
         display: flex;
         flex-direction: column; /* Behövs eftersom det fanns i originalet */
     }
+.dropdown-client.show {
+    display: flex;
+    flex-direction: column;
+}
+
+.dropdown-client {
+    position: absolute;
+    display: none;
+    flex-direction: column;
+    background-color: var(--dropdown-card);
+    padding: 0.5rem;
+    border-radius: 1rem;
+    right: 5rem;
+    top: 5rem;
+    min-width: 14rem;
+    z-index: 1;
+}
+
+
+
 
 .dropdown-option {
     display: flex;
@@ -1298,7 +1327,7 @@ form-tag-select i {
         border-radius: 12px;
     }
 
-user-avatar{
+.user-avatar{
     width:24px;
     height:24px;
     border-radius:50%;

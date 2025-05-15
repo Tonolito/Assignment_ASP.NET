@@ -45,7 +45,6 @@ public class EditProjectDto
     [Display(Name = "Members", Prompt = "Add Member")]
     public string? UserId { get; set; }
 
-    [Display(Name = "Client", Prompt = "Add Client")]
-    public string? ClientId { get; set; }
+    
 
 }

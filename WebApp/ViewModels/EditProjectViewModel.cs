@@ -17,11 +17,6 @@ public class EditProjectViewModel
     [Required(ErrorMessage = "Required")]
     public string ProjectName { get; set; } = null!;
 
-    [Display(Name = "Client Name", Prompt = "Enter Client name")]
-    [DataType(DataType.Text)]
-    [Required(ErrorMessage = "Required")]
-    public string ClientName { get; set; } = null!;
-
     [Display(Name = "Description", Prompt = "Enter Description")]
     [Required(ErrorMessage = "Required")]
     [DataType(DataType.Text)]
@@ -45,13 +40,6 @@ public class EditProjectViewModel
     [Display(Name = "Members", Prompt = "Add Member")]
     public string? UserId { get; set; }
 
-   
-
-    [Display(Name = "Client Name", Prompt = "Add Client")]
-    [DataType(DataType.Text)]
-    [Required(ErrorMessage = "Required")]
-    public string ClientId { get; set; } = null!;
-
 
     public static implicit operator EditProjectDto(EditProjectViewModel model)
     {
@@ -59,7 +47,7 @@ public class EditProjectViewModel
             ? null!
             : new EditProjectDto
             {
-                //Id = model.Id
+                Id = model.Id,
                 ProjectImage = model.ProjectImage,
                 ProjectName = model.ProjectName,
                 Description = model.Description,
@@ -67,7 +55,6 @@ public class EditProjectViewModel
                 EndDate = model.EndDate,
                 Budget = model.Budget,
                 UserId = model.UserId,
-                ClientName = model.ClientId,
             };
     }
 }

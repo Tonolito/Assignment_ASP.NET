@@ -9,7 +9,8 @@ namespace Business.Interfaces
         //Task<ProjectResult<string>> CreateProjectAsync(AddProjectDto dto, List<string> selectedMemberIds);
         Task<ProjectResult> CreateProjectAsync(AddProjectDto dto);
         Task<ProjectResult> DeleteProjectAsync(string id);
-        Task<ProjectResult<IEnumerable<Project>>> GetProjectsAsync();
+        Task<ProjectResult> GetProjectByIdAsync(string id);
+        Task<ProjectsResult<IEnumerable<Project>>> GetProjectsAsync();
         //Task<ProjectResult<Project>> GetProjectsAsync(string id);
         Task<ProjectResult> UpdateProjectAsync(EditProjectDto dto);
         Task<ProjectResult> UpdateProjectMembersAsync(string projectId, string selectedMemberIdsJson);

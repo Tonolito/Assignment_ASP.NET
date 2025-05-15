@@ -9,6 +9,7 @@ using Domain.Extentions;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text.Json;
 
 namespace Business.Services;
@@ -29,74 +30,169 @@ public class ProjectService(IProjectRepository projectRepository, IStatusService
             return new ProjectResult { Succeeded = false, StatusCode = 400, Error = "Not all required fields are input." };
         }
 
-        var projectEntity = dto.MapTo<ProjectEntity>();
-
-
-        var statusResult = await _statusService.GetStatusByIdAsync(1);
-        var status = statusResult.Result;
-
-        projectEntity.StatusId = status!.Id;
-
-        var result = await _projectRepository.AddAsync(projectEntity);
-
-        if (result.Succeeded)
+        try
         {
-            // Skapa kopplinga  r till medlemmar i ProjectMember-tabellen
-            if (dto.SelectedMemberIds != null && dto.SelectedMemberIds.Any())
+            // Hjäp av chatgtp
+            string imageUrl = string.Empty;
+            if (dto.ProjectImage != null && dto.ProjectImage.Length > 0)
             {
-                // dto.SelectedMemberIds innehåller EN sträng, som i sig är en JSON-lista → deserialisera den
-                var memberIdsJson = dto.SelectedMemberIds[0];  // "[\"id1\", \"id2\"]"
-                var memberIds = JsonSerializer.Deserialize<List<string>>(memberIdsJson);
 
-                if (memberIds != null && memberIds.Any())
+                var fileName = $"{Guid.NewGuid()}{Path.GetExtension(dto.ProjectImage.FileName)}";
+
+
+                var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "projects");
+
+
+                if (!Directory.Exists(folderPath))
+                    Directory.CreateDirectory(folderPath);
+
+
+                var filePath = Path.Combine(folderPath, fileName);
+
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
                 {
-                    var projectMembers = new List<ProjectMemberEntity>();
-
-                    foreach (var memberId in memberIds)
-                    {
-                        var member = await _context.Users.FirstOrDefaultAsync(m => m.Id == memberId);
-
-                        if (member != null)
-                        {
-                            projectMembers.Add(new ProjectMemberEntity
-                            {
-                                ProjectId = projectEntity.Id,
-                                Member = member 
-                            });
-                        }
-                    }
-
-                    await _context.ProjectMembers.AddRangeAsync(projectMembers);
-                    await _context.SaveChangesAsync();
+                    await dto.ProjectImage.CopyToAsync(stream);
                 }
-            }
 
+                imageUrl = $"/images/projects/{fileName}";
+            }
+            else
+            {
+                imageUrl = $"/images/projects/templateavatar.svg";
+            }
+            var projectEntity = dto.MapTo<ProjectEntity>();
+
+
+            projectEntity.Image = imageUrl;
+
+            
+            var statusResult = await _statusService.GetStatusByIdAsync(1);
+            var status = statusResult.Result;
+
+            projectEntity.StatusId = status!.Id;
+
+            var result = await _projectRepository.AddAsync(projectEntity);
+
+            if (result.Succeeded)
+            {
+                // Skapa kopplinga  r till medlemmar i ProjectMember-tabellen
+                if (dto.SelectedMemberIds != null && dto.SelectedMemberIds.Any())
+                {
+                    // dto.SelectedMemberIds innehåller EN sträng, som i sig är en JSON-lista → deserialisera den
+                    var memberIdsJson = dto.SelectedMemberIds[0];  // "[\"id1\", \"id2\"]"
+                    var memberIds = JsonSerializer.Deserialize<List<string>>(memberIdsJson);
+
+                    if (memberIds != null && memberIds.Any())
+                    {
+                        var projectMembers = new List<ProjectMemberEntity>();
+
+                        foreach (var memberId in memberIds)
+                        {
+                            var member = await _context.Users.FirstOrDefaultAsync(m => m.Id == memberId);
+
+                            if (member != null)
+                            {
+                                projectMembers.Add(new ProjectMemberEntity
+                                {
+                                    ProjectId = projectEntity.Id,
+                                    Member = member
+                                });
+                            }
+                        }
+
+                        await _context.ProjectMembers.AddRangeAsync(projectMembers);
+                        await _context.SaveChangesAsync();
+                    }
+                }
+
+            }
+            return new ProjectResult
+            {
+                Succeeded = true,
+                StatusCode = 201
+            };
         }
-        return new ProjectResult
+        catch (Exception ex)
         {
-            Succeeded = true,
-            StatusCode = 201
-        };
+            Debug.Write(ex);
+            return new ProjectResult { Succeeded = false, StatusCode = 500, Error = ex.Message };
+        }
     }
 
     //READ - Get all projects with members and clients
-    public async Task<ProjectResult<IEnumerable<Project>>> GetProjectsAsync()
+    public async Task<ProjectsResult<IEnumerable<Project>>> GetProjectsAsync()
     {
-        //include => include.ProjectClients
-        var response = await _projectRepository.GetAllAsync(orderByDescending: true, sortBy: s => s.Created, where: null, include => include.ProjectMembers, include => include.Status);
+        // 1. Hämta alla projekt med ProjectMembers och Status
+        var response = await _projectRepository.GetAllProjectsAsync(
+            orderByDescending: true,
+            sortBy: s => s.Created,
+            where: null,
+            include => include.ProjectMembers,
+            include => include.Status
+        );
 
-        return new ProjectResult<IEnumerable<Project>> { Succeeded = true, StatusCode = 200, Result = response.Result };
+        var projectEntities = response.Result.ToList();
+        var projects = response.Result?.ToList() ?? [];
+
+        // 2. Hämta alla unika memberIds från alla projekt
+        var allMemberIds = projects
+            .SelectMany(p => p.MemberIds)
+            .Distinct()
+            .ToList();
+
+        // 3. Hämta användare från databasen
+        var members = await _context.Users
+            .Where(u => allMemberIds.Contains(u.Id))
+            .ToDictionaryAsync(u => u.Id);
+
+        // 4. Fyll på Members-listan i varje projekt
+        foreach (var project in projects)
+        {
+            project.Members = project.MemberIds
+                .Where(id => members.ContainsKey(id))
+                .Select(id =>
+                {
+                    var member = members[id];
+                    return new Member
+                    {
+                        Id = member.Id,
+                        FirstName = member.FirstName,
+                        LastName = member.LastName,
+                        Image = member.Image ?? "/images/default-avatar.svg"
+                    };
+                })
+                .ToList();
+        }
+
+        return new ProjectsResult<IEnumerable<Project>>
+        {
+            Succeeded = true,
+            StatusCode = 200,
+            Result = projects
+        };
+
     }
 
-    //READ - Get a specific project with members and clients
-    //public async Task<ProjectResult<Project>> GetProjectsAsync(string id)
-    //{
-    //    //var projectEntity = await _projectRepository.GetProjectWithDetailsAsync(id);
 
-    //    return projectEntity != null
-    //        ? new ProjectResult<Project> { Succeeded = true, StatusCode = 200, Result = projectEntity.MapTo<Project>() }
-    //        : new ProjectResult<Project> { Succeeded = false, StatusCode = 404, Error = $"Project with '{id}' was not found" };
-    //}
+    public async Task<ProjectResult> GetProjectByIdAsync(string id)
+    {
+        var response = await _projectRepository.GetProjectByIdAsync(
+            id,
+            include => include.ProjectMembers,
+            include => include.Status
+        );
+
+        return new ProjectResult
+        {
+            Succeeded = response.Succeeded,
+            StatusCode = response.StatusCode,
+            Result = response.Result
+        };
+    }
+
+
+
 
     //UPDATE
     public async Task<ProjectResult> UpdateProjectAsync(EditProjectDto dto)
@@ -105,9 +201,17 @@ public class ProjectService(IProjectRepository projectRepository, IStatusService
         {
             return new ProjectResult { Succeeded = false, StatusCode = 400, Error = "Invalid project data." };
         }
+        var existing = await _projectRepository.GetAsync(x => x.Id == dto.Id);
 
+        //existing.Result.Id = dto.Id;
+        //existing.Result.ProjectName = dto.ProjectName;
+        //existing.Result.Description = dto.Description;
+        //existing.Result.StartDate = dto.StartDate;
+        //existing.Result.EndDate = dto.EndDate;
+        //existing.Result.Budget = dto.Budget;
+           
         var projectEntity = dto.MapTo<ProjectEntity>();
-        var projectResult = await _projectRepository.GetAsync(x => x.Id == dto.Id);
+
 
         var result = await _projectRepository.UpdateAsync(projectEntity);
 
@@ -121,16 +225,26 @@ public class ProjectService(IProjectRepository projectRepository, IStatusService
     {
         if (id == null)
         {
-            return new ProjectResult { Succeeded = false, StatusCode = 400, Error = "Invalid project ID." };
+            return new ProjectResult { Succeeded = false, StatusCode = 400, Error = "Id can't be found." };
         }
+        try
+        {
+            var projectEntity = await _context.Projects.FindAsync(id);
 
-        var projectResult = await _projectRepository.GetAsync(x => x.Id == id);
-        var projectEntity = projectResult.Result!.MapTo<ProjectEntity>();
+            if (projectEntity == null)
+            {
+                return new ProjectResult { Succeeded = false, StatusCode = 404, Error = "Member not found." };
+            }
+            _context.Projects.Remove(projectEntity);
+            await _context.SaveChangesAsync();
 
-        var result = await _projectRepository.DeleteAsync(projectEntity);
-        return result.Succeeded
-            ? new ProjectResult { Succeeded = true, StatusCode = 200 }
-            : new ProjectResult { Succeeded = false, StatusCode = result.StatusCode, Error = result.Error };
+            return new ProjectResult { Succeeded = true, StatusCode = 200 };
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+            return new ProjectResult { Succeeded = false, StatusCode = 500, Error = ex.Message };
+        }
     }
 
     //MSC - Update project members (unchanged)

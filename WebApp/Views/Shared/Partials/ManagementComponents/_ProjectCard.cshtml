@@ -1,22 +1,52 @@
 ﻿@model Project
+@{
+    var today = DateTime.Today;
+    string timeLeftText;
+
+    if (Model.EndDate == null)
+    {
+        timeLeftText = "No end date";
+    }
+    else
+    {
+        var daysLeft = (Model.EndDate.Value - today).Days;
+
+        if (daysLeft < 0)
+        {
+            timeLeftText = "Project ended";
+        }
+        else if (daysLeft < 7)
+        {
+            timeLeftText = daysLeft == 1 ? "1 day left" : $"{daysLeft} days left";
+        }
+        else
+        {
+            var weeksLeft = daysLeft / 7;
+            timeLeftText = weeksLeft == 1 ? "1 week left" : $"{weeksLeft} weeks left";
+        }
+    }
+}
+
 <div class="project-card">
     <div class="upper-card">
-        <div class="project-img-container"><img src="/images/Image.svg" alt=""></div>
+        <div class="project-img-container"><img src="@Model.Image" alt=""></div>
         <div class="card-title">
             <h6 class="card-title">@Model.ProjectName</h6>
             @* <p class="card-company">@Model.Client</p> *@
         </div>
-        <button class="dots-container" data-modal="true" data-type="Project" data-target="#projectModal #project-dropdown-@Model.Id" data-id=@Model.Id>
-            <img src="/images/Dot_2.svg" alt="">
+        <button class="dots-container" data-type="dropdown" data-target="#project-dropdown-@Model.Id">
+            <img src="/images/Dot_2.svg" alt="" />
         </button>
-        @await Html.PartialAsync("Partials/ManagementComponents/_ProjectDropdown")
+
     </div>
     <p class="card-description">@Model.Description</p>
     <div class="lower-card">
         <div class="deadline-card">
-            <i class="fa-regular fa-clock"></i>
-            <p>1 Week left</p>
-        </div>
-        @* @await Html.PartialAsync("Partials/ManagementComponents/_ProjectMembers") *@
+        <i class="fa-regular fa-clock"></i>
+        <p>@timeLeftText</p>
     </div>
+        @await Html.PartialAsync("Partials/ManagementComponents/_ProjectMembers", Model.Members)
+    </div>
+            @await Html.PartialAsync("Partials/ManagementComponents/_ProjectDropdown", Model.Id)
+
 </div>

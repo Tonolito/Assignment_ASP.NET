@@ -9,6 +9,9 @@ using System.Text.Json;
 using WebApp.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Components.Forms;
+using Business.Services;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Diagnostics;
 
 
 namespace WebApp.Controllers;
@@ -80,8 +83,8 @@ public class ProjectsController(IProjectService projectService, AppDbContext dat
     }
 
 
-    [HttpPost]
-    [Route("projects/edit")]
+    [HttpPut]
+    [Route("edit")]
 
     public async Task<IActionResult> Edit(EditProjectViewModel model)
     {
@@ -105,5 +108,58 @@ public class ProjectsController(IProjectService projectService, AppDbContext dat
         }
         return Ok(new { succes = true });
 
+    }
+
+    [HttpGet]
+    [Route("edit/{id}")]
+    public async Task<IActionResult> Edit(string id)
+    {
+
+
+        var result = await _projectService.GetProjectByIdAsync(id);
+
+
+        if (result.Succeeded && result.Result != null)
+        {
+
+            return Json(new
+            {
+                id = result.Result.Id,
+                projectName = result.Result.ProjectName,
+                description = result.Result.Description,
+                members = result.Result.MemberIds,
+                budget = result.Result.Budget,
+
+                startDate = result.Result.StartDate,
+                endDate = result.Result.EndDate,
+                statusId = result.Result.StatusId,
+
+            }); ;
+
+        }
+
+        return Json(new { success = false, error = "Project not found." });
+    }
+
+    [HttpDelete("delete/{id}")]
+    public async Task<IActionResult> Delete(string id)
+    {
+
+        if (string.IsNullOrEmpty(id))
+        {
+            return BadRequest(new { success = false, message = "Project ID cannot be null or empty" });
+        }
+
+        var result = await _projectService.DeleteProjectAsync(id);
+        if (result.Succeeded)
+        {
+            return Ok(new { success = true, message = "Project deleted successfully." });
+        }
+        if (!result.Succeeded)
+        {
+            Debug.WriteLine($"Failed to delete project: {result.Error}");
+        }
+
+        return BadRequest(new { success = false, message = result.Error });
     }
 }
