@@ -10,8 +10,6 @@ public class AddProjectViewModel
     [Display(Name = "Project Image", Prompt = "Select a image")]
     public IFormFile? ProjectImage { get; set; }
 
-    //public string Id { get; set; } = null!;
-
     [Display(Name = "Project Name", Prompt = "Enter Project name")]
     [DataType(DataType.Text)]
     [Required(ErrorMessage = "Required")]

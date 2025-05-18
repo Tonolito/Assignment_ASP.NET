@@ -227,7 +227,9 @@ public class ProjectService(IProjectRepository projectRepository, IStatusService
         var response = await _projectRepository.GetProjectByIdAsync(
             id,
             include => include.ProjectMembers,
-            include => include.Status
+            include => include.Status,
+            include => include.Client
+
         );
 
         return new ProjectResult
@@ -248,19 +250,24 @@ public class ProjectService(IProjectRepository projectRepository, IStatusService
         {
             return new ProjectResult { Succeeded = false, StatusCode = 400, Error = "Invalid project data." };
         }
-        var existing = await _projectRepository.GetAsync(x => x.Id == dto.Id);
+        var existing = await _context.Projects.FindAsync(dto.Id);
 
-        //existing.Result.Id = dto.Id;
-        //existing.Result.ProjectName = dto.ProjectName;
-        //existing.Result.Description = dto.Description;
-        //existing.Result.StartDate = dto.StartDate;
-        //existing.Result.EndDate = dto.EndDate;
-        //existing.Result.Budget = dto.Budget;
+        existing.Id = dto.Id;
+        existing.ProjectName = dto.ProjectName;
+        existing.Description = dto.Description;
+        existing.StartDate = dto.StartDate;
+        existing.EndDate = dto.EndDate;
+        existing.Budget = dto.Budget;
+        //existing.ClientId = dto.SelectedClientId;
 
-        var projectEntity = dto.MapTo<ProjectEntity>();
 
 
-        var result = await _projectRepository.UpdateAsync(projectEntity);
+        //existing.Image = dto.ProjectImage;
+
+
+
+
+        var result = await _projectRepository.UpdateAsync(existing);
 
         return result.Succeeded
             ? new ProjectResult { Succeeded = true, StatusCode = 200 }

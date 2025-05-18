@@ -37,6 +37,7 @@
                 <img src="" class="image-preview" />
                 <input asp-for="ProjectImage" accept="image/*" class="hide" />
             </div>
+
             <div class="labelgroup-modal">
                 <label asp-for="ProjectName"></label>
                 <div class="field-group">
@@ -130,7 +131,9 @@
 
 <script>
         document.addEventListener('DOMContentLoaded', function(){
-        initWysiwyg('#project-wysiwyg-editor', '#project-wysiwyg-toolbar', 'Description', '@Html.Raw(ViewBag.RichTextContent ?? "")'); 
+        initWysiwyg('#project-wysiwyg-editor', '#project-wysiwyg-toolbar', 'Description', '@Html.Raw(ViewBag.RichTextContent ?? "")');
+        
+
     });
 
     function initWysiwyg(wysiwygEditorId, wysiwygToolbar, textareaId, content) {
@@ -155,38 +158,45 @@
         });
     }
 
-     const preSelectedMembers = @Html.Raw(selectedUsersJson);
-
-    initTagSelector({
-        containerId: 'tagged-users',
-        inputId: 'user-search',
-        resultId: 'user-search-results',
-        searchUrl: (query) => '/members/search-members?term=' + encodeURIComponent(query),
-        displayProperty: 'fullName',
-        imageProperty: 'imageUrl',
-        avatarFolder: '',
-        tagClass: 'user-tag',
-        emptyMessage: 'No users found.',
-        preselected: preSelectedMembers,
-        selectedInputIds: 'SelectedMemberIds'
-    });
+    
+                 let isAddModalInitialized = false;
 
 
-    const preSelectedClient = @Html.Raw(selectedClientsJson);
+    function initAddModalTags() {
+        if (isAddModalInitialized) return;
+        isAddModalInitialized = true;
 
-    initTagSelector({
-        containerId: 'tagged-clients',
-        inputId: 'client-search',
-        resultId: 'client-search-results',
-        searchUrl: (query) => '/clients/search-clients?term=' + encodeURIComponent(query),
-        displayProperty: 'clientName',
-        imageProperty: 'imageUrl',
-        avatarFolder: '',
-        tagClass: 'client-tag',
-        emptyMessage: 'No clients found.',
-        preselected: preSelectedClient,
-        selectedInputIds: 'SelectedClientId'
-    });
+        const preSelectedMembers = @Html.Raw(selectedUsersJson);
+        const preSelectedClient = @Html.Raw(selectedClientsJson);
+
+        initTagSelector({
+            containerId: 'tagged-users',
+            inputId: 'user-search',
+            resultId: 'user-search-results',
+            searchUrl: (query) => '/members/search-members?term=' + encodeURIComponent(query),
+            displayProperty: 'fullName',
+            imageProperty: 'imageUrl',
+            avatarFolder: '',
+            tagClass: 'user-tag',
+            emptyMessage: 'No users found.',
+            preselected: preSelectedMembers,
+            selectedInputIds: 'SelectedMemberIds'
+        });
+
+        initTagSelector({
+            containerId: 'tagged-clients',
+            inputId: 'client-search',
+            resultId: 'client-search-results',
+            searchUrl: (query) => '/clients/search-clients?term=' + encodeURIComponent(query),
+            displayProperty: 'clientName',
+            imageProperty: 'imageUrl',
+            avatarFolder: '',
+            tagClass: 'client-tag',
+            emptyMessage: 'No clients found.',
+            preselected: preSelectedClient,
+            selectedInputIds: 'SelectedClientId'
+        });
+    }
 
 </script>
 

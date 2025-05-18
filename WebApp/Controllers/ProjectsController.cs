@@ -57,9 +57,7 @@ public class ProjectsController(IProjectService projectService, AppDbContext dat
         dto.SelectedClientId = SelectedC;
 
 
-        // Convert view model to DTO    
 
-        // Check for model validation
         if (!ModelState.IsValid)
         {
             var errors = ModelState
@@ -69,14 +67,11 @@ public class ProjectsController(IProjectService projectService, AppDbContext dat
             return BadRequest(new { success = false, errors });
         }
 
-        // Create project in the service
         var result = await _projectService.CreateProjectAsync(dto);
         if (result.Succeeded)
         {
-            // Update members using the ProjectId that was returned in Result
-            //await _projectService.UpdateProjectMembersAsync(result.Result, SelectedMemberIds);
+          
 
-            // Return the success response with the ProjectId in the result
             return Ok();
         }
         else
@@ -91,6 +86,8 @@ public class ProjectsController(IProjectService projectService, AppDbContext dat
 
     public async Task<IActionResult> Edit(EditProjectViewModel model)
     {
+
+        // Couldn't get edit project to populate the selectedids or id for client
         EditProjectDto dto = model;
 
         if (!ModelState.IsValid)
@@ -130,12 +127,19 @@ public class ProjectsController(IProjectService projectService, AppDbContext dat
                 id = result.Result.Id,
                 projectName = result.Result.ProjectName,
                 description = result.Result.Description,
-                members = result.Result.MemberIds,
+                memberIds = result.Result.MemberIds,
                 budget = result.Result.Budget,
-
                 startDate = result.Result.StartDate,
                 endDate = result.Result.EndDate,
                 statusId = result.Result.StatusId,
+                clientId = result.Result.Client.Id,
+                client = new Client
+                {
+                    Id = result.Result.Client.Id,
+                    Image = result.Result.Client.Image,
+                    ClientName = result.Result.Client.ClientName
+                },
+                members = result.Result.Members
 
             }); ;
 

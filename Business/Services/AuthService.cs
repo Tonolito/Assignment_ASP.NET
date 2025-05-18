@@ -21,6 +21,11 @@ public class AuthService(SignInManager<MemberEntity> signInManager, UserManager<
     private readonly IMemberService _memberService = memberService;
     private readonly INotificationService _notificationService = notificationService;
 
+    /// <summary>
+    /// Check if Mebember is a user with a log in and creates a notification
+    /// </summary>
+    /// <param name="dto"></param>
+    /// <returns></returns>
     public async Task<AuthResult> SignInAsync(MemberSignInDto dto)
     {
         if (dto == null)
@@ -65,6 +70,13 @@ public class AuthService(SignInManager<MemberEntity> signInManager, UserManager<
         }
     }
 
+
+    /// <summary>
+    /// Creates a Member with the role User.
+    /// </summary>
+    /// <param name="dto"></param>
+    /// <param name="roleName"></param>
+    /// <returns></returns>
     public async Task<AuthResult> SignUpAsync(MemberSignUpDto dto, string roleName = "User")
     {
 
@@ -95,7 +107,10 @@ public class AuthService(SignInManager<MemberEntity> signInManager, UserManager<
 
 
     }
-
+    /// <summary>
+    /// Makes it possible to log out
+    /// </summary>
+    /// <returns></returns>
     public async Task<AuthResult> SignOutAsync()
     {
         try

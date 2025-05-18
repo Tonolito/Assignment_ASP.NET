@@ -78,7 +78,7 @@ public class MemberService(UserManager<MemberEntity> userManager, IMemberReposit
     }
 
     /// <summary>
-    /// It's for adding a member with a already set password
+    /// It's for adding a member with a already set password with image
     /// </summary>
     /// <param name="dto"></param>
     /// <param name="roleName"></param>
@@ -190,10 +190,15 @@ public class MemberService(UserManager<MemberEntity> userManager, IMemberReposit
 
 
     //UPDATE
+    /// <summary>
+    /// Updates a member but need to use _context cause of otherwise crashes because of entity being tracked at the same time
+    /// </summary>
+    /// <param name="dto"></param>
+    /// <returns></returns>
         public async Task<MemberResult> EditMemberAsync(EditMemberDto dto)
         {
 
-        var existing = await _context.Users.FindAsync(dto.Id); // om du jobbar i service-lagret med context
+        var existing = await _context.Users.FindAsync(dto.Id);
         if (existing == null)
         {
             return new MemberResult { Succeeded = false, StatusCode = 404, Error = "Member not found" };

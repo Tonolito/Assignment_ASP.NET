@@ -56,7 +56,12 @@
                 if (modal) {
                     modal.style.display = 'flex';
                     console.log('Open');
-
+                    if (modalTarget === '#editProjectModal' && typeof initEditModalTags === 'function') {
+                        initEditModalTags();
+                    }
+                    if (modalTarget === '#addProjectModal' && typeof initAddModalTags === 'function') {
+                        initAddModalTags();
+                    }
                 }
             });
         });
@@ -199,8 +204,54 @@
                         form.querySelector('input[name="StartDate"]').value = formatDateForInput(data.startDate);
                         form.querySelector('input[name="EndDate"]').value = formatDateForInput(data.endDate);
 
+                        const preselectedClient = data.client ? [{
+                            id: data.client.id,
+                            clientName: data.client.clientName,
+                            imageUrl: data.client.image
+                        }] : [];
 
-                        form.querySelector('input[name="Description"]').value = data.description;
+                        initTagSelector({
+                            containerId: 'tagged-clients-edit',
+                            inputId: 'client-search-edit',
+                            resultId: 'client-search-results-edit',
+                            searchUrl: (query) => '/clients/search-clients?term=' + encodeURIComponent(query),
+                            displayProperty: 'clientName',
+                            imageProperty: 'imageUrl',
+                            avatarFolder: '',
+                            tagClass: 'client-tag',
+                            emptyMessage: 'No clients found.',
+                            preselected: preselectedClient,
+                            selectedInputIds: 'SelectedClientId'
+                        });
+
+                        const preselectedMembers = (data.members || []).map(member => ({
+                            id: member.id,
+                            fullName: `${member.firstName} ${member.lastName}`,
+                            imageUrl: member.image
+                        }));
+
+
+                        initTagSelector({
+                            containerId: 'tagged-users-edit',
+                            inputId: 'user-search-edit',
+                            resultId: 'user-search-results-edit',
+                            searchUrl: (query) => '/members/search-members?term=' + encodeURIComponent(query),
+                            displayProperty: 'fullName',
+                            imageProperty: 'imageUrl',
+                            avatarFolder: '',
+                            tagClass: 'user-tag',
+                            emptyMessage: 'No users found.',
+                            preselected: preselectedMembers,
+                            selectedInputIds: 'SelectedMemberIds'
+                        });
+
+
+                        
+                        if (quillEditorEdit) {
+                            console.log(data.description)
+                            quillEditorEdit.root.innerHTML = data.description || '';
+                            form.querySelector('#Description-edit').value = data.description || '';
+                        }
                         //form.querySelector('input[name="ClientName"]').value = data.clientName;
                         //form.querySelector('input[name="MemberIds"]').value = data.memberIds;
 

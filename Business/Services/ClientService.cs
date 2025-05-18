@@ -113,7 +113,6 @@ public class ClientService(IClientRepository clientRepository, AppDbContext cont
                 return new ClientResult { Succeeded = false, StatusCode = 404, Error = "Client not found." };
             }
 
-            // Ta bort medlemmen
             _context.Clients.Remove(clientEntity);
             await _context.SaveChangesAsync();
 

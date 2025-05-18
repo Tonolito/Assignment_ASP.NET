@@ -7,8 +7,16 @@
     const results = document.getElementById(config.resultId);
     const selectedInputIds = document.getElementById(config.selectedInputIds);
 
+    console.log(tagContainer)
+    console.log(input)
+    console.log(results)
+    console.log(selectedInputIds)
+
+
     if (Array.isArray(config.preselected)) {
         config.preselected.forEach(item => addTag(item));
+        console.log(config.preselected)
+
     }
 
     input.addEventListener('focus', () => {

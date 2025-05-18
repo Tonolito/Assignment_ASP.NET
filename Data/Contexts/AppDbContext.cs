@@ -32,7 +32,6 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
 
     public  DbSet<ProjectMemberEntity> ProjectMembers { get; set; } = null!;
 
-    //public DbSet<ProjectClientEntity> ProjectClients { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -49,13 +48,13 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
             .HasOne(pm => pm.Project)
             .WithMany(p => p.ProjectMembers)
             .HasForeignKey(pm => pm.ProjectId)
-            .OnDelete(DeleteBehavior.Cascade); // Använd rätt DeleteBehavior
+            .OnDelete(DeleteBehavior.Cascade); 
 
         modelBuilder.Entity<ProjectMemberEntity>()
             .HasOne(pm => pm.Member)
             .WithMany(m => m.ProjectMembers)
             .HasForeignKey(pm => pm.MemberId)
-            .OnDelete(DeleteBehavior.Cascade); // Eller ett annat DeleteBehavior
+            .OnDelete(DeleteBehavior.Cascade); 
 
 
 
@@ -65,7 +64,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
     .HasOne(p => p.Client)
     .WithMany(c => c.Projects)
     .HasForeignKey(p => p.ClientId)
-    .OnDelete(DeleteBehavior.Cascade); // Valfritt: Cascade eller Restrict
+    .OnDelete(DeleteBehavior.Cascade); 
 
     }
 

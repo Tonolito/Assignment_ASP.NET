@@ -12,7 +12,6 @@ public interface INotificationService
 
 public class NotificationService : INotificationService
 {
-    // GÅ TILL REPOSITORY?
 
     private readonly AppDbContext _context;
 
@@ -61,7 +60,6 @@ public class NotificationService : INotificationService
         }
 
         return notifications;
-        //return [];
     }
 
     public async Task DismissNotificationAsync(string notificationId, string userId)

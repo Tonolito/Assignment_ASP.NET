@@ -11,6 +11,15 @@ namespace Data.Repositories;
 
 public class ProjectRepository(AppDbContext context) : BaseRepository<ProjectEntity, Project>(context), IProjectRepository
 {
+    /// <summary>
+    /// Includes all the entity with connection tables.
+    /// </summary>
+    /// <param name="orderByDescending"></param>
+    /// <param name="sortBy"></param>
+    /// <param name="where"></param>
+    /// <param name="includes"></param>
+    /// <returns></returns>
+    /// Help with chatgpt
     public virtual async Task<RepositoryResult<IEnumerable<Project>>> GetAllProjectsAsync(bool orderByDescending = false, Expression<Func<ProjectEntity, object>>? sortBy = null, Expression<Func<ProjectEntity, bool>>? where = null, params Expression<Func<ProjectEntity, object>>[] includes)
     {
         IQueryable<ProjectEntity> query = _table;
@@ -35,7 +44,7 @@ public class ProjectRepository(AppDbContext context) : BaseRepository<ProjectEnt
 
         var entities = await query.ToListAsync();
 
-        // Mappa varje ProjectEntity till Project-modell här
+        
         var result = entities.Select(entity => new Project
         {
             Id = entity.Id,
@@ -45,7 +54,7 @@ public class ProjectRepository(AppDbContext context) : BaseRepository<ProjectEnt
             StartDate = entity.StartDate,
             EndDate = entity.EndDate,
             Budget = entity.Budget,
-            StatusId = entity.StatusId,  // Mappa StatusId direkt från ProjectEntity
+            StatusId = entity.StatusId,  
             MemberIds = entity.ProjectMembers?.Select(pm => pm.MemberId.ToString()).ToList() ?? new List<string>(), // Mappa ProjectMembers till MemberIds
             Client = entity.Client != null
             ? new Client
@@ -59,19 +68,33 @@ public class ProjectRepository(AppDbContext context) : BaseRepository<ProjectEnt
         return new RepositoryResult<IEnumerable<Project>> { Succeeded = true, StatusCode = 200, Result = result };
     }
 
+    /// <summary>
+    /// Includes all the entity with the connection table when searching for a project by id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="includes"></param>
+    /// <returns></returns>
+    /// Hjälp av chatgpt och Fredrik Nilsson Win24
     public virtual async Task<RepositoryResult<Project>> GetProjectByIdAsync(
     string id,
     params Expression<Func<ProjectEntity, object>>[] includes)
     {
         IQueryable<ProjectEntity> query = _table;
 
-        // Lägg till includes (t.ex. ProjectMembers, Status)
         if (includes != null && includes.Length > 0)
         {
             foreach (var include in includes)
             {
                 query = query.Include(include);
             }
+        }
+
+        var includesProjectMembers = includes.Any(i =>
+        i.Body is MemberExpression me && me.Member.Name == nameof(ProjectEntity.ProjectMembers));
+
+        if (includesProjectMembers)
+        {
+            query = query.Include("ProjectMembers.Member");
         }
 
         var entity = await query.FirstOrDefaultAsync(x => x.Id == id);
@@ -81,7 +104,6 @@ public class ProjectRepository(AppDbContext context) : BaseRepository<ProjectEnt
             return new RepositoryResult<Project> { Succeeded = false, StatusCode = 404 };
         }
 
-        // Mappa ProjectEntity till Project
         var project = new Project
         {
             Id = entity.Id,
@@ -92,7 +114,28 @@ public class ProjectRepository(AppDbContext context) : BaseRepository<ProjectEnt
             EndDate = entity.EndDate,
             Budget = entity.Budget,
             StatusId = entity.StatusId,
-            MemberIds = entity.ProjectMembers?.Select(pm => pm.MemberId.ToString()).ToList() ?? new List<string>()
+            MemberIds = entity.ProjectMembers?.Select(pm => pm.MemberId.ToString()).ToList() ?? new List<string>(),
+            Members = entity.ProjectMembers?.Where(pm => pm.Member != null)
+            .Select(pm => new Member
+            {
+                Id = pm.Member.Id,
+                FirstName = pm.Member.FirstName,
+                LastName = pm.Member.LastName,
+                Image = pm.Member.Image
+            })
+            .ToList() ?? new(),
+            ClientId = entity.ClientId,
+            Client = entity.Client != null
+            ? new Client
+            {
+                Id = entity.Client.Id,
+                ClientName = entity.Client.ClientName,
+                Image = entity.Client.Image,
+                Email = entity.Client.Email,
+                Location = entity.Client.Location,
+                Phone = entity.Client.Phone
+            }
+            : null
         };
 
         return new RepositoryResult<Project> { Succeeded = true, StatusCode = 200, Result = project };

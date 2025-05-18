@@ -1,8 +1,14 @@
 ﻿@model EditProjectViewModel
+@using System.Text.Json
+
+
+
 <div class="modal-container" id="editProjectModal">
     <div class="modal-card">
         <div class="top-card">
             <h3>Edit Project</h3>
+            
+
             <button class="exit-btn" data-close="true">
                 <i class="fa-solid fa-xmark fa-2xl"></i>
             </button>
@@ -10,10 +16,15 @@
 
         <form id="editProjectForm"  novalidate method="post" asp-action="Edit" asp-controller="Projects">
             <input asp-for="Id" type="hidden" />
+            <input type="hidden" name="SelectedMemberIds" id="SelectedMemberIds" />
+            <input type="hidden" name="SelectedClientId" id="SelectedClientId" />
+
+
             <div class="image-previewer circle">
                 <img src="" class="image-preview" />
                 <input asp-for="ProjectImage" accept="image/*" class="hide" />
             </div>
+
             <div class="labelgroup-modal">
                 <label asp-for="ProjectName"></label>
                 <div class="field-group">
@@ -21,14 +32,45 @@
                     <span asp-validation-for="ProjectName"></span>
                 </div>
             </div>
-           
+
             <div class="labelgroup-modal">
-                <label asp-for="Description"></label>
-                <div class="field-group">
-                    <input asp-for="Description" />
-                    <span asp-validation-for="Description"></span>
+                <div class="modal-label"></div>
+                <div id="tagged-clients-edit" class="form-input form-tag-select">
+                    <input type="text" id="client-search-edit" class="form-tag-input" placeholder="Add Client..." />
+                    <label for="client-search-edit">
+                        <i></i>
+                    </label>
+                    <div id="client-search-results-edit" class="search-results"></div>
                 </div>
             </div>
+
+            <div class="labelgroup-modal">
+                 <label asp-for="Description"></label> 
+                 <div class="wysiwyg">
+                     <textarea id="Description-edit" asp-for="Description" style="display: none;"></textarea>
+                    <div id="project-wysiwyg-editor-edit"></div>
+                    <div id="project-wysiwyg-toolbar-edit">
+                        <span class="ql-formats"> 
+                             <button class="ql-bold"></button> 
+                             <button class="ql-italic"></button> 
+                             <button class="ql-underline"></button> 
+                         </span> 
+                         <span class="ql-formats"> 
+                             <button class="ql-align" value=""></button> 
+                             <button class="ql-align" value="center"></button> 
+                             <button class="ql-align" value="right"></button> 
+                         </span> 
+                         <span class="ql-formats">
+                             <button class="ql-list" value="bullet"></button> 
+                             <button class="ql-list" value="ordered"></button>
+                         </span> 
+                         <span class="ql-formats"> 
+                             <button class="ql-link"></button> 
+                         </span> 
+                     </div> 
+
+                 </div> 
+             </div>
 
             <div class="dates-flex">
                 <div class="labelgroup-modal">
@@ -48,12 +90,14 @@
             </div>
 
             <div class="labelgroup-modal">
-                <label asp-for="UserId"></label>
-                <div class="search-icon-container">
-                    <img class="search-icon" src="/css/images/Search.svg" alt="" />
+                <div class="modal-label"></div>
+                <div id="tagged-users-edit" class="form-input form-tag-select">
+                    <input type="text" id="user-search-edit" class="form-tag-input" placeholder="Add Member..." />
+                    <label for="user-search-edit">
+                        <i></i>
+                    </label>
+                    <div id="user-search-results-edit" class="search-results"></div>
                 </div>
-                <input asp-for="UserId"/>
-                <span asp-validation-for="UserId"></span>
             </div>
 
             <div class="labelgroup-modal">
@@ -68,3 +112,67 @@
         </form>
     </div>
 </div>
+
+
+<script>
+
+    document.addEventListener('DOMContentLoaded', function(){
+         initWysiwyg('#project-wysiwyg-editor-edit', '#project-wysiwyg-toolbar-edit', 'Description-edit', '@Html.Raw(ViewBag.RichTextContent ?? "")');
+     });
+     let quillEditorEdit = null;
+
+     function initWysiwyg(wysiwygEditorId, wysiwygToolbar, textareaId, content) {
+        const textarea = document.getElementById(textareaId);
+
+
+         const quill = new Quill(wysiwygEditorId, {
+             modules: {
+                 syntax: true,
+                 toolbar: wysiwygToolbar,
+             },
+             placeholder: 'Type something...',
+            theme: 'snow',
+         });
+
+         if (content) {
+             quill.root.innerHTML = content;
+             textarea.value = content;
+         }
+
+        quill.on('text-change', function() {
+             textarea.value = quill.root.innerHTML;
+        });
+
+        if (textareaId === 'Description-edit') {
+        quillEditorEdit = quill;
+    }
+     }
+
+
+
+    let isEditModalInitialized = false;
+
+    function initEditModalTags() {
+        if (isEditModalInitialized) return;
+        isEditModalInitialized = true;
+
+
+        initTagSelector({
+            containerId: 'tagged-users-edit',
+            inputId: 'user-search-edit',
+            resultId: 'user-search-results-edit',
+            searchUrl: (query) => '/members/search-members?term=' + encodeURIComponent(query),
+            displayProperty: 'fullName',
+            imageProperty: 'imageUrl',
+            avatarFolder: '',
+            tagClass: 'user-tag',
+            emptyMessage: 'No users found.',
+            preselected: preSelectedMembers,
+            selectedInputIds: 'SelectedMemberIds'
+        });
+
+        
+    }
+</script>
+
+

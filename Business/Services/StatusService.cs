@@ -16,8 +16,6 @@ public class StatusService(IStatusRepository statusRepository) : IStatusService
 
         var result = await _statusRepository.GetAllAsync();
 
-        //return result.MapTo<StatusResult>();
-
         return result.Succeeded
             ? new StatusResult<IEnumerable<Status>> { Succeeded = true, StatusCode = 200, Result = result.Result }
             : new StatusResult<IEnumerable<Status>> { Succeeded = false, StatusCode = result.StatusCode,  Error = result.Error };

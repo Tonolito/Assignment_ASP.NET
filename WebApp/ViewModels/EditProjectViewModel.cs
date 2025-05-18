@@ -1,4 +1,5 @@
 ﻿using Domain.Dtos;
+using Domain.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace WebApp.ViewModels;
@@ -25,20 +26,21 @@ public class EditProjectViewModel
     [Display(Name = "Start Date", Prompt = "")]
     [DataType(DataType.Date)]
     [Required(ErrorMessage = "Required")]
-    public DateOnly StartDate { get; set; }
+    public DateTime? StartDate { get; set; }
 
     [Display(Name = "End Date", Prompt = "")]
     [DataType(DataType.Date)]
     [Required(ErrorMessage = "Required")]
-    public DateOnly EndDate { get; set; }
+    public DateTime? EndDate { get; set; }
 
     [Display(Name = "Budget", Prompt = "0")]
     [Required(ErrorMessage = "Required")]
-    public int Budget { get; set; }
+    public decimal? Budget { get; set; }
 
-    //??????
-    [Display(Name = "Members", Prompt = "Add Member")]
-    public string? UserId { get; set; }
+    public List<string> SelectedMemberIds { get; set; } = new();
+
+    public string? SelectedClientId { get; set; }
+
 
 
     public static implicit operator EditProjectDto(EditProjectViewModel model)
@@ -54,7 +56,9 @@ public class EditProjectViewModel
                 StartDate = model.StartDate,
                 EndDate = model.EndDate,
                 Budget = model.Budget,
-                UserId = model.UserId,
+                SelectedMemberIds = model.SelectedMemberIds,
+                SelectedClientId = model.SelectedClientId
+
             };
     }
 }
