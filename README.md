@@ -1,32 +1,47 @@
 # Assignment_ASP.NET
 
-En del hjälp av chatgpt men mycket bollande med Fredrik Nilsson i Win24 Örebro om felsökning samt tips och råd. Han ska ha stort plus för att lärt mig felsökandet!.
+An ASP.NET Core MVC school project for managing projects, members, clients, authentication, and notifications.
 
-24/3 -25 *** Lagt till html för Project Management
+## Overview
 
-Admin skapas automatiskt när du startar webapp. 
+This repository is a school project built as a layered ASP.NET Core application with four projects:
 
-Admin@domain.com
-BytMig123!
+- `WebApp` - MVC frontend, controllers, views, SignalR hubs, and startup configuration
+- `Business` - business logic and services
+- `Data` - Entity Framework Core context, entities, repositories, and migrations
+- `Domain` - DTOs, domain models, and mapping helpers
 
+The application uses:
 
-Forgot password genererar nytt lösenord: BytMig123!
+- .NET 9
+- ASP.NET Core MVC
+- ASP.NET Core Identity
+- Entity Framework Core
+- SQLite
+- SignalR
+- Cookie-based authentication
+- External authentication support
 
-NotificationTypes och Targetgroup ska fyllas i manuellt ha värden:
+## Main Features
 
-Types:
-1	User
-2	Project
+- User sign up and sign in
+- Admin sign in
+- Role-based access with `Administrator` and `User`
+- Project management
+- Member management
+- Client management
+- Real-time notifications with SignalR
+- Simple chat page with SignalR
+- SQLite database created automatically on startup
+- Seeded default admin account
 
-Group:
-1	AllUsers
-2	Admins
-3	admin
+## Project Structure
 
-Statuses:
-1	Ongoing
-
-
-Byt ut secret
-
-
+```text
+Assignment_ASP.NET/
+|-- WebApp/
+|-- Business/
+|-- Data/
+|-- Domain/
+`-- Assignment_ASP.NET.sln
+```
